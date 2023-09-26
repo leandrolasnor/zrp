@@ -18,21 +18,21 @@ RSpec.describe HeroesController do
             {
               id: be_a(Integer),
               name: heroes[3].name,
-              rank: heroes[3].rank,
+              rank: ListHeroes::Model::Hero.ranks.keys[heroes[3].rank],
               lat: heroes[3].lat,
               lng: heroes[3].lng
             },
             {
               id: be_a(Integer),
               name: heroes[4].name,
-              rank: heroes[4].rank,
+              rank: ListHeroes::Model::Hero.ranks.keys[heroes[4].rank],
               lat: heroes[4].lat,
               lng: heroes[4].lng
             },
             {
               id: be_a(Integer),
               name: heroes[5].name,
-              rank: heroes[5].rank,
+              rank: ListHeroes::Model::Hero.ranks.keys[heroes[5].rank],
               lat: heroes[5].lat,
               lng: heroes[5].lng
             }
@@ -108,7 +108,7 @@ RSpec.describe HeroesController do
         let(:expected_body) do
           {
             name: 'Hero name',
-            rank: 2,
+            rank: 'b',
             lat: -12.897,
             lng: 88.907
           }
@@ -206,6 +206,32 @@ RSpec.describe HeroesController do
           it 'must be able to update hero' do
             expect(response).to have_http_status(:ok)
             expect(parsed_body).to eq(expected_body)
+          end
+        end
+      end
+    end
+
+    delete('destroy hero') do
+      security [{ ApiKeyAuth: [] }]
+      consumes "application/json"
+      response(200, 'successful') do
+        let(:id) { hero.id }
+
+        let(:expected_body) do
+          {
+            id: be_a(Integer),
+            name: 'Hero name',
+            rank: 'b',
+            lat: -12.897,
+            lng: 88.907
+          }
+        end
+
+        context 'on Success' do
+          run_test!
+          it 'must be able to destroy hero' do
+            expect(response).to have_http_status(:ok)
+            expect(parsed_body).to match(expected_body)
           end
         end
       end
