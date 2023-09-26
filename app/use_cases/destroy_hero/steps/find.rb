@@ -8,6 +8,6 @@ class DestroyHero::Steps::Find
   option :model, type: Interface(:find), default: -> { DestroyHero::Model::Hero }, reader: :private
 
   def call(params)
-    model.find(params[:hero_id])
+    model.find(params[:id])
   end
 end
