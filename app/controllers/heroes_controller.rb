@@ -22,7 +22,7 @@ class HeroesController < BaseController
   end
 
   def delete
-    status, content, serializer = Http::DetroyHero::Service.(destroy_params)
+    status, content, serializer = Http::DestroyHero::Service.(destroy_params)
     render json: content, status: status, serializer: serializer
   end
 
