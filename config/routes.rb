@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   root to: proc { [200, {}, ['success']] }
 
   scope '/v1' do
-    resources :heroes, only: [:show, :create, :update, :delete] do
+    resources :heroes, only: [:show, :create, :update, :destroy] do
       get :list, on: :collection
     end
 
