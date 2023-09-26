@@ -1,0 +1,16 @@
+{
+  "name": "socket.io",
+  "version": "1.0.0",
+  "description": "socket.io-client",
+  "type": "module",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "nodemon": "^3.0.1",
+    "socket.io-client": "^4.7.2"
+  },
+  "scripts": {
+    "start": "nodemon ./socket.io/index.js"
+  }
+}
