@@ -12,6 +12,28 @@ gem "sqlite3", "~> 1.4"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
 
+gem 'active_model_serializers'
+
+gem 'dry-container'
+
+gem 'dry-transaction'
+
+gem 'dry-monads'
+
+gem 'dry-initializer'
+
+gem 'dry-validation'
+
+gem 'redis'
+
+gem 'hiredis'
+
+gem 'devise_token_auth'
+
+gem 'devise'
+
+gem 'kaminari'
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
@@ -34,15 +56,28 @@ gem "bootsnap", require: false
 # gem "image_processing", "~> 1.2"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-# gem "rack-cors"
+gem "rack-cors"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem 'factory_bot_rails'
+  gem 'faker', github: 'faker-ruby/faker'
+  gem 'rspec'
+  gem 'rspec-rails'
+  gem 'rswag'
+  gem 'rswag-specs'
+  gem 'shoulda-matchers'
+  gem 'simplecov', require: false
+  gem 'timecop'
 end
 
 group :development do
+  gem 'rubocop', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem "spring"
+  gem "spring"
 end
 
