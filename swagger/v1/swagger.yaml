@@ -1,0 +1,129 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/v1/heroes/list":
+    get:
+      summary: list heroes
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: page
+        in: query
+        description: pagination
+        schema:
+          type: integer
+      - name: per_page
+        in: query
+        description: pagination
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful
+  "/v1/heroes":
+    post:
+      summary: create hero
+      security:
+      - ApiKeyAuth: []
+      parameters: []
+      responses:
+        '201':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                rank:
+                  type: integer
+                lat:
+                  type: float
+                lng:
+                  type: float
+              required:
+              - name
+              - rank
+              - lat
+              - lng
+  "/v1/heroes/{id}":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show hero
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: successful
+    patch:
+      summary: update hero
+      security:
+      - ApiKeyAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                lat:
+                  type: float
+                lng:
+                  type: float
+              required:
+              - name
+              - lat
+              - lng
+    put:
+      summary: update hero
+      security:
+      - ApiKeyAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                rank:
+                  type: integer
+                lat:
+                  type: float
+                lng:
+                  type: float
+              required:
+              - name
+              - rank
+              - lat
+              - lng
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: 127.0.0.1:3000
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
