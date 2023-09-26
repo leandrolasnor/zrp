@@ -14,7 +14,6 @@ class Http::Service
 
     new(args.to_h).call
   rescue StandardError => error
-    debugger
     Rails.logger.error(error)
     [:internal_server_error]
   end
