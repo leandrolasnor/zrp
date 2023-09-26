@@ -34,6 +34,10 @@ gem 'devise'
 
 gem 'kaminari'
 
+gem 'sneakers'
+
+gem 'bunny'
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 

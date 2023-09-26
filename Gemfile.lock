@@ -80,12 +80,16 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
+    amq-protocol (2.3.2)
     ast (2.4.2)
     base64 (0.1.1)
     bcrypt (3.1.19)
     bootsnap (1.16.0)
       msgpack (~> 1.2)
     builder (3.2.4)
+    bunny (2.22.0)
+      amq-protocol (~> 2.3, >= 2.3.1)
+      sorted_set (~> 1, >= 1.0.2)
     case_transform (0.2)
       activesupport
     concurrent-ruby (1.2.2)
@@ -258,6 +262,7 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
+    rbtree (0.4.6)
     rdoc (6.5.0)
       psych (>= 4.0.0)
     redis (5.0.7)
@@ -336,14 +341,27 @@ GEM
       rubocop-capybara (~> 2.17)
       rubocop-factory_bot (~> 2.22)
     ruby-progressbar (1.13.0)
+    serverengine (2.0.7)
+      sigdump (~> 0.2.2)
+    set (1.0.3)
     shoulda-matchers (5.3.0)
       activesupport (>= 5.2.0)
+    sigdump (0.2.5)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
+    sneakers (2.11.0)
+      bunny (~> 2.12)
+      concurrent-ruby (~> 1.0)
+      rake
+      serverengine (~> 2.0.5)
+      thor
+    sorted_set (1.0.3)
+      rbtree
+      set (~> 1.0)
     spring (4.1.1)
     sqlite3 (1.6.6-x86_64-linux)
     stringio (3.0.8)
@@ -366,6 +384,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers
   bootsnap
+  bunny
   debug
   devise
   devise_token_auth
@@ -392,6 +411,7 @@ DEPENDENCIES
   rubocop-rspec
   shoulda-matchers
   simplecov
+  sneakers
   spring
   sqlite3 (~> 1.4)
   timecop
