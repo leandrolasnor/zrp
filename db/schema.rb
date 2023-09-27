@@ -14,14 +14,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_22_201358) do
   create_table "heroes", force: :cascade do |t|
     t.string "name", null: false
     t.integer "rank", null: false
-    t.float "lat", default: 0.0
-    t.float "lng", default: 0.0
+    t.integer "status", default: 1, null: false
+    t.decimal "lat", precision: 18, scale: 15
+    t.decimal "lng", precision: 18, scale: 15
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "threats", force: :cascade do |t|
-    t.string "name", null: false
+    t.string "name"
+    t.integer "rank"
+    t.integer "status", default: 1
+    t.decimal "lat", precision: 18, scale: 15
+    t.decimal "lng", precision: 18, scale: 15
     t.text "payload", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
