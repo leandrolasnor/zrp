@@ -5,7 +5,9 @@ opts = {
   username: 'guest',
   password: 'guest',
   exchange: 'sneakers',
-  exchange_type: :direct
+  exchange_type: :direct,
+  ack: false,
+  workers: 1
 }
 
 Sneakers.configure(opts)
