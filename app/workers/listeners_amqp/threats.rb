@@ -9,5 +9,7 @@ class ListenersAmqp::Threats
     parsed = JSON.parse(threat, symbolize_names: true)
     created = Ws::CreateThreat::Service.(parsed)
     ack! if created
+  rescue StandardError => error
+    Rails.logger.error(error)
   end
 end
