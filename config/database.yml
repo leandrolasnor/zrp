@@ -18,8 +18,8 @@ development:
   <<: *postgresql
   database: zrp
   host: db
-  username: root
-  password: root
+  username: user
+  password: user
   timeout: 5000
 
 # Warning: The database defined as "test" will be erased and
