@@ -40,7 +40,7 @@ gem 'bunny'
 
 gem 'geocoder'
 
-gem 'resque'
+gem 'resque', require: 'resque/server'
 
 gem 'resque-scheduler'
 
