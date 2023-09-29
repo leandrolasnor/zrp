@@ -1,0 +1,48 @@
+# docker-compose.yml
+services:
+  environment:
+    image: leandrolasnor/ruby:zrp
+    container_name: dev.zrp
+    stdin_open: true
+    tty: true
+    ports:
+      - "3000:3000"
+
+  socket.io:
+    image: leandrolasnor/ruby:zrp
+    container_name: 'socket.io'
+    command: sh -c "yarn start"
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  sneakers:
+    image: leandrolasnor/ruby:zrp
+    container_name: 'sneakers'
+    command: sh -c "rake sneakers:run"
+    depends_on:
+      - socket.io
+
+  resque:
+    image: leandrolasnor/ruby:zrp
+    container_name: 'resque'
+    command: sh -c "rake resque:work QUEUE=matches"
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    environment:
+        ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+        - "6379:6379"
