@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_22_201358) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_27_110750) do
+  create_table "battles", force: :cascade do |t|
+    t.integer "score"
+    t.integer "hero_id", null: false
+    t.integer "threat_id", null: false
+    t.datetime "finished_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["score"], name: "index_battles_on_score"
+  end
+
   create_table "heroes", force: :cascade do |t|
     t.string "name", null: false
     t.integer "rank", null: false
@@ -57,4 +67,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_22_201358) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "battles", "heroes"
+  add_foreign_key "battles", "threats"
 end
