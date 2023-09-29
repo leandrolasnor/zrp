@@ -44,6 +44,8 @@ gem 'resque', require: 'resque/server'
 
 gem 'resque-scheduler'
 
+gem 'pg'
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 

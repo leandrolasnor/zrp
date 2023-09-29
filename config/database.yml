@@ -14,10 +14,6 @@ sqlite: &sqlite
   adapter: sqlite3
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
-# development:
-#   <<: *sqlite
-#   database: db/development.sqlite3
-
 development:
   <<: *postgresql
   database: zrp
@@ -30,9 +26,9 @@ development:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <<: *default
+  <<: *sqlite
   database: db/test.sqlite3
 
 production:
-  <<: *default
+  <<: *sqlite
   database: db/production.sqlite3
