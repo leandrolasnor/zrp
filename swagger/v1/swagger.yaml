@@ -4,9 +4,58 @@ info:
   title: API V1
   version: v1
 paths:
+  "/auth/sign_in":
+    post:
+      summary: sign in with user
+      tags:
+      - Auth
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+              - email
+              - password
+  "/auth":
+    post:
+      summary: create a user
+      tags:
+      - Auth
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                password_confirmation:
+                  type: string
+              required:
+              - email
+              - password
+              - password_confirmation
   "/v1/heroes/list":
     get:
       summary: list heroes
+      tags:
+      - Heroes
       security:
       - ApiKeyAuth: []
       parameters:
@@ -26,6 +75,8 @@ paths:
   "/v1/heroes":
     post:
       summary: create hero
+      tags:
+      - Heroes
       security:
       - ApiKeyAuth: []
       parameters: []
@@ -43,9 +94,9 @@ paths:
                 rank:
                   type: integer
                 lat:
-                  type: float
+                  type: number
                 lng:
-                  type: float
+                  type: number
               required:
               - name
               - rank
@@ -60,6 +111,8 @@ paths:
         type: string
     get:
       summary: show hero
+      tags:
+      - Heroes
       security:
       - ApiKeyAuth: []
       responses:
@@ -67,6 +120,8 @@ paths:
           description: successful
     patch:
       summary: update hero
+      tags:
+      - Heroes
       security:
       - ApiKeyAuth: []
       parameters: []
@@ -82,15 +137,17 @@ paths:
                 name:
                   type: string
                 lat:
-                  type: float
+                  type: numeric
                 lng:
-                  type: float
+                  type: numeric
               required:
               - name
               - lat
               - lng
     put:
       summary: update hero
+      tags:
+      - Heroes
       security:
       - ApiKeyAuth: []
       parameters: []
@@ -108,14 +165,23 @@ paths:
                 rank:
                   type: integer
                 lat:
-                  type: float
+                  type: numeric
                 lng:
-                  type: float
+                  type: numeric
               required:
               - name
               - rank
               - lat
               - lng
+    delete:
+      summary: destroy hero
+      tags:
+      - Heroes
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: successful
 servers:
 - url: http://{defaultHost}
   variables:

@@ -5,6 +5,7 @@ require 'swagger_helper'
 RSpec.describe HeroesController do
   path '/v1/heroes/list' do
     get('list heroes') do
+      tags 'Heroes'
       security [{ ApiKeyAuth: [] }]
       parameter name: :page, in: :query, type: :integer, description: 'pagination'
       parameter name: :per_page, in: :query, type: :integer, description: 'pagination'
@@ -54,6 +55,7 @@ RSpec.describe HeroesController do
 
   path '/v1/heroes' do
     post('create hero') do
+      tags 'Heroes'
       security [{ ApiKeyAuth: [] }]
       consumes "application/json"
       parameter name: :params, in: :body, schema: {
@@ -61,14 +63,14 @@ RSpec.describe HeroesController do
         properties: {
           name: { type: :string },
           rank: { type: :integer },
-          lat: { type: :float },
-          lng: { type: :float }
+          lat: { type: :number },
+          lng: { type: :number }
         },
         required: [:name, :rank, :lat, :lng]
       }
       response(201, 'successful') do
-        let(:lat) { "-47.3602244101421" }
-        let(:lng) { "42.35626747005944" }
+        let(:lat) { -47.3602244101421 }
+        let(:lng) { 42.35626747005944 }
         let(:params) do
           {
             name: 'Heroizinho',
@@ -83,8 +85,8 @@ RSpec.describe HeroesController do
             id: be_a(Integer),
             name: 'Heroizinho',
             rank: 's',
-            lat: lat,
-            lng: lng
+            lat: lat.to_s,
+            lng: lng.to_s
           }
         end
 
@@ -101,11 +103,14 @@ RSpec.describe HeroesController do
 
   path '/v1/heroes/{id}' do
     let(:hero) { create(:hero, name: 'Hero name', rank: 2, lat: lat, lng: lng) }
-    let(:lat) { "-1.691468683929372" }
-    let(:lng) { "-90.9745256083916" }
+    let(:lat) { -1.691468683929372 }
+    let(:lng) { -90.9745256083916 }
     parameter name: 'id', in: :path, type: :string, required: true
 
     get('show hero') do
+      tags 'Heroes'
+      consumes "application/json"
+      produces 'application/json'
       security [{ ApiKeyAuth: [] }]
       response(200, 'successful') do
         let(:id) { hero.id }
@@ -113,8 +118,8 @@ RSpec.describe HeroesController do
           {
             name: 'Hero name',
             rank: 'b',
-            lat: lat,
-            lng: lng
+            lat: lat.to_s,
+            lng: lng.to_s
           }
         end
 
@@ -129,22 +134,23 @@ RSpec.describe HeroesController do
     end
 
     patch('update hero') do
+      tags 'Heroes'
       security [{ ApiKeyAuth: [] }]
       consumes "application/json"
       parameter name: :params, in: :body, schema: {
         type: :object,
         properties: {
           name: { type: :string },
-          lat: { type: :float },
-          lng: { type: :float }
+          lat: { type: :numeric },
+          lng: { type: :numeric }
         },
         required: [:name, :lat, :lng]
       }
 
       response(200, 'successful') do
         let(:id) { hero.id }
-        let(:lat) { "5.529871874122506" }
-        let(:lng) { "-162.4156876628909" }
+        let(:lat) { 5.529871874122506 }
+        let(:lng) { -162.4156876628909 }
 
         let(:params) do
           {
@@ -158,8 +164,8 @@ RSpec.describe HeroesController do
           {
             name: 'Other name for hero',
             rank: 'b',
-            lat: lat,
-            lng: lng
+            lat: lat.to_s,
+            lng: lng.to_s
           }
         end
 
@@ -174,6 +180,7 @@ RSpec.describe HeroesController do
     end
 
     put('update hero') do
+      tags 'Heroes'
       security [{ ApiKeyAuth: [] }]
       consumes "application/json"
       parameter name: :params, in: :body, schema: {
@@ -181,15 +188,15 @@ RSpec.describe HeroesController do
         properties: {
           name: { type: :string },
           rank: { type: :integer },
-          lat: { type: :float },
-          lng: { type: :float }
+          lat: { type: :numeric },
+          lng: { type: :numeric }
         },
         required: [:name, :rank, :lat, :lng]
       }
       response(200, 'successful') do
         let(:id) { hero.id }
-        let(:lat) { "-22.86210918520104" }
-        let(:lng) { "-27.26000247930017" }
+        let(:lat) { -22.86210918520104 }
+        let(:lng) { -27.26000247930017 }
 
         let(:params) do
           {
@@ -204,8 +211,8 @@ RSpec.describe HeroesController do
           {
             name: 'Ramon Valdez',
             rank: 'c',
-            lat: lat,
-            lng: lng
+            lat: lat.to_s,
+            lng: lng.to_s
           }
         end
 
@@ -220,6 +227,7 @@ RSpec.describe HeroesController do
     end
 
     delete('destroy hero') do
+      tags 'Heroes'
       security [{ ApiKeyAuth: [] }]
       consumes "application/json"
       response(200, 'successful') do
