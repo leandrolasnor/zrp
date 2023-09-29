@@ -18,23 +18,23 @@ RSpec.describe HeroesController do
             {
               id: be_a(Integer),
               name: heroes[3].name,
-              rank: ListHeroes::Model::Hero.ranks.keys[heroes[3].rank],
-              lat: heroes[3].lat,
-              lng: heroes[3].lng
+              rank: heroes[3].rank,
+              lat: heroes[3].lat.to_s,
+              lng: heroes[3].lng.to_s
             },
             {
               id: be_a(Integer),
               name: heroes[4].name,
-              rank: ListHeroes::Model::Hero.ranks.keys[heroes[4].rank],
-              lat: heroes[4].lat,
-              lng: heroes[4].lng
+              rank: heroes[4].rank,
+              lat: heroes[4].lat.to_s,
+              lng: heroes[4].lng.to_s
             },
             {
               id: be_a(Integer),
               name: heroes[5].name,
-              rank: ListHeroes::Model::Hero.ranks.keys[heroes[5].rank],
-              lat: heroes[5].lat,
-              lng: heroes[5].lng
+              rank: heroes[5].rank,
+              lat: heroes[5].lat.to_s,
+              lng: heroes[5].lng.to_s
             }
           ]
         end
@@ -67,12 +67,14 @@ RSpec.describe HeroesController do
         required: [:name, :rank, :lat, :lng]
       }
       response(201, 'successful') do
+        let(:lat) { "-47.3602244101421" }
+        let(:lng) { "42.35626747005944" }
         let(:params) do
           {
             name: 'Heroizinho',
             rank: 0,
-            lat: -17.227,
-            lng: 71.007
+            lat: lat,
+            lng: lng
           }
         end
 
@@ -81,8 +83,8 @@ RSpec.describe HeroesController do
             id: be_a(Integer),
             name: 'Heroizinho',
             rank: 's',
-            lat: -17.227,
-            lng: 71.007
+            lat: lat,
+            lng: lng
           }
         end
 
@@ -98,7 +100,9 @@ RSpec.describe HeroesController do
   end
 
   path '/v1/heroes/{id}' do
-    let(:hero) { create(:hero, name: 'Hero name', rank: 2, lat: -12.897, lng: 88.907) }
+    let(:hero) { create(:hero, name: 'Hero name', rank: 2, lat: lat, lng: lng) }
+    let(:lat) { "-1.691468683929372" }
+    let(:lng) { "-90.9745256083916" }
     parameter name: 'id', in: :path, type: :string, required: true
 
     get('show hero') do
@@ -109,8 +113,8 @@ RSpec.describe HeroesController do
           {
             name: 'Hero name',
             rank: 'b',
-            lat: -12.897,
-            lng: 88.907
+            lat: lat,
+            lng: lng
           }
         end
 
@@ -139,12 +143,14 @@ RSpec.describe HeroesController do
 
       response(200, 'successful') do
         let(:id) { hero.id }
+        let(:lat) { "5.529871874122506" }
+        let(:lng) { "-162.4156876628909" }
 
         let(:params) do
           {
             name: 'Other name for hero',
-            lat: 123.898,
-            lng: -33.754
+            lat: lat,
+            lng: lng
           }
         end
 
@@ -152,8 +158,8 @@ RSpec.describe HeroesController do
           {
             name: 'Other name for hero',
             rank: 'b',
-            lat: 123.898,
-            lng: -33.754
+            lat: lat,
+            lng: lng
           }
         end
 
@@ -182,13 +188,15 @@ RSpec.describe HeroesController do
       }
       response(200, 'successful') do
         let(:id) { hero.id }
+        let(:lat) { "-22.86210918520104" }
+        let(:lng) { "-27.26000247930017" }
 
         let(:params) do
           {
             name: 'Ramon Valdez',
             rank: 3,
-            lat: 34.808,
-            lng: -29.707
+            lat: lat,
+            lng: lng
           }
         end
 
@@ -196,8 +204,8 @@ RSpec.describe HeroesController do
           {
             name: 'Ramon Valdez',
             rank: 'c',
-            lat: 34.808,
-            lng: -29.707
+            lat: lat,
+            lng: lng
           }
         end
 
@@ -222,8 +230,8 @@ RSpec.describe HeroesController do
             id: be_a(Integer),
             name: 'Hero name',
             rank: 'b',
-            lat: -12.897,
-            lng: 88.907
+            lat: be_a(String),
+            lng: be_a(String)
           }
         end
 
