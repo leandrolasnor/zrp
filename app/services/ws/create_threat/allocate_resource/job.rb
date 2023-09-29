@@ -39,7 +39,7 @@ class Ws::CreateThreat::AllocateResource::Job
     end
   end
 
-  @queue = :matchs
+  @queue = :matches
   def self.perform(threat_id)
     new.call(threat_id)
   end
