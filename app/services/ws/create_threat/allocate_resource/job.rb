@@ -8,7 +8,7 @@ class Ws::CreateThreat::AllocateResource::Job
 
   def call(threat_id)
     transaction.operations[:allocate].subscribe('resource.not.allocated') do
-      Resque.enqueue_in(3.seconds, self.class, threat_id)
+      Resque.enqueue_at(3.seconds.from_now.to_s, self.class, threat_id)
     end
 
     transaction.operations[:allocate].subscribe('resource.allocated') do
@@ -27,12 +27,12 @@ class Ws::CreateThreat::AllocateResource::Job
 
         _1.failure :matches do |f|
           Rails.logger.error(f)
-          Resque.enqueue_in(1.minute, self.class, threat_id)
+          Resque.enqueue_at(1.minute.from_now.to_s, self.class, threat_id)
         end
 
         _1.failure :allocate do |f|
           Rails.logger.error(f)
-          Resque.enqueue_in(3.seconds, self.class, threat_id)
+          Resque.enqueue_at(3.seconds.from_now.to_s, self.class, threat_id)
         end
 
         _1.failure do |f|
