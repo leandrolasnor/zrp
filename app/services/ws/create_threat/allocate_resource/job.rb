@@ -12,8 +12,9 @@ class Ws::CreateThreat::AllocateResource::Job
     end
 
     transaction.operations[:allocate].subscribe('resource.allocated') do
+      Rails.logger.info(_1[:threat].battles.first.finished_at.to_s)
       Resque.enqueue_at(
-        _1[:threat].battles.first.finished_at.to_datetime,
+        _1[:threat].battles.first.finished_at.to_s,
         Ws::CreateThreat::DeallocateResource::Job,
         _1[:threat].id
       )
