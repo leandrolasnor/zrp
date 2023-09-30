@@ -84,7 +84,7 @@ RSpec.describe HeroesController do
           {
             id: be_a(Integer),
             name: 'Heroizinho',
-            rank: 's',
+            rank: 'c',
             lat: lat.to_s,
             lng: lng.to_s
           }
@@ -117,7 +117,7 @@ RSpec.describe HeroesController do
         let(:expected_body) do
           {
             name: 'Hero name',
-            rank: 'b',
+            rank: 'a',
             lat: lat.to_s,
             lng: lng.to_s
           }
@@ -163,7 +163,7 @@ RSpec.describe HeroesController do
         let(:expected_body) do
           {
             name: 'Other name for hero',
-            rank: 'b',
+            rank: 'a',
             lat: lat.to_s,
             lng: lng.to_s
           }
@@ -210,7 +210,7 @@ RSpec.describe HeroesController do
         let(:expected_body) do
           {
             name: 'Ramon Valdez',
-            rank: 'c',
+            rank: 's',
             lat: lat.to_s,
             lng: lng.to_s
           }
@@ -237,7 +237,7 @@ RSpec.describe HeroesController do
           {
             id: be_a(Integer),
             name: 'Hero name',
-            rank: 'b',
+            rank: 'a',
             lat: be_a(String),
             lng: be_a(String)
           }

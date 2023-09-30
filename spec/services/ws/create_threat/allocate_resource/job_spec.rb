@@ -42,14 +42,17 @@ RSpec.describe Ws::CreateThreat::AllocateResource::Job do
 
   context 'on Success' do
     let(:heroes) do
-      hero1 = create(:hero, :allocate_resource)
-      hero2 = create(:hero, :allocate_resource)
+      hero1 = build(:hero, :allocate_resource)
+      hero2 = build(:hero, :allocate_resource)
 
-      hero1.rank = threat.rank.to_i
+      hero1.rank = CreateThreat::Model::Threat.ranks[threat.rank]
       hero1.lat = threat.lat
       hero1.lng = threat.lng
       hero2.lat = threat.lng
       hero2.lng = threat.lat
+
+      hero1.save
+      hero2.save
 
       [hero1, hero2]
     end
