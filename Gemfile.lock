@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/faker-ruby/faker.git
-  revision: 2f06350da484de1fbc3f2e8ef3f1c755502a7a45
+  revision: 0a1f68c98c44d39b283a066684fe6973a0e07c40
   specs:
     faker (3.2.1)
       i18n (>= 1.8.11, < 2)
@@ -170,6 +170,7 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
+    foreman (0.87.2)
     fugit (1.8.1)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
@@ -274,7 +275,6 @@ GEM
       actionpack (= 7.0.8)
       activesupport (= 7.0.8)
       method_source
-      rake (>= 12.2)
       thor (~> 1.0)
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
@@ -340,7 +340,7 @@ GEM
     rswag-ui (2.10.1)
       actionpack (>= 3.1, < 7.1)
       railties (>= 3.1, < 7.1)
-    rubocop (1.56.3)
+    rubocop (1.56.4)
       base64 (~> 0.1.1)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -361,7 +361,7 @@ GEM
     rubocop-performance (1.19.1)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    rubocop-rails (2.21.1)
+    rubocop-rails (2.21.2)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
@@ -373,7 +373,7 @@ GEM
     ruby2_keywords (0.0.5)
     rufus-scheduler (3.9.1)
       fugit (~> 1.1, >= 1.1.6)
-    serverengine (2.0.7)
+    serverengine (2.1.1)
       sigdump (~> 0.2.2)
     set (1.0.3)
     shoulda-matchers (5.3.0)
@@ -390,11 +390,10 @@ GEM
       rack (~> 2.2, >= 2.2.4)
       rack-protection (= 3.1.0)
       tilt (~> 2.0)
-    sneakers (2.11.0)
-      bunny (~> 2.12)
+    sneakers (2.12.0)
+      bunny (~> 2.14)
       concurrent-ruby (~> 1.0)
-      rake
-      serverengine (~> 2.0.5)
+      serverengine (~> 2.1.0)
       thor
     sorted_set (1.0.3)
       rbtree
@@ -435,6 +434,7 @@ DEPENDENCIES
   dry-validation
   factory_bot_rails
   faker!
+  foreman
   geocoder
   hiredis
   kaminari
@@ -442,6 +442,7 @@ DEPENDENCIES
   puma (~> 5.0)
   rack-cors
   rails (~> 7.0.8)
+  rake
   redis
   resque
   resque-scheduler
