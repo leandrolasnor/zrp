@@ -4,6 +4,6 @@ module Enums::Threat::Rank
   extend ActiveSupport::Concern
 
   included do
-    enum :rank, [:god, :dragon, :tiger, :wolf]
+    enum :rank, [:wolf, :tiger, :dragon, :god]
   end
 end

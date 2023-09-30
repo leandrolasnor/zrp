@@ -4,6 +4,6 @@ module Enums::Hero::Rank
   extend ActiveSupport::Concern
 
   included do
-    enum :rank, [:s, :a, :b, :c]
+    enum :rank, [:c, :b, :a, :s]
   end
 end
