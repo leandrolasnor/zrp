@@ -6,5 +6,6 @@
 require_relative "config/application"
 require 'sneakers/tasks'
 require 'resque/tasks'
+require 'resque/scheduler/tasks'
 
 Rails.application.load_tasks
