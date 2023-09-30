@@ -9,22 +9,16 @@ class AllocateResource::Steps::Matches
   option :resources,
          type: Interface(:enabled, :page),
          default: -> { AllocateResource::Model::Hero }, reader: :private
-  option :per_page, type: Integer, default: -> { 25 }, reader: :private
-  option :time_to_end, type: Instance(Proc), default: -> { proc { TIMES[_1.rank].() } }
+  option :limit, type: Integer, default: -> { 25 }, reader: :private
+  option :finisher, type: Instance(Proc), default: -> { proc { TIMES[_1.rank].() } }
 
   def call(demand)
-    finished_at = time_to_end.(demand)
-    matches = promising.map { matcher.new(threat: demand, hero: _1, finished_at: finished_at) }
+    time_to_end = finisher.(demand)
+    matches = resources.allocatable(limit).map { matcher.new(threat: demand, hero: _1, finished_at: time_to_end) }
     return Success(matches) if matches.count >= 2
 
     Failure(I18n.t(:insufficient_resources))
   rescue StandardError => error
     Failure(error)
-  end
-
-  private
-
-  def promising
-    @promising ||= resources.enabled.page(1).per(per_page).order(:updated_at)
   end
 end
