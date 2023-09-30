@@ -17,17 +17,20 @@ class AllocateResource::Steps::Allocate
     first.hero.touch
     second.hero.touch
 
-    if threat.rank.to_i == first.hero.rank.to_i
+    threat_ranks = AllocateResource::Model::Threat.ranks
+    hero_ranks = AllocateResource::Model::Hero.ranks
+
+    if threat_ranks[threat.rank] == hero_ranks[first.hero.rank]
       first.score!
       first.save!
       first.hero.working!
       publish('resource.allocated', threat: threat)
-    elsif threat.rank.to_i == second.hero.rank.to_i
+    elsif threat_ranks[threat.rank] == hero_ranks[second.hero.rank]
       second.score!
       second.save!
       second.hero.working!
       publish('resource.allocated', threat: threat)
-    elsif threat.rank.to_i > first.hero.rank.to_i && threat.rank.to_i > second.hero.rank.to_i
+    elsif threat_ranks[threat.rank] > hero_ranks[first.hero.rank] && threat_ranks[threat.rank] > hero_ranks[second.hero.rank]
       first.score!
       first.save!
       second.score!
