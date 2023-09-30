@@ -7,16 +7,8 @@ namespace :metric do
       battles: {
         total: AllocateResource::Model::Battle.count
       },
-      threats: {
-        problem: AllocateResource::Model::Threat.problem.count,
-        enabled: AllocateResource::Model::Threat.enabled.count,
-        disabled: AllocateResource::Model::Threat.disabled.count,
-        total: AllocateResource::Model::Threat.count
-      },
-      heroes: {
-        enabled: AllocateResource::Model::Hero.enabled.count,
-        working: AllocateResource::Model::Hero.working.count
-      }
+      threats: AllocateResource::Model::Threat.group(:status).count,
+      heroes: AllocateResource::Model::Hero.group(:status).count
     }
 
     puts JSON.pretty_generate(metric)
