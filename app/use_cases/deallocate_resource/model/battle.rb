@@ -2,4 +2,5 @@
 
 class DeallocateResource::Model::Battle < ApplicationRecord
   belongs_to :threat
+  belongs_to :hero
 end
