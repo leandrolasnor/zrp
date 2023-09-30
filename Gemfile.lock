@@ -278,7 +278,6 @@ GEM
       thor (~> 1.0)
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
-    rake (13.0.6)
     rbtree (0.4.6)
     rdoc (6.5.0)
       psych (>= 4.0.0)
@@ -442,7 +441,6 @@ DEPENDENCIES
   puma (~> 5.0)
   rack-cors
   rails (~> 7.0.8)
-  rake
   redis
   resque
   resque-scheduler
