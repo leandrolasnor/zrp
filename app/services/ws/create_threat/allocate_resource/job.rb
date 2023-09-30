@@ -13,7 +13,7 @@ class Ws::CreateThreat::AllocateResource::Job
 
     transaction.operations[:allocate].subscribe('resource.allocated') do
       Resque.enqueue_at(
-        _1[:threat].battles.first.finished_at,
+        _1[:threat].battles.first.finished_at.utc,
         Ws::CreateThreat::DeallocateResource::Job,
         _1[:threat].id
       )
