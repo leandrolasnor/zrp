@@ -19,7 +19,6 @@ namespace :metric do
       }
     }
 
-    puts Time.zone.now
     puts JSON.pretty_generate(metric)
   end
 end
