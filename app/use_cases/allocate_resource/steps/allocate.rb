@@ -23,20 +23,20 @@ class AllocateResource::Steps::Allocate
     if threat_ranks[threat.rank] == hero_ranks[first.hero.rank]
       first.score!
       first.save!
-      first.hero.working!
+      first.hero.lock!.working!
       publish('resource.allocated', threat: threat)
     elsif threat_ranks[threat.rank] == hero_ranks[second.hero.rank]
       second.score!
       second.save!
-      second.hero.working!
+      second.hero.lock!.working!
       publish('resource.allocated', threat: threat)
     elsif threat_ranks[threat.rank] > hero_ranks[first.hero.rank] && threat_ranks[threat.rank] > hero_ranks[second.hero.rank]
       first.score!
       first.save!
       second.score!
       second.save!
-      first.hero.working!
-      second.hero.working!
+      first.hero.lock!.working!
+      second.hero.lock!.working!
       publish('resource.allocated', threat: threat)
     else
       publish('resource.not.allocated')
