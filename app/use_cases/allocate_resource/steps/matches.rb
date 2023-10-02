@@ -9,7 +9,7 @@ class AllocateResource::Steps::Matches
   option :resources,
          type: Interface(:allocatable),
          default: -> { AllocateResource::Model::Hero }, reader: :private
-  option :limit, type: Integer, default: -> { 25 }, reader: :private
+  option :limit, type: Integer, default: -> { 5 }, reader: :private
   option :finisher, type: Instance(Proc), default: -> { proc { TIMES[_1.rank].() } }
 
   def call(demand)
