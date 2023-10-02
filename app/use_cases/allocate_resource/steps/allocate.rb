@@ -14,6 +14,11 @@ class AllocateResource::Steps::Allocate
     second = matches.second
     threat = matches.first.threat
 
+    ApplicationRecord.transaction do
+      second.hero.with_lock { second.hero.touch }
+      first.hero.with_lock { first.hero.touch }
+    end
+
     threat_ranks = AllocateResource::Model::Threat.ranks
     hero_ranks = AllocateResource::Model::Hero.ranks
 
@@ -31,7 +36,6 @@ class AllocateResource::Steps::Allocate
     elsif threat_ranks[threat.rank] == hero_ranks[second.hero.rank]
       ApplicationRecord.transaction do
         second.hero.with_lock do
-          second.hero.touch
           second.hero.working!
           second.score!
           second.save!
@@ -42,13 +46,11 @@ class AllocateResource::Steps::Allocate
     elsif threat_ranks[threat.rank] > hero_ranks[first.hero.rank] && threat_ranks[threat.rank] > hero_ranks[second.hero.rank]
       ApplicationRecord.transaction do
         first.hero.with_lock do
-          first.hero.touch
           first.hero.working!
           first.score!
           first.save!
         end
         second.hero.with_lock do
-          second.hero.touch
           second.hero.working!
           second.score!
           second.save!
