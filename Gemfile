@@ -48,6 +48,8 @@ gem 'foreman'
 
 gem 'pg'
 
+gem "paranoia", "~> 2.2"
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
