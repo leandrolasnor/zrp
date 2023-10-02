@@ -25,6 +25,7 @@ class AllocateResource::Steps::Allocate
           first.score!
           first.save!
         end
+        threat.with_lock { threat.working! }
         publish('resource.allocated', threat: threat)
       end
     elsif threat_ranks[threat.rank] == hero_ranks[second.hero.rank]
@@ -35,6 +36,7 @@ class AllocateResource::Steps::Allocate
           second.score!
           second.save!
         end
+        threat.with_lock { threat.working! }
         publish('resource.allocated', threat: threat)
       end
     elsif threat_ranks[threat.rank] > hero_ranks[first.hero.rank] && threat_ranks[threat.rank] > hero_ranks[second.hero.rank]
@@ -51,6 +53,7 @@ class AllocateResource::Steps::Allocate
           second.score!
           second.save!
         end
+        threat.with_lock { threat.working! }
         publish('resource.allocated', threat: threat)
       end
     else
