@@ -112,4 +112,10 @@ _presumo que nesse momento seu ambiente esteja devidamente configurado e o banco
 * No `response` copie o `header` **authorization** - seu valor será como este: *Bearer eyJhY2Nlc3MtdG9rZW4iOiJyNzV4Wi1KM1psbnQ0R2FVSGFzTUxnIiwidG9rZW4tdHlwZSI6IkJlYXJlciIsImNsaWVudCI6IlhxMEpHSWs5ZkV5RzhURXZhNWxpUXciLCJleHBpcnkiOiIxNjk3NDQyODUwIiwidWlkIjoic3RyaW5nQHRlc3QuY29tIn0=*
 * Copie o `token` e clique no botão **Authorize** no canto superior direito da interface do [`Swagger`](http://127.0.0.1:3000/api-docs)
 * Cole e conteúdo, clique em **Authorize** e depois em **Close**
-* Agora será possível integarir com a api pela interface do [`Swagger`](http://localhost:3000/api-docs), criando, listando, atualizando e deletando heróis.
+* Agora será possível integarir com a api pela interface do [`Swagger`](http://localhost:3000/api-docs)
+
+    - cria herói
+    - lista os heróis
+    - atualiza os dados de um herói
+    - remove um herói
+    - mostra o histórico decrescente de ameaças ordenada pela sua ocorrencia
