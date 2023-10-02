@@ -9,7 +9,7 @@ Este documento descreve o passo a passo para rodar a aplicação referente ao de
 * Uma image docker foi publicada no [Docker Hub](https://hub.docker.com/layers/leandrolasnor/ruby/zrp/images/sha256-460c2139ac4b20ba8cb49d29bc4866b9292207ce12cc4d192a57234824d1f34a?context=repo)
 
 * Use o comando `docker compose up db api -d` para baixar a imagem e subir os containers _api_, _db_ e _redis_
-* Use o comando `docker compose exec api bundle exec rake db:migrate:reset` para rodar criar o banco de dados
+* Use o comando `docker compose exec api bundle exec rake db:migrate:reset` para criar o banco de dados
 * Use o comando `docker compose exec api bundle exec rake db:seed` para popular o banco de dados com alguns heróis
 
 ```
@@ -99,7 +99,7 @@ services:
 
 ## Passo a Passo de como executar a solução
 
-_presumo que nesse momento seu ambiente esteja devidamente configurado e o banco de dados criado_
+_presumo que nesse momento seu ambiente esteja devidamente configurado e o banco de dados criado e populado_
 
 * Use o comando `docker compose up resque sneakers -d` para rodar o restante dos serviços
 * Use o comando `docker compose exec api bundle exec rake metric:show` para ver alguns números relevantes sobre a dinâmica entre alocação e desalocação de heróis em batalhas contra ameaças.
