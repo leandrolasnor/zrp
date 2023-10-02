@@ -3,7 +3,7 @@
 require 'rails_helper'
 RSpec.describe CreateThreat::Model::Threat, type: :model do
   describe 'Enums' do
-    let(:enum_status) { [:problem, :enabled, :disabled] }
+    let(:enum_status) { [:problem, :enabled, :disabled, :working] }
     let(:enum_rank) { [:wolf, :tiger, :dragon, :god] }
 
     it do

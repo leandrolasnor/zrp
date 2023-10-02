@@ -18,24 +18,24 @@ RSpec.describe HeroesController do
           [
             {
               id: be_a(Integer),
-              name: heroes[3].name,
-              rank: heroes[3].rank,
-              lat: heroes[3].lat.to_s,
-              lng: heroes[3].lng.to_s
+              name: heroes[2].name,
+              rank: heroes[2].rank,
+              lat: heroes[2].lat.to_s,
+              lng: heroes[2].lng.to_s
             },
             {
               id: be_a(Integer),
-              name: heroes[4].name,
-              rank: heroes[4].rank,
-              lat: heroes[4].lat.to_s,
-              lng: heroes[4].lng.to_s
+              name: heroes[1].name,
+              rank: heroes[1].rank,
+              lat: heroes[1].lat.to_s,
+              lng: heroes[1].lng.to_s
             },
             {
               id: be_a(Integer),
-              name: heroes[5].name,
-              rank: heroes[5].rank,
-              lat: heroes[5].lat.to_s,
-              lng: heroes[5].lng.to_s
+              name: heroes[0].name,
+              rank: heroes[0].rank,
+              lat: heroes[0].lat.to_s,
+              lng: heroes[0].lng.to_s
             }
           ]
         end
