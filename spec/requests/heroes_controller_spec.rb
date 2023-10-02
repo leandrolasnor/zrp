@@ -40,14 +40,13 @@ RSpec.describe HeroesController do
           ]
         end
 
-        before { heroes }
+        before do
+          heroes
+        end
 
-        context 'on Success' do
-          run_test!
-          it 'must be able to get the second page of heros list' do
-            expect(response).to have_http_status(:ok)
-            expect(parsed_body).to match(expected_body)
-          end
+        run_test! do |response|
+          expect(response).to have_http_status(:ok)
+          expect(parsed_body).to match(expected_body)
         end
       end
     end
@@ -90,12 +89,9 @@ RSpec.describe HeroesController do
           }
         end
 
-        context 'on Success' do
-          run_test!
-          it 'must be able to create a hero' do
-            expect(response).to have_http_status(:created)
-            expect(parsed_body).to match(expected_body)
-          end
+        run_test! do |response|
+          expect(response).to have_http_status(:created)
+          expect(parsed_body).to match(expected_body)
         end
       end
     end
@@ -123,12 +119,9 @@ RSpec.describe HeroesController do
           }
         end
 
-        context 'on Success' do
-          run_test!
-          it 'must be able to get a heros record' do
-            expect(response).to have_http_status(:ok)
-            expect(parsed_body).to eq(expected_body)
-          end
+        run_test! do |response|
+          expect(response).to have_http_status(:ok)
+          expect(parsed_body).to eq(expected_body)
         end
       end
     end
@@ -169,12 +162,9 @@ RSpec.describe HeroesController do
           }
         end
 
-        context 'on Success' do
-          run_test!
-          it 'must be able to update some data from hero' do
-            expect(response).to have_http_status(:ok)
-            expect(parsed_body).to eq(expected_body)
-          end
+        run_test! do |response|
+          expect(response).to have_http_status(:ok)
+          expect(parsed_body).to match(expected_body)
         end
       end
     end
@@ -216,12 +206,9 @@ RSpec.describe HeroesController do
           }
         end
 
-        context 'on Success' do
-          run_test!
-          it 'must be able to update hero' do
-            expect(response).to have_http_status(:ok)
-            expect(parsed_body).to eq(expected_body)
-          end
+        run_test! do |response|
+          expect(response).to have_http_status(:ok)
+          expect(parsed_body).to match(expected_body)
         end
       end
     end
@@ -243,12 +230,9 @@ RSpec.describe HeroesController do
           }
         end
 
-        context 'on Success' do
-          run_test!
-          it 'must be able to destroy hero' do
-            expect(response).to have_http_status(:ok)
-            expect(parsed_body).to match(expected_body)
-          end
+        run_test! do |response|
+          expect(response).to have_http_status(:ok)
+          expect(parsed_body).to match(expected_body)
         end
       end
     end

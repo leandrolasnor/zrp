@@ -11,7 +11,7 @@ RSpec.describe Ws::CreateThreat::AllocateResource::Job do
       let(:error_message) { I18n.t(:insufficient_resources) }
 
       before do
-        allow(AllocateResource::Model::Hero).to receive(:allocatable).with(25).and_return([])
+        allow(AllocateResource::Model::Hero).to receive(:allocatable).with(5).and_return([])
         allow(Rails.logger).to receive(:error).with(error_message)
         allow(Resque).to receive(:enqueue_at).with(duck_type(:to_time), described_class, threat.id)
         call

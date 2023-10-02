@@ -15,7 +15,9 @@ Rails.application.routes.draw do
       get :list, on: :collection
     end
 
-    get :tests, to: 'tests#test'
+    resources :threats, only: [] do
+      get :historical, on: :collection
+    end
   end
 
   match '*path', via: :all, to: proc { [404, {}, nil] }
