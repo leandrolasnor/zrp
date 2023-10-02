@@ -8,6 +8,6 @@ class ListHeroes::Monad
   option :model, type: Interface(:page), default: -> { ListHeroes::Model::Hero }, reader: :private
 
   def call(page: 1, per_page: 25)
-    Try { model.page(page).per(per_page).order(:desc) }
+    Try { model.page(page).per(per_page).order(id: :desc) }
   end
 end
