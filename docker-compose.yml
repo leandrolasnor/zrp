@@ -1,23 +1,9 @@
 # docker-compose.yml
+version: '3.8'
 services:
-  environment:
-    image: leandrolasnor/ruby:zrp
-    container_name: dev.zrp
-    stdin_open: true
-    tty: true
-    ports:
-      - "3000:3000"
-
-  socket.io:
-    image: leandrolasnor/ruby:zrp
-    container_name: 'socket.io'
-    command: sh -c "yarn start"
-    depends_on:
-      - rabbitmq
-
   rabbitmq:
     image: rabbitmq:management
-    container_name: rabbitmq
+    container_name: zrp.rabbitmq
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
@@ -25,24 +11,55 @@ services:
       - "5672:5672"
       - "15672:15672"
 
+  socket.io:
+    image: leandrolasnor/ruby:zrp
+    container_name: zrp.socket.io
+    command: sh -c "yarn start"
+    depends_on:
+      - rabbitmq
+
   sneakers:
     image: leandrolasnor/ruby:zrp
-    container_name: 'sneakers'
-    command: sh -c "rake sneakers:run"
+    container_name: zrp.sneakers
+    command: sh -c "bundle exec rake sneakers:run"
     depends_on:
       - socket.io
-
-  resque:
-    image: leandrolasnor/ruby:zrp
-    container_name: 'resque'
-    command: sh -c "rake resque:work QUEUE=matches"
-    depends_on:
-      - redis
+      - db
 
   redis:
     image: redis:alpine
-    container_name: redis
+    container_name: zrp.redis
     environment:
         ALLOW_EMPTY_PASSWORD: 'yes'
     ports:
         - "6379:6379"
+
+  resque:
+    image: leandrolasnor/ruby:zrp
+    container_name: zrp.resque
+    command: sh -c "foreman start"
+    depends_on:
+      - redis
+      - db
+
+  api:
+    image: leandrolasnor/ruby:zrp
+    container_name: zrp.api
+    stdin_open: true
+    tty: true
+    command: sh
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis
+      - db
+
+  db:
+    image: bitnami/postgresql:latest
+    container_name: zrp.postgresql
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+      POSTGRES_DB: zrp
+    ports:
+      - "5432:5432"
