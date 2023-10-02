@@ -11,8 +11,11 @@ class EditHero::Steps::Edit
   option :model, type: Interface(:update), default: -> { EditHero::Model::Hero }, reader: :private
 
   def call(params)
-    updated = model.update(params[:id], params.to_h)
-    publish('hero.edited', hero: updated)
-    updated
+    ApplicationRecord.transaction do
+      hero = model.find(params[:id]).lock!
+      hero.update!(params.to_h)
+      publish('hero.edited', hero: hero)
+      hero
+    end
   end
 end

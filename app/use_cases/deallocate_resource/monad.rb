@@ -8,6 +8,16 @@ class DeallocateResource::Monad
   option :model, type: Interface(:find), default: -> { DeallocateResource::Model::Threat }, reader: :private
 
   def call(id)
-    Try { model.find(id) }.fmap { _1.disabled! && _1.touch && _1 }.fmap { _1.heroes.map(&:enabled!) && _1 }
+    Try do
+      ApplicationRecord.transaction do
+        threat = model.find(id).lock!
+        threat.touch
+        threat.disabled!
+        threat.heroes.each do
+          _1.lock!
+          _1.enabled!
+        end
+      end
+    end
   end
 end

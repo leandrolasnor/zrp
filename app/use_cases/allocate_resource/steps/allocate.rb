@@ -14,30 +14,45 @@ class AllocateResource::Steps::Allocate
     second = matches.second
     threat = matches.first.threat
 
-    first.hero.touch
-    second.hero.touch
-
     threat_ranks = AllocateResource::Model::Threat.ranks
     hero_ranks = AllocateResource::Model::Hero.ranks
 
     if threat_ranks[threat.rank] == hero_ranks[first.hero.rank]
-      first.hero.lock!.working!
-      first.score!
-      first.save!
-      publish('resource.allocated', threat: threat)
+      ApplicationRecord.transaction do
+        first.hero.with_lock do
+          first.hero.touch
+          first.hero.working!
+          first.score!
+          first.save!
+        end
+        publish('resource.allocated', threat: threat)
+      end
     elsif threat_ranks[threat.rank] == hero_ranks[second.hero.rank]
-      second.hero.lock!.working!
-      second.score!
-      second.save!
-      publish('resource.allocated', threat: threat)
+      ApplicationRecord.transaction do
+        second.hero.with_lock do
+          second.hero.touch
+          second.hero.working!
+          second.score!
+          second.save!
+        end
+        publish('resource.allocated', threat: threat)
+      end
     elsif threat_ranks[threat.rank] > hero_ranks[first.hero.rank] && threat_ranks[threat.rank] > hero_ranks[second.hero.rank]
-      first.hero.lock!.working!
-      second.hero.lock!.working!
-      first.score!
-      first.save!
-      second.score!
-      second.save!
-      publish('resource.allocated', threat: threat)
+      ApplicationRecord.transaction do
+        first.hero.with_lock do
+          first.hero.touch
+          first.hero.working!
+          first.score!
+          first.save!
+        end
+        second.hero.with_lock do
+          second.hero.touch
+          second.hero.working!
+          second.score!
+          second.save!
+        end
+        publish('resource.allocated', threat: threat)
+      end
     else
       publish('resource.not.allocated')
     end
