@@ -25,7 +25,6 @@ class AllocateResource::Steps::Allocate
     if threat_ranks[threat.rank] == hero_ranks[first.hero.rank]
       ApplicationRecord.transaction do
         first.hero.with_lock do
-          first.hero.touch
           first.hero.working!
           first.score!
           first.save!
