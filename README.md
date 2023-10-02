@@ -2,6 +2,8 @@
 
 Este documento descreve o passo a passo para rodar a aplicação referente ao desafio da vaga de Fullstack da ZRP
 
+:warning: _Por um contra tempo, o front-end não pôde ser desenvolvido_
+
 ## Considerações sobre o ambiente
 
 * Uma image docker foi publicada no [Docker Hub](https://hub.docker.com/layers/leandrolasnor/ruby/zrp/images/sha256-460c2139ac4b20ba8cb49d29bc4866b9292207ce12cc4d192a57234824d1f34a?context=repo)
