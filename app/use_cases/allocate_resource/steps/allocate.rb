@@ -6,6 +6,9 @@ class AllocateResource::Steps::Allocate
   include Dry::Events::Publisher[:allocate_resource]
   extend  Dry::Initializer
 
+  option :threat_ranks, type: Instance(ActiveSupport::HashWithIndifferentAccess), default: -> { AllocateResource::Model::Threat.ranks }, reader: :private
+  option :hero_ranks, type: Instance(ActiveSupport::HashWithIndifferentAccess), default: -> { AllocateResource::Model::Hero.ranks }, reader: :private
+
   register_event 'resource.allocated'
   register_event 'resource.not.allocated'
 
@@ -18,9 +21,6 @@ class AllocateResource::Steps::Allocate
       second.hero.with_lock { second.hero.touch }
       first.hero.with_lock { first.hero.touch }
     end
-
-    threat_ranks = AllocateResource::Model::Threat.ranks
-    hero_ranks = AllocateResource::Model::Hero.ranks
 
     if threat_ranks[threat.rank] == hero_ranks[first.hero.rank]
       ApplicationRecord.transaction do
