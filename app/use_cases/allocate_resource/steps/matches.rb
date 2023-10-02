@@ -7,7 +7,7 @@ class AllocateResource::Steps::Matches
 
   option :matcher, type: Interface(:find), default: -> { AllocateResource::Model::Battle }, reader: :private
   option :resources,
-         type: Interface(:enabled, :page),
+         type: Interface(:allocatable),
          default: -> { AllocateResource::Model::Hero }, reader: :private
   option :limit, type: Integer, default: -> { 25 }, reader: :private
   option :finisher, type: Instance(Proc), default: -> { proc { TIMES[_1.rank].() } }
