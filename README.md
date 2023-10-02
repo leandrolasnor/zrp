@@ -2,7 +2,7 @@
 
 Este documento descreve o passo a passo para rodar a aplicação referente ao desafio da vaga de Fullstack da ZRP
 
-:warning: _Por um contra tempo, o front-end não pôde ser desenvolvido_
+:warning: _Somente back-end_
 
 ## Considerações sobre o ambiente
 
