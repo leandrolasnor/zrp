@@ -3,6 +3,7 @@
 Este documento descreve o passo a passo para rodar a aplicação referente ao desafio da vaga de Fullstack da ZRP
 
 [Enunciado do problema](https://zrp.github.io/challenges/dev/)
+
 :warning: _Somente back-end_
 
 ## Considerações sobre o ambiente
