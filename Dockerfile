@@ -17,10 +17,8 @@ RUN gem install bundler --version '2.4.19'
 RUN bundle
 RUN yarn
 
-COPY entrypoint.sh /usr/bin/
-RUN dos2unix /usr/bin/entrypoint.sh
-RUN chmod +x /usr/bin/entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["rm", "-f", "/api/tmp/pids/server.pid"]
+ENTRYPOINT ["git", "pull"]
 
 RUN rm -rf /root/.oh-my-zsh
 RUN sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
