@@ -105,14 +105,14 @@ _presumo que nesse momento seu ambiente esteja devidamente configurado e o banco
 
 * Use o comando `docker compose up resque sneakers -d` para rodar o restante dos serviços
 * Use o comando `docker compose exec api bundle exec rake metric:show` para ver alguns números relevantes sobre a dinâmica entre alocação e desalocação de heróis em batalhas contra ameaças.
-* Use o comando `docker compose exec api rails s` para rodar o servidor
-* Acesse o [`Swagger`](http://127.0.0.1:3000/api-docs)
+* Use o comando `docker compose exec api rails s -b 0.0.0.0` para rodar o servidor
+* Acesse o [`Swagger`](http://localhost:3000/api-docs)
 * Verifique o campo `defaultHost` na interface do [`Swagger`](http://localhost:3000/api-docs) e avalie se a url esta correta (_127.0.0.1:3000_ ou _localhost:3000_)
 
 * Nessa interface você poderá validar a documentação dos endpoints e testá-los, enviando algumas requisições http
 * É necessário estar logado para interagir com a api - utilize o endpoint **POST** `/auth` (_create user_) para criar um usuário. Informe email, password e confirme o password
 * No `response` copie o `header` **authorization** - seu valor será como este: *Bearer eyJhY2Nlc3MtdG9rZW4iOiJyNzV4Wi1KM1psbnQ0R2FVSGFzTUxnIiwidG9rZW4tdHlwZSI6IkJlYXJlciIsImNsaWVudCI6IlhxMEpHSWs5ZkV5RzhURXZhNWxpUXciLCJleHBpcnkiOiIxNjk3NDQyODUwIiwidWlkIjoic3RyaW5nQHRlc3QuY29tIn0=*
-* Copie o `token` e clique no botão **Authorize** no canto superior direito da interface do [`Swagger`](http://127.0.0.1:3000/api-docs)
+* Copie o `token` e clique no botão **Authorize** no canto superior direito da interface do [`Swagger`](http://localhost:3000/api-docs)
 * Cole e conteúdo, clique em **Authorize** e depois em **Close**
 * Agora será possível integarir com a api pela interface do [`Swagger`](http://localhost:3000/api-docs)
 
