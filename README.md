@@ -8,7 +8,7 @@ Este documento descreve o passo a passo para rodar a aplicação referente ao de
 
 ## Considerações sobre o ambiente
 
-* Uma image docker foi publicada no [Docker Hub](https://hub.docker.com/layers/leandrolasnor/ruby/zrp/images/sha256-460c2139ac4b20ba8cb49d29bc4866b9292207ce12cc4d192a57234824d1f34a?context=repo)
+* Uma image docker foi publicada no [Docker Hub](https://hub.docker.com/layers/leandrolasnor/ruby/zrp/images/sha256-ce5bc45ff7c8721df11ff6fcc61a4e6a578ad314594f90a8af9904e4c4c9ee42?context=explore)
 
 * Use o comando `docker compose up db api -d` para baixar a imagem e subir os containers _api_, _db_ e _redis_
 * Use o comando `docker compose exec api bundle exec rake db:migrate:reset` para criar o banco de dados
