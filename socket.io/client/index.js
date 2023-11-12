@@ -6,7 +6,7 @@ const queue = "threats";
 const send_event = async (data) => {
   let connection;
   try {
-    connection = await amqp.connect("amqp://rabbitmq:5672");
+    connection = await amqp.connect(`${process.env.AMQP_SERVER}`);
     const channel = await connection.createChannel();
 
     await channel.assertQueue(queue, { durable: true });
@@ -21,7 +21,7 @@ const send_event = async (data) => {
 }
 
 // const socket = io('https://zrp-challenges-dev-production.up.railway.app');
-const socket = io('http://socket.io.server:3003');
+const socket = io(`${process.env.SOCKET_IO_SERVER}:${process.env.SOCKET_IO_SERVER_PORT}`);
 socket.on("connect", () => {
   console.log('Connected');
 });

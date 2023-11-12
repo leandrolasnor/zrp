@@ -20,6 +20,10 @@ services:
     image: leandrolasnor/ruby:zrp
     container_name: zrp.socket.io.client
     command: sh -c "yarn --cwd ./socket.io/client start"
+    environment:
+      - AMQP_SERVER=amqp://rabbitmq:5672
+      - SOCKET_IO_SERVER=http://socket.io.server
+      - SOCKET_IO_SERVER_PORT=3003
     depends_on:
       - rabbitmq
       - socket.io.server
