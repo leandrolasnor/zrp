@@ -17,7 +17,7 @@ const occurrence = () => {
 const emitOccurrence = socket => {
   let payload = occurrence()
   console.log(payload)
-  socket.timeout(30000).emit("occurrence", payload, (err) => {
+  socket.timeout(process.env.INSURGENCY_TIME).emit("occurrence", payload, (err) => {
     if (err) {
       // no ack from the server, let's retry
       emitOccurrence(socket);
