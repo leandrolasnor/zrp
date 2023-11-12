@@ -9,22 +9,6 @@ Este documento descreve o passo a passo para rodar a aplicação referente ao de
 ## Considerações sobre o ambiente
 
 ```
-# makefile
-all: prepare run
-
-prepare:
-  docker compose up db api -d
-  docker compose exec api bundle exec rake db:migrate:reset
-  docker compose exec api bundle exec rake db:seed
-
-run:
-  docker compose up resque sneakers -d
-
-metric:
-  docker compose exec api bundle exec rake metric:show
-```
-
-```
 # docker-compose.yml
 version: '2.22'
 services:
@@ -106,12 +90,6 @@ services:
 
 * Uma image docker foi publicada no [Docker Hub](https://hub.docker.com/layers/leandrolasnor/ruby/zrp/images/sha256-ce5bc45ff7c8721df11ff6fcc61a4e6a578ad314594f90a8af9904e4c4c9ee42?context=explore)
 
-* Faça o clone deste repositório ou copie os arquivos `makefile` e `docker-compose.yml` para um pasta na sua máquina
-
-* Use o comando `make prepare` para baixar a imagem e subir os containers _api_, _db_ e _redis_
-
-__Nessa etapa as `migrations` foram executadas e o banco de dados se encontra populado com alguns heróis__
-
 #### Conceitos e ferramentas utilizadas na resolução do problema
 * Princípio de Inversão de Dependência
 * Princípio da Segregação da Interface
@@ -126,17 +104,40 @@ __Nessa etapa as `migrations` foram executadas e o banco de dados se encontra po
 * Dry-rb
 * RSpec
 
+## Considerações sobre a aplicação
+
+```
+# makefile
+all: prepare run
+
+prepare:
+  docker compose up db api -d
+  docker compose exec api bundle exec rake db:migrate:reset
+  docker compose exec api bundle exec rake db:seed
+
+run:
+  docker compose up resque sneakers -d
+
+metric:
+  docker compose exec api bundle exec rake metric:show
+```
+
+* Faça o clone deste repositório ou copie os arquivos `makefile` e `docker-compose.yml` para um pasta na sua máquina
+
+* Use o comando `make prepare` para baixar a imagem e subir os containers _api_, _db_ e _redis_
+
+__Nessa etapa as `migrations` foram executadas e o banco de dados se encontra populado com alguns heróis__
+
 ## Passo a Passo de como executar a solução
 
 _presumo que nesse momento seu ambiente esteja devidamente configurado e o banco de dados criado e populado_
 
-* Use o comando `make run` para rodar o restante dos serviços
+* Use o comando `make run` para rodar o restante dos serviços.
 * Use o comando `make metric` para ver alguns números relevantes sobre a dinâmica entre alocação e desalocação de heróis em batalhas contra ameaças.
 * Acelere o processo de `insurgência`, diminuindo o valor da variável de ambiente `INSURGENCY_TIME` no `docker-compose.yml`
 
+## Documentação
 
-## Considerações sobre a aplicação
-_A api está rodando na porta `3000`_
 * Acesse o [`Swagger`](http://localhost:3000/api-docs)
 * Verifique o campo `defaultHost` na interface do [`Swagger`](http://localhost:3000/api-docs) e avalie se a url esta correta (_127.0.0.1:3000_ ou _localhost:3000_)
 
