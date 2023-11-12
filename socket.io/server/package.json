@@ -1,0 +1,19 @@
+{
+  "name": "socket.io.server",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "socket.io-server",
+  "main": "index.js",
+  "author": "Leandro Lasnor",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "dependencies": {
+    "http": "^0.0.1-security",
+    "lodash": "^4.17.21",
+    "socket.io": "^4.7.2",
+    "supervillains": "^3.1.0"
+  }
+}

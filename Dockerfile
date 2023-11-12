@@ -15,7 +15,8 @@ RUN git branch --set-upstream-to origin/master
 
 RUN gem install bundler --version '2.4.19'
 RUN bundle
-RUN yarn
+RUN yarn --cwd ./socket.io/server install
+RUN yarn --cwd ./socket.io/client install
 
 COPY entrypoint.sh /usr/bin/
 RUN dos2unix /usr/bin/entrypoint.sh

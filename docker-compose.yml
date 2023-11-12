@@ -11,19 +11,25 @@ services:
       - "5672:5672"
       - "15672:15672"
 
-  socket.io:
+  socket.io.server:
     image: leandrolasnor/ruby:zrp
-    container_name: zrp.socket.io
-    command: sh -c "yarn start"
+    container_name: zrp.socket.io.server
+    command: sh -c "yarn --cwd ./socket.io/server start"
+
+  socket.io.client:
+    image: leandrolasnor/ruby:zrp
+    container_name: zrp.socket.io.client
+    command: sh -c "yarn --cwd ./socket.io/client start"
     depends_on:
       - rabbitmq
+      - socket.io.server
 
   sneakers:
     image: leandrolasnor/ruby:zrp
     container_name: zrp.sneakers
     command: sh -c "bundle exec rake sneakers:run"
     depends_on:
-      - socket.io
+      - socket.io.client
       - db
 
   redis:

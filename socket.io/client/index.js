@@ -20,7 +20,8 @@ const send_event = async (data) => {
   }
 }
 
-const socket = io('https://zrp-challenges-dev-production.up.railway.app');
+// const socket = io('https://zrp-challenges-dev-production.up.railway.app');
+const socket = io('http://127.0.0.1:3003');
 socket.on("connect", () => {
   console.log('Connected');
 });
