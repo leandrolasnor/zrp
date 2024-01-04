@@ -125,15 +125,9 @@ metric:
 
 * Faça o clone deste repositório ou copie os arquivos `makefile` e `docker-compose.yml` para um pasta na sua máquina
 
-* Use o comando `make prepare` para baixar a imagem e subir os containers _api_, _db_ e _redis_
-
-__Nessa etapa as `migrations` foram executadas e o banco de dados se encontra populado com alguns heróis__
-
 ## Passo a Passo de como executar a solução
 
-_presumo que nesse momento seu ambiente esteja devidamente configurado e o banco de dados criado e populado_
-
-* Use o comando `make run` para rodar o restante dos serviços.
+* Use o comando `make all` para baixar as imagens, subir os containers e rodar os serviços.
 * Use o comando `make metric` para ver alguns números relevantes sobre a dinâmica entre alocação e desalocação de heróis em batalhas contra ameaças.
 * Acelere o processo de `insurgência`, diminuindo o valor da variável de ambiente `INSURGENCY_TIME` no `docker-compose.yml`
 
