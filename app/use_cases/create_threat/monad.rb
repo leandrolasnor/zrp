@@ -18,10 +18,10 @@ class CreateThreat::Monad
           _1.rank = params[:dangerLevel].downcase rescue nil
           _1.lat = params[:location].first[:lat] rescue nil
           _1.lng = params[:location].first[:lng] rescue nil
-          _1.status = CreateThreat::Model::Threat.statuses['problem'] unless (params[:location].first[:lng] rescue nil) &&
-                                                                             (params[:location].first[:lat] rescue nil) &&
-                                                                             params[:monsterName] &&
-                                                                             params[:dangerLevel]
+          _1.status = model.statuses['problem'] unless (params[:location].first[:lng] rescue nil) &&
+                                                       (params[:location].first[:lat] rescue nil) &&
+                                                       params[:monsterName] &&
+                                                       params[:dangerLevel]
 
           _1.payload = params.to_json
         end
