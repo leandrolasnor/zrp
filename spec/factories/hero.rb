@@ -10,5 +10,9 @@ FactoryBot.define do
     trait :allocate_resource do
       initialize_with { AllocateResource::Model::Hero.new(attributes) }
     end
+
+    trait :dashboard do
+      initialize_with { Dashboard::Model::Hero.new(attributes) }
+    end
   end
 end

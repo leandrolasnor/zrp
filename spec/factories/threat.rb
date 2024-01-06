@@ -20,6 +20,10 @@ FactoryBot.define do
       }.to_json
     end
 
+    trait :dashboard do
+      initialize_with { Dashboard::Model::Threat.new(attributes) }
+    end
+
     trait :allocate_resource do
       initialize_with { AllocateResource::Model::Threat.new(attributes) }
     end

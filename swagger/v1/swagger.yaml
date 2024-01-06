@@ -135,6 +135,16 @@ paths:
       responses:
         '200':
           description: successful
+  "/v1/metrics/dashboard":
+    get:
+      summary: dashboard metric
+      tags:
+      - Metrics
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: successful
   "/auth/sign_in":
     post:
       summary: sign in with user
