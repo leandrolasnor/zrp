@@ -17,6 +17,7 @@ RUN gem install bundler --version '2.4.19'
 RUN bundle
 RUN yarn --cwd ./socket.io/server install
 RUN yarn --cwd ./socket.io/client install
+RUN yarn --cwd ./reacting install
 
 COPY entrypoint.sh /usr/bin/
 RUN dos2unix /usr/bin/entrypoint.sh
