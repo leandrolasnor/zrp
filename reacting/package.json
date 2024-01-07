@@ -1,0 +1,74 @@
+{
+  "name": "reacting",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@babel/core": "^7.22.9",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/plugin-syntax-flow": "^7.22.5",
+    "@babel/plugin-transform-react-jsx": "^7.22.5",
+    "@fortawesome/fontawesome-svg-core": "^6.4.0",
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@popperjs/core": "^2.11.8",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@testing-library/dom": "^9.3.1",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^13.0.0",
+    "@testing-library/user-event": "^13.2.1",
+    "axios": "^1.4.0",
+    "bootstrap": "^5.3.1",
+    "d3-geo": "^3.1.0",
+    "event-source-polyfill": "^1.0.31",
+    "lodash": "^4.17.21",
+    "mdb-react-ui-kit": "^7.0.0",
+    "moment": "^2.29.4",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.8.0",
+    "react-datepicker": "^4.16.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.45.2",
+    "react-is": "^18.2.0",
+    "react-jvectormap": "^0.0.16",
+    "react-redux": "^8.1.1",
+    "react-redux-toastr": "^7.6.11",
+    "react-scripts": "5.0.1",
+    "react-svg-tooltip": "^0.0.11",
+    "react-svg-worldmap": "^2.0.0-alpha.16",
+    "react-tooltip": "^5.25.0",
+    "react-widgets": "^5.8.4",
+    "redux": "^4.2.1",
+    "redux-multi": "^0.1.12",
+    "redux-promise": "^0.6.0",
+    "redux-thunk": "^2.4.2",
+    "start": "^5.1.0",
+    "styled-components": "^6.0.5",
+    "typescript": "^5.1.6",
+    "web-vitals": "^2.1.0"
+  },
+  "scripts": {
+    "start": "PORT=3001 react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
