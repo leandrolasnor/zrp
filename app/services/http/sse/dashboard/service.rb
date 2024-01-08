@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Http::Sse::Dashboard::Service < Http::Sse::Service
+class Http::Sse::Dashboard::Service < Http::Sse::ApplicationService
   option :monad, type: Interface(:call), default: -> { Dashboard::Monad.new }, reader: :private
 
   def call

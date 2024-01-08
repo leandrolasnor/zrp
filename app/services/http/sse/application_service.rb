@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Http::Sse::Service
+class Http::Sse::ApplicationService
   include ActionController::Live
   include Dry.Types()
   extend Dry::Initializer

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Http::ThreatsHistory::Service < Http::Service
+class Http::ThreatsHistory::Service < Http::ApplicationService
   option :serializer,
          type: Interface(:serializer_for),
          default: -> { Http::ThreatsHistory::Serializer },

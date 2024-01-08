@@ -9,6 +9,6 @@ class AllocateResource::Model::Battle < ApplicationRecord
   private
 
   def calculator
-    @calculator ||= AllocateResource::Context::Calculator::Battle.new(self)
+    @calculator ||= AllocateResource::DomainService::Calculator::Battle.new(self)
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Http::EditHero::Service < Http::Service
+class Http::EditHero::Service < Http::ApplicationService
   option :serializer, type: Interface(:serializer_for), default: -> { Http::EditHero::Serializer }, reader: :private
   option :transaction, type: Interface(:call), default: -> { EditHero::Transaction.new }, reader: :private
 

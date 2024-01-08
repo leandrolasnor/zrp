@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AllocateResource::Context::Calculator::Battle
+class AllocateResource::DomainService::Calculator::Battle
   include Dry.Types()
   extend Dry::Initializer
 

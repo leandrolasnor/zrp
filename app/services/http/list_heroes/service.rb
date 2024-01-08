@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Http::ListHeroes::Service < Http::Service
+class Http::ListHeroes::Service < Http::ApplicationService
   option :serializer, type: Interface(:serializer_for), default: -> { Http::ListHeroes::Serializer }, reader: :private
   option :monad, type: Interface(:call), default: -> { ListHeroes::Monad.new }, reader: :private
 
