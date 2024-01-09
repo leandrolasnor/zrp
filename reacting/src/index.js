@@ -12,34 +12,9 @@ import multi from 'redux-multi'
 import thunk from 'redux-thunk'
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { createGlobalStyle } from 'styled-components'
+import './index.css'
 import axios from 'axios'
 import reportWebVitals from './reportWebVitals'
-
-const GlobalStyle = createGlobalStyle`
-  html { min-height: 100% }
-  body {
-    height: 100%
-    min-height: 100vh margin: 0
-    background:
-      linear-gradient(
-        limegreen,
-        transparent
-      ),
-      linear-gradient(
-        90deg,
-        skyblue,
-        transparent
-      ),
-      linear-gradient(
-        -90deg,
-        coral,
-        transparent
-      )
-
-    background-blend-mode: screen
-  }
-`
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL
 
@@ -56,7 +31,6 @@ const store =
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
-    <GlobalStyle />
     <Provider store={store}>
       <AuthOrApp />
       <ReduxToastr
