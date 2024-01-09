@@ -33,6 +33,7 @@
     "react-jvectormap": "^0.0.16",
     "react-redux": "^8.1.1",
     "react-redux-toastr": "^7.6.11",
+    "react-router-dom": "^6.21.1",
     "react-scripts": "5.0.1",
     "react-svg-tooltip": "^0.0.11",
     "react-svg-worldmap": "^2.0.0-alpha.16",
