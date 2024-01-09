@@ -19,16 +19,27 @@ class Dashboard::Monad
       metrics << [:threat_count, threat.count]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
-      metrics << [:hero_count, hero.count]
+      metrics << [:hero_count, hero.not_disabled.count]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
       metrics << [:threats_grouped, threat.group(:rank, :status).count]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
-      metrics << [:heroes_grouped, hero.group(:rank, :status).count]
+      metrics << [:heroes_grouped_rank_status, hero.not_disabled.group(:rank, :status).count]
+      publish('metrics.fetched', payload: [metrics.last].to_h)
+
+      metrics << [:heroes_grouped_rank, hero.not_disabled.group(:rank).count]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
       metrics << [:average_score, battle.average(:score)]
+      publish('metrics.fetched', payload: [metrics.last].to_h)
+
+      metrics << [
+        :average_time_to_match,
+        ActiveSupport::Duration.build(
+          threat.disabled.includes(:battles).average('battles.created_at - threats.created_at')
+        ).parts
+      ]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
       metrics.to_h
