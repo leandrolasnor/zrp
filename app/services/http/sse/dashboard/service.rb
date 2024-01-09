@@ -7,7 +7,12 @@ class Http::Sse::Dashboard::Service < Http::Sse::ApplicationService
     monad.subscribe('metrics.fetched') do |event|
       sse.write({ type: 'METRICS_FETCHED', payload: event[:payload] })
     end
+
     res = monad.()
+    loop res.success? do
+      sleep 1
+      res = monad.()
+    end
 
     Rails.logger.error(res.exception) if res.failure?
   end
