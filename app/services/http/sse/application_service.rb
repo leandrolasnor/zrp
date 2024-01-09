@@ -23,6 +23,8 @@ class Http::Sse::ApplicationService
     end
 
     new(args.merge(sse: sse)).call
+  rescue ActionController::Live::ClientDisconnected
+    sse.close
   rescue StandardError => error
     Rails.logger.error(error)
   ensure
