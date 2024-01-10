@@ -16,7 +16,7 @@ const BattlesCharts = props => {
         <Card.Subtitle className="mb-0 text-muted">Match type</Card.Subtitle>
         <Row>
           <Col sm={12}>
-            <PieChart height={162} className='mt-0' name='Battles' data={_.get(metrics, 'battles_two_and_one_percent', [])} donut color={colors} />
+            <PieChart height={162} className='mt-0' name='Heroes' data={_.get(metrics, 'battles_two_and_one_percent', [])} donut color={colors} />
           </Col>
         </Row>
       </Card.Body>
