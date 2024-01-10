@@ -4,8 +4,6 @@ Este documento descreve o passo a passo para rodar a aplicação referente ao de
 
 [Enunciado do problema](https://zrp.github.io/challenges/dev/)
 
-:warning: _Somente back-end_
-
 ## Considerações sobre o ambiente
 
 ```
@@ -111,16 +109,16 @@ services:
 all: prepare run
 
 prepare:
-  docker compose up db api -d
-  docker compose exec api bundle exec rake db:migrate:reset
-  docker compose exec api bundle exec rake db:seed
+	docker compose up api -d
+	docker compose exec api bundle exec rake db:migrate:reset
+	docker compose exec api bundle exec rake db:seed
 
 run:
-  docker compose up resque sneakers -d
-  docker compose exec api rails s -b 0.0.0.0
+	docker compose up resque sneakers -d
+	docker compose exec api foreman start -f Procfile.api
 
 metric:
-  docker compose exec api bundle exec rake metric:show
+	docker compose exec api bundle exec rake metric:show
 ```
 
 * Faça o clone deste repositório ou copie os arquivos `makefile` e `docker-compose.yml` para um pasta na sua máquina
@@ -128,8 +126,9 @@ metric:
 ## Passo a Passo de como executar a solução
 
 * Use o comando `make all` para baixar as imagens, subir os containers e rodar os serviços.
-* Use o comando `make metric` para ver alguns números relevantes sobre a dinâmica entre alocação e desalocação de heróis em batalhas contra ameaças.
-* Acelere o processo de `insurgência`, diminuindo o valor da variável de ambiente `INSURGENCY_TIME` no `docker-compose.yml`
+* Acesse [`frontend`](http://localhost:3001) para ver alguns números relevantes sobre a dinâmica entre alocação e desalocação de heróis em batalhas contra ameaças. :warning: _Em desenvolvimento_
+* Ao acessar a interface web, crie um usuário clicando no botão `sign up`, informe email, senha e confirme sua senha.
+* É possível acelerar o processo de `insurgência`, diminuindo o valor da variável de ambiente `INSURGENCY_TIME` no `docker-compose.yml`
 
 ## Documentação
 
@@ -148,3 +147,4 @@ metric:
     - atualiza os dados de um herói
     - remove um herói
     - mostra o histórico decrescente de ameaças ordenada pela sua ocorrencia
+    - visualizar os indicadores exibidos no dashboard
