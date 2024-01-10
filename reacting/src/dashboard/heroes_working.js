@@ -1,5 +1,5 @@
 import { Row, Col, Card } from 'react-bootstrap'
-import { FlexboxGrid, Tag, Progress } from 'rsuite'
+import { Tag, Progress } from 'rsuite'
 import { styled } from 'styled-components'
 
 const _ = require('lodash')

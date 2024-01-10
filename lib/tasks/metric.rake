@@ -3,14 +3,8 @@
 namespace :metric do
   desc "Show some metrics"
   task show: :environment do
-    metric = {
-      battles: {
-        total: AllocateResource::Model::Battle.count
-      },
-      threats: AllocateResource::Model::Threat.group(:status).count,
-      heroes: AllocateResource::Model::Hero.group(:status).count
-    }
+    res = Dashboard::Monad.new.()
 
-    puts JSON.pretty_generate(metric)
+    puts JSON.pretty_generate(res.value!)
   end
 end

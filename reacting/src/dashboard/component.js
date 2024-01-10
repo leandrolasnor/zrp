@@ -1,17 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import HeroesWorking from './heroes_working.js'
 import { Row, Col } from 'react-bootstrap'
 import { TagGroup, Tag, Progress } from 'rsuite'
+import HeroesWorking from './heroes_working.js'
+import ThreatsDisabled from './threats_disabled.js'
+import BattlesCharts from './battles_charts.js'
+import BattlesScatter from './battles_scatter_chart.js'
 
 const _ = require('lodash')
 
 const Dashboard = () => {
-  const [seconds, setSeconds] = useState(0)
   const dispatch = useDispatch()
   const { user } = useSelector(state => state.auth)
-  const authorization = _.get(user, 'authorization')
   const { metrics } = useSelector(state => state.metrics)
+
+  const [seconds, setSeconds] = useState(0)
+
   const average_time_to_match_hours = Number(_.get(metrics, ['average_time_to_match', 'hours'], 0)).toFixed(0)
   const average_time_to_match_minutes = Number(_.get(metrics, ['average_time_to_match', 'minutes'], 0)).toFixed(0)
   const average_time_to_match_seconds = Number(_.get(metrics, ['average_time_to_match', 'seconds'], 0)).toFixed(0)
@@ -20,7 +24,7 @@ const Dashboard = () => {
     setSeconds(0)
     let eventSource = new EventSource(
       `http://localhost:3000/v1/metrics/dashboard`,
-      { headers: {'authorization': authorization} }
+      { headers: {'authorization': _.get(user, 'authorization')} }
     )
     eventSource.onmessage = (e) => dispatch(JSON.parse(e.data))
     eventSource.onerror = (e) => eventSource.close()
@@ -34,7 +38,7 @@ const Dashboard = () => {
       setInterval(() => {
         setSeconds(prev => prev+12)
       },1000)
-      const sse_interval = setInterval(sse, 10000)
+      setInterval(sse, 10000)
     }
   }, [])
 
@@ -55,9 +59,20 @@ const Dashboard = () => {
           </TagGroup>
         </Col>
       </Row>
-      <Row>
-        <Col className='mt-2' sm={4}>
+      <Row className='mt-2'>
+        <Col sm={4}>
           <HeroesWorking metrics={metrics} />
+        </Col>
+        <Col sm={4}>
+          <ThreatsDisabled metrics={metrics} />
+        </Col>
+        <Col sm={4}>
+          <BattlesCharts metrics={metrics} />
+        </Col>
+      </Row>
+      <Row>
+        <Col sm={12}>
+          <BattlesScatter metrics={metrics} />
         </Col>
       </Row>
     </Row>
