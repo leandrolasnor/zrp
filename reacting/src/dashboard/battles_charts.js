@@ -13,10 +13,10 @@ const BattlesCharts = props => {
     <Card>
       <Card.Body>
         <Card.Title>Battles</Card.Title>
-        <Card.Subtitle className="mb-0 text-muted">Match type</Card.Subtitle>
+        <Card.Subtitle className="mb-0 text-muted">{`${_.get(metrics, 'battle_count', 0)} Altogether`}</Card.Subtitle>
         <Row>
           <Col sm={12}>
-            <PieChart height={162} className='mt-0' name='Heroes' data={_.get(metrics, 'battles_two_and_one_percent', [])} donut color={colors} />
+            <PieChart height={162} className='mt-0' data={_.get(metrics, 'battles_two_and_one_percent', [])} donut color={colors} />
           </Col>
         </Row>
       </Card.Body>
