@@ -7,9 +7,6 @@ const NavBar = () => {
   return(
     <Navbar variant='pills'>
       <Navbar.Brand href='#'>Dashboard</Navbar.Brand>
-      <Nav.Item>
-        <Nav.Link href='#heroes'>Heroes</Nav.Link>
-      </Nav.Item>
       <Navbar.Collapse className='justify-content-end'>
         <Nav.Item>
           <Button variant='link' href='#' onClick={() => dispatch(logout())}>Sign out</Button>
