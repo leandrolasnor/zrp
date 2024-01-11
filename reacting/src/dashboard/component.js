@@ -70,11 +70,6 @@ const Dashboard = () => {
           <BattlesCharts metrics={metrics} />
         </Col>
       </Row>
-      <Row>
-        <Col sm={12}>
-          <BattlesScatter metrics={metrics} />
-        </Col>
-      </Row>
     </Row>
   )
 }
