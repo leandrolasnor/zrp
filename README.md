@@ -3,9 +3,10 @@
 :page_with_curl: [Enunciado do problema](https://zrp.github.io/challenges/dev/)
 
 #### Conceitos e ferramentas utilizadas na resolução do problema
-:gem: `Ruby on Rails` `React` `Redux` `RSpec` `Dry-rb`
+:gem: `Ruby on Rails` `React` `Redux` `Dry-rb`
 `SOLID` `DDD` `Clear Code` `Clean Arch`
-`Resque` `Sneakers` `RabbitMQ`
+`Resque` `Sneakers` `RSpec` `RSwag`
+`Socket.io` `PostgreSQL` `Redis` `RabbitMQ`
 
 # Como rodar?
 
