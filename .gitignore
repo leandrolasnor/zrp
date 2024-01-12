@@ -35,4 +35,4 @@
 /coverage
 /*.rdb
 node_modules
-*.lock
+/Gemfile.lock
