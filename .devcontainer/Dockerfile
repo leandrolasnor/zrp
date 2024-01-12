@@ -1,6 +1,6 @@
 FROM ruby:3.2.2-alpine3.18
 RUN apk update && apk add \
-    build-base tzdata git sqlite sqlite-dev zsh wget \
+    build-base tzdata git sqlite sqlite-dev zsh bash wget \
     nano curl font-meslo-nerd shadow zsh-vcs redis yarn \
     postgresql-dev postgresql-client
 
