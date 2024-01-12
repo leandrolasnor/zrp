@@ -5,6 +5,7 @@ RUN apk update && apk add \
     postgresql-dev postgresql-client
 
 WORKDIR /workspaces/zrp
+COPY . .
 RUN gem install bundler --version '2.4.19'
 RUN bundle
 RUN yarn --cwd ./socket.io/server install
