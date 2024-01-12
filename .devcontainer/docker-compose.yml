@@ -16,6 +16,8 @@ services:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ../..:/workspaces:cached
     container_name: zrp.socket.io.server
     command: sh -c "yarn --cwd ./socket.io/server start"
     environment:
@@ -26,6 +28,8 @@ services:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ../..:/workspaces:cached
     container_name: zrp.socket.io.client
     command: sh -c "yarn --cwd ./socket.io/client start"
     environment:
@@ -41,6 +45,8 @@ services:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ../..:/workspaces:cached
     container_name: zrp.sneakers
     command: sh -c "bundle exec rake sneakers:run"
     depends_on:
@@ -60,6 +66,8 @@ services:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ../..:/workspaces:cached
     container_name: zrp.resque
     command: sh -c "foreman start -f Procfile.resque"
     depends_on:
@@ -71,6 +79,8 @@ services:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ../..:/workspaces:cached
     container_name: zrp.api
     stdin_open: true
     tty: true

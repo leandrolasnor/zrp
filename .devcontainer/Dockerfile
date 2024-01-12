@@ -4,10 +4,7 @@ RUN apk update && apk add \
     nano curl font-meslo-nerd shadow zsh-vcs redis dos2unix yarn \
     postgresql-dev postgresql-client
 
-WORKDIR /workspaces/zrp
 RUN gem install bundler --version '2.4.19'
-RUN pwd
-RUN ls
 RUN bundle
 RUN yarn --cwd ./socket.io/server install
 RUN yarn --cwd ./socket.io/client install
