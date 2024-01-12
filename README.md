@@ -1,8 +1,54 @@
-# Desafio para Fullstack - ZRP
+# Simulador de batalhas de heróis contra ameaças
 
-Este documento descreve o passo a passo para rodar a aplicação referente ao desafio da vaga de Fullstack da ZRP
+:page_with_curl: [Enunciado do problema](https://zrp.github.io/challenges/dev/)
 
-[Enunciado do problema](https://zrp.github.io/challenges/dev/)
+#### Conceitos e ferramentas utilizadas na resolução do problema
+:gem: `Ruby on Rails` `React` `Redux` `RSpec` `Dry-rb`
+`SOLID` `DDD` `Clear Code` `Clean Arch`
+`Resque` `Sneakers` `RabbitMQ`
+
+# Como rodar?
+
+## Use o vscode para rodar os serviços via devcontainer
+
+1. Com vscode aberto, digite o comando `> Dev Containers: Clone Repository in Container Volume...`.
+2. Aperte `Enter`, informe a url: `https://github.com/leandrolasnor/zrp`.
+3. Escolha a branch `master`.
+4. :hourglass_flowing_sand:
+
+## Ou use `makefile`
+
+1. Faça o clone deste repositório ou copie os arquivos `makefile` e `docker-compose.yml` para um pasta na sua máquina.
+2. Use o comando `make all` para baixar as imagens, subir os containers e rodar os serviços.
+3. :hourglass_flowing_sand:
+
+* Uma image docker foi publicada no [Docker Hub](https://hub.docker.com/layers/leandrolasnor/ruby/zrp/images/sha256-ce5bc45ff7c8721df11ff6fcc61a4e6a578ad314594f90a8af9904e4c4c9ee42?context=explore)
+
+## Com os serviços rodando, faça:
+
+* :chart_with_upwards_trend: Acesse o [`frontend`](http://localhost:3001) para ver alguns números relevantes sobre a dinâmica entre alocação e desalocação de heróis em batalhas contra ameaças. :warning: _Em desenvolvimento_
+* Ao acessar a interface web, crie um usuário clicando no botão `sign up`, informe email, senha e confirme sua senha.
+* É possível acelerar o processo de `insurgência`, diminuindo o valor da variável de ambiente `INSURGENCY_TIME` no `docker-compose.yml`
+
+## Documentação
+
+* Acesse o [`Swagger`](http://localhost:3000/api-docs)
+* Verifique o campo `defaultHost` na interface do [`Swagger`](http://localhost:3000/api-docs) e avalie se a url esta correta (_127.0.0.1:3000_ ou _localhost:3000_)
+
+* Nessa interface você poderá validar a documentação dos endpoints e testá-los, enviando algumas requisições http
+* É necessário estar logado para interagir com a api - utilize o endpoint **POST** `/auth` (_create user_) para criar um usuário. Informe email, password e confirme o password
+* No `response` copie o `header` **authorization** - seu valor será como este: *Bearer eyJhY2Nlc3MtdG9rZW4iOiJyNzV4Wi1KM1psbnQ0R2FVSGFzTUxnIiwidG9rZW4tdHlwZSI6IkJlYXJlciIsImNsaWVudCI6IlhxMEpHSWs5ZkV5RzhURXZhNWxpUXciLCJleHBpcnkiOiIxNjk3NDQyODUwIiwidWlkIjoic3RyaW5nQHRlc3QuY29tIn0=*
+* Copie o `token` e clique no botão **Authorize** no canto superior direito da interface do [`Swagger`](http://localhost:3000/api-docs)
+* Cole e conteúdo, clique em **Authorize** e depois em **Close**
+* Agora será possível integarir com a api pela interface do [`Swagger`](http://localhost:3000/api-docs)
+
+    - cria herói
+    - lista os heróis
+    - atualiza os dados de um herói
+    - remove um herói
+    - mostra o histórico decrescente de ameaças ordenada pela sua ocorrencia
+    - visualizar os indicadores exibidos no dashboard
+
 
 ## Considerações sobre o ambiente
 
@@ -85,25 +131,6 @@ services:
     ports:
       - "5432:5432"
 ```
-
-* Uma image docker foi publicada no [Docker Hub](https://hub.docker.com/layers/leandrolasnor/ruby/zrp/images/sha256-ce5bc45ff7c8721df11ff6fcc61a4e6a578ad314594f90a8af9904e4c4c9ee42?context=explore)
-
-#### Conceitos e ferramentas utilizadas na resolução do problema
-* Princípio de Inversão de Dependência
-* Princípio da Segregação da Interface
-* Princípio da responsabilidade única
-* Princípio da substituição de Liskov
-* Princípio Aberto-Fechado
-* Background Processing
-* Domain Driven Design
-* Código Limpo
-* Rubocop
-* Bullet
-* Dry-rb
-* RSpec
-
-## Considerações sobre a aplicação
-
 ```
 # makefile
 all: prepare run
@@ -120,31 +147,3 @@ run:
 metric:
 	docker compose exec api bundle exec rake metric:show
 ```
-
-* Faça o clone deste repositório ou copie os arquivos `makefile` e `docker-compose.yml` para um pasta na sua máquina
-
-## Passo a Passo de como executar a solução
-
-* Use o comando `make all` para baixar as imagens, subir os containers e rodar os serviços.
-* Acesse [`frontend`](http://localhost:3001) para ver alguns números relevantes sobre a dinâmica entre alocação e desalocação de heróis em batalhas contra ameaças. :warning: _Em desenvolvimento_
-* Ao acessar a interface web, crie um usuário clicando no botão `sign up`, informe email, senha e confirme sua senha.
-* É possível acelerar o processo de `insurgência`, diminuindo o valor da variável de ambiente `INSURGENCY_TIME` no `docker-compose.yml`
-
-## Documentação
-
-* Acesse o [`Swagger`](http://localhost:3000/api-docs)
-* Verifique o campo `defaultHost` na interface do [`Swagger`](http://localhost:3000/api-docs) e avalie se a url esta correta (_127.0.0.1:3000_ ou _localhost:3000_)
-
-* Nessa interface você poderá validar a documentação dos endpoints e testá-los, enviando algumas requisições http
-* É necessário estar logado para interagir com a api - utilize o endpoint **POST** `/auth` (_create user_) para criar um usuário. Informe email, password e confirme o password
-* No `response` copie o `header` **authorization** - seu valor será como este: *Bearer eyJhY2Nlc3MtdG9rZW4iOiJyNzV4Wi1KM1psbnQ0R2FVSGFzTUxnIiwidG9rZW4tdHlwZSI6IkJlYXJlciIsImNsaWVudCI6IlhxMEpHSWs5ZkV5RzhURXZhNWxpUXciLCJleHBpcnkiOiIxNjk3NDQyODUwIiwidWlkIjoic3RyaW5nQHRlc3QuY29tIn0=*
-* Copie o `token` e clique no botão **Authorize** no canto superior direito da interface do [`Swagger`](http://localhost:3000/api-docs)
-* Cole e conteúdo, clique em **Authorize** e depois em **Close**
-* Agora será possível integarir com a api pela interface do [`Swagger`](http://localhost:3000/api-docs)
-
-    - cria herói
-    - lista os heróis
-    - atualiza os dados de um herói
-    - remove um herói
-    - mostra o histórico decrescente de ameaças ordenada pela sua ocorrencia
-    - visualizar os indicadores exibidos no dashboard
