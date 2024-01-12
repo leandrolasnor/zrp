@@ -13,7 +13,7 @@ export const sign_in = values => {
           payload: {
             data: resp.data.data,
             headers: {
-              ... _.pick(
+              ..._.pick(
                 resp.headers,
                 ['access_token', 'client', 'uid', 'expiry']
               ),
@@ -43,7 +43,7 @@ export const sign_up = values => {
           payload: {
             data: resp.data.data,
             headers: {
-              ... _.pick(
+              ..._.pick(
                 resp.headers,
                 ['access_token', 'client', 'uid', 'expiry']
               ),

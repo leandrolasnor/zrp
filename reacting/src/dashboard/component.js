@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
 import { TagGroup, Tag, Progress } from 'rsuite'
 import HeroesWorking from './heroes_working.js'
 import ThreatsDisabled from './threats_disabled.js'
 import BattlesCharts from './battles_charts.js'
-import BattlesScatter from './battles_scatter_chart.js'
 
 const _ = require('lodash')
 

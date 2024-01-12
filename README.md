@@ -12,9 +12,8 @@
 
 ## Use o vscode para rodar os serviços via devcontainer
 
-1. Com vscode aberto, digite o comando `> Dev Containers: Clone Repository in Container Volume...`.
-2. Aperte `Enter`, informe a url: `https://github.com/leandrolasnor/zrp`.
-3. Escolha a branch `master`.
+1. Com vscode aberto, digite o comando `> Dev Containers: Clone Repository in Container Volume...`
+2. Aperte `Enter`, informe a url: `https://github.com/leandrolasnor/zrp`
 4. :hourglass_flowing_sand:
 
 ## Ou use `makefile`
