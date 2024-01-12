@@ -4,7 +4,6 @@ RUN apk update && apk add \
     nano curl font-meslo-nerd shadow zsh-vcs redis dos2unix yarn \
     postgresql-dev postgresql-client
 
-COPY . .
 RUN gem install bundler --version '2.4.19'
 RUN bundle
 RUN yarn --cwd ./socket.io/server install
