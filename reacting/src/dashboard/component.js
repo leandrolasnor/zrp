@@ -33,9 +33,9 @@ const Dashboard = () => {
   useEffect(() => {
     sse()
     const counter = setInterval(() => {
-      setSeconds(prev => prev+12)
+      setSeconds(prev => prev+10)
     },1000)
-    const request_sse = setInterval(sse, 10000)
+    const request_sse = setInterval(sse, 11000)
     return () => {
       clearInterval(counter)
       clearInterval(request_sse)
