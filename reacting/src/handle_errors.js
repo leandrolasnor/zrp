@@ -14,7 +14,6 @@ const handle_errors = e => {
   }else if(_.get(e, 'message', false) === 'Network Error'){
     toastr.error('API', e.message)
   }else{
-    debugger;
     toastr.error('Error', _.get(e, 'message', 'unknown error'))
   }
 }
