@@ -30,15 +30,15 @@ const Dashboard = () => {
     eventSource.onerror = (e) => eventSource.close()
   }
 
-  const initialized = useRef(false)
   useEffect(() => {
-    if (!initialized.current) {
-      initialized.current = true
-      sse()
-      setInterval(() => {
-        setSeconds(prev => prev+12)
-      },1000)
-      setInterval(sse, 10000)
+    sse()
+    const counter = setInterval(() => {
+      setSeconds(prev => prev+12)
+    },1000)
+    const request_sse = setInterval(sse, 10000)
+    return () => {
+      clearInterval(counter)
+      clearInterval(request_sse)
     }
   }, [])
 
