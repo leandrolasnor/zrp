@@ -6,6 +6,8 @@ RUN apk update && apk add \
 
 WORKDIR /workspaces/zrp
 RUN gem install bundler --version '2.4.19'
+RUN pwd
+RUN ls
 RUN bundle
 RUN yarn --cwd ./socket.io/server install
 RUN yarn --cwd ./socket.io/client install
