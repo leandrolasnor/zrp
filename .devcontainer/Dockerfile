@@ -19,7 +19,7 @@ RUN yarn --cwd ./socket.io/server install
 RUN yarn --cwd ./socket.io/client install
 RUN yarn --cwd ./reacting install
 
-RUN dos2unix /usr/bin/entrypoint.sh
+RUN dos2unix /app/.devcontainer/boot.sh
 RUN chmod +x /app/.devcontainer/boot.sh
 
 RUN rm -rf /root/.oh-my-zsh
