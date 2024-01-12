@@ -3,7 +3,7 @@
 	"name": "ZRP project development",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "api",
-	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	"workspaceFolder": "/workspaces/zrp",
   	"runServices": ["resque", "sneakers"],
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
