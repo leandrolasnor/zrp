@@ -4,9 +4,7 @@ RUN apk update && apk add \
     nano curl font-meslo-nerd shadow zsh-vcs redis dos2unix yarn \
     postgresql-dev postgresql-client
 
-ENV APP_HOME /app
-WORKDIR $APP_HOME
-COPY . $APP_HOME
+COPY . .
 RUN gem install bundler --version '2.4.19'
 RUN bundle
 RUN yarn --cwd ./socket.io/server install
@@ -14,6 +12,9 @@ RUN yarn --cwd ./socket.io/client install
 RUN yarn --cwd ./reacting install
 
 RUN dos2unix ./.devcontainer/boot.sh
+RUN dos2unix ./.devcontainer/start.sh
+
+RUN chmod +x ./.devcontainer/start.sh
 RUN chmod +x ./.devcontainer/boot.sh
 
 RUN rm -rf /root/.oh-my-zsh
