@@ -6,21 +6,18 @@ RUN apk update && apk add \
 
 ENV APP_HOME /app
 WORKDIR $APP_HOME
-
-RUN git init
-RUN git remote add origin https://github.com/leandrolasnor/zrp
-RUN git pull origin master
-RUN git checkout master -f
-RUN git branch --set-upstream-to origin/master
-
+COPY Gemfile* $APP_HOME/
 RUN gem install bundler --version '2.4.19'
 RUN bundle
+RUN bundle install
+COPY . $APP_HOME
+
 RUN yarn --cwd ./socket.io/server install
 RUN yarn --cwd ./socket.io/client install
 RUN yarn --cwd ./reacting install
 
-RUN dos2unix /app/.devcontainer/boot.sh
-RUN chmod +x /app/.devcontainer/boot.sh
+RUN dos2unix ./.devcontainer/boot.sh
+RUN chmod +x ./.devcontainer/boot.sh
 
 RUN rm -rf /root/.oh-my-zsh
 RUN sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
