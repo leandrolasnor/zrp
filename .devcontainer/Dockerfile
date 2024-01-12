@@ -1,7 +1,7 @@
 FROM ruby:3.2.2-alpine3.18
 RUN apk update && apk add \
     build-base tzdata git sqlite sqlite-dev zsh bash wget \
-    nano curl font-meslo-nerd shadow zsh-vcs redis yarn \
+    nano curl font-meslo-nerd shadow zsh-vcs redis dos2unix yarn \
     postgresql-dev postgresql-client
 
 ENV APP_HOME /app
@@ -18,6 +18,9 @@ RUN bundle
 RUN yarn --cwd ./socket.io/server install
 RUN yarn --cwd ./socket.io/client install
 RUN yarn --cwd ./reacting install
+
+RUN dos2unix /usr/bin/entrypoint.sh
+RUN chmod +x /app/.devcontainer/boot.sh
 
 RUN rm -rf /root/.oh-my-zsh
 RUN sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
