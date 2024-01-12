@@ -7,7 +7,21 @@ var _ = require('lodash')
 export const sign_in = values => {
   return dispatch => {
     axios.post('/auth/sign_in', values).then(resp => {
-      dispatch({type: 'USER_FETCHED', payload: {data: resp.data.data, headers: resp.headers}})
+      dispatch(
+        {
+          type: 'USER_FETCHED',
+          payload: {
+            data: resp.data.data,
+            headers: {
+              ... _.pick(
+                resp.headers,
+                ['access_token', 'client', 'uid', 'expiry']
+              ),
+              authorization: resp.headers.getAuthorization()
+            }
+          }
+        }
+      )
     }).catch(e => {
       if(_.get(e, 'response.data', false)){
         if(_.get(e, 'response.data.errors', false)){
@@ -23,7 +37,21 @@ export const sign_in = values => {
 export const sign_up = values => {
   return dispatch => {
     axios.post(`/auth`, values).then(resp => {
-      dispatch({type: 'USER_FETCHED', payload: { data: resp.data.data, headers: resp.headers}})
+      dispatch(
+        {
+          type: 'USER_FETCHED',
+          payload: {
+            data: resp.data.data,
+            headers: {
+              ... _.pick(
+                resp.headers,
+                ['access_token', 'client', 'uid', 'expiry']
+              ),
+              authorization: resp.headers.getAuthorization()
+            }
+          }
+        }
+      )
     }).catch(e => {
       if(_.get(e, 'response.data', false)){
         if(_.get(e, 'response.data.errors.full_messages', false)){
@@ -51,7 +79,7 @@ export const validateToken = data => {
     headers:{
       "uid": _.get(data,"uid"),
       "client":_.get(data,"client"),
-      "access-token": _.get(data,"access-token"),
+      "access_token": _.get(data,"access_token"),
       'Authorization': _.get(data,"authorization")
     }
   }

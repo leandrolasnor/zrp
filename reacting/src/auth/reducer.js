@@ -24,8 +24,8 @@ var reducer = (state = INITIAL_STATE, action) => {
           email: action.payload.data.email,
           uid: _.get(action.payload,"headers.uid"),
           client: _.get(action.payload,"headers.client"),
-          "access-token": _.get(action.payload,"headers.access-token"),
-          authorization: action.payload.headers.getAuthorization()
+          access_token: _.get(action.payload,"headers.access_token"),
+          authorization: _.get(action.payload, "headers.authorization")
         })
       );
       return {
