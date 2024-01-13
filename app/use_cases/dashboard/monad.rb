@@ -38,7 +38,7 @@ class Dashboard::Monad
       metrics << [:heroes_grouped_rank, hero.not_disabled.group(:rank).count]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
-      metrics << [:average_score, battle.average(:score).round(2)]
+      metrics << [:average_score, battle.average(:score)&.round(2)]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
       battles_grouped_two_heroes = battle.group(:threat_id).having('count(*) = 2').count
