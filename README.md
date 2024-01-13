@@ -52,62 +52,26 @@
 
 ## Considerações sobre o ambiente
 
-```
-# docker-compose.yml
-version: '2.22'
+```# docker-compose.yml
+version: '3.8'
 services:
   rabbitmq:
     image: rabbitmq:management
     container_name: zrp.rabbitmq
     environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
     ports:
-      - "5672:5672"
-      - "15672:15672"
-
-  socket.io.server:
-    image: leandrolasnor/ruby:zrp
-    container_name: zrp.socket.io.server
-    command: sh -c "yarn --cwd ./socket.io/server start"
-    environment:
-      - INSURGENCY_TIME=30000
-
-  socket.io.client:
-    image: leandrolasnor/ruby:zrp
-    container_name: zrp.socket.io.client
-    command: sh -c "yarn --cwd ./socket.io/client start"
-    environment:
-      - AMQP_SERVER=amqp://rabbitmq:5672
-      - SOCKET_IO_SERVER=http://socket.io.server
-      - SOCKET_IO_SERVER_PORT=3003
-    depends_on:
-      - rabbitmq
-      - socket.io.server
-
-  sneakers:
-    image: leandrolasnor/ruby:zrp
-    container_name: zrp.sneakers
-    command: sh -c "bundle exec rake sneakers:run"
-    depends_on:
-      - socket.io.client
-      - db
+    - 5672:5672
+    - 15672:15672
 
   redis:
     image: redis:alpine
     container_name: zrp.redis
     environment:
-        ALLOW_EMPTY_PASSWORD: 'yes'
+      ALLOW_EMPTY_PASSWORD: yes
     ports:
-        - "6379:6379"
-
-  resque:
-    image: leandrolasnor/ruby:zrp
-    container_name: zrp.resque
-    command: sh -c "foreman start"
-    depends_on:
-      - redis
-      - db
+    - 6379:6379
 
   api:
     image: leandrolasnor/ruby:zrp
@@ -115,11 +79,22 @@ services:
     stdin_open: true
     tty: true
     command: sh
+    environment:
+      MEILISEARCH_ACCESS_KEY: key
+      MEILISEARCH_URL: http://meilisearch:7700/
+      INSURGENCY_TIME: 30000
+      AMQP_SERVER: amqp://rabbitmq:5672
+      SOCKET_IO_SERVER: http://api
+      SOCKET_IO_SERVER_PORT: 3003
     ports:
-      - "3000:3000"
+    - 3000:3000
+    - 3001:3001
+    - 3003:3003
     depends_on:
-      - redis
-      - db
+    - redis
+    - db
+    - rabbitmq
+    - meilisearch
 
   db:
     image: bitnami/postgresql:latest
@@ -129,10 +104,18 @@ services:
       POSTGRES_PASSWORD: user
       POSTGRES_DB: zrp
     ports:
-      - "5432:5432"
+    - 5432:5432
+
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    container_name: zrp.meilisearch
+    environment:
+      MEILI_MASTER_KEY: key
+      MEILI_NO_ANALYTICS: true
+    ports:
+    - 7700:7700
 ```
-```
-# makefile
+```# makefile
 all: prepare run
 
 prepare:
@@ -141,8 +124,7 @@ prepare:
 	docker compose exec api bundle exec rake db:seed
 
 run:
-	docker compose up resque sneakers -d
-	docker compose exec api foreman start -f Procfile.api
+  docker compose exec api foreman start
 
 metric:
 	docker compose exec api bundle exec rake metric:show
