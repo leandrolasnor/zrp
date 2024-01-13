@@ -14,7 +14,7 @@
 
 1. Com vscode aberto, digite o comando `> Dev Containers: Clone Repository in Container Volume...`
 2. Aperte `Enter`, informe a url: `https://github.com/leandrolasnor/zrp`
-4. :hourglass_flowing_sand:
+4. :hourglass_flowing_sand: [+] Building 352.7s (31/31) FINISHED
 
 ## Ou use `makefile`
 
