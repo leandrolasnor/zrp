@@ -4,7 +4,16 @@
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "api",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-  "runServices": ["resque", "sneakers", "db", "rabbitmq", "redis", "socket.io.server", "socket.io.client"],
+  "runServices": [
+    "resque",
+    "sneakers",
+    "db",
+    "rabbitmq",
+    "redis",
+    "socket.io.server",
+    "socket.io.client",
+    "meilisearch"
+  ],
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	//"features": {
