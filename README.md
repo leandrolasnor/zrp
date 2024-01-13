@@ -3,32 +3,34 @@
 :page_with_curl: [Enunciado do problema](https://zrp.github.io/challenges/dev/)
 
 #### Conceitos e ferramentas utilizadas na resolução do problema
-:gem: `Ruby on Rails` `React` `Redux` `Dry-rb`
+`Docker`
+
+`Ruby on Rails` `Dry-rb`
+
+`React` `Redux` `MeiliSearch` `Socket.io`
+
 `SOLID` `DDD` `Clear Code` `Clean Arch`
-`Resque` `Sneakers` `RSpec` `RSwag`
-`Socket.io` `PostgreSQL` `Redis` `RabbitMQ`
+
+`Resque` `Sneakers` `Redis` `RabbitMQ`
+
+`RSpec` `RSwag`
+
+`PostgreSQL`
 
 # Como rodar?
 
-## Use o vscode para rodar os serviços via devcontainer
+## .devcontainer :whale:
 
-1. Com vscode aberto, digite o comando `> Dev Containers: Clone Repository in Container Volume...`
-2. Aperte `Enter`, informe a url: `https://github.com/leandrolasnor/zrp`
-4. :hourglass_flowing_sand: [+] Building 352.7s (31/31) FINISHED
+1. Rode o comando no Visual Code `> Dev Containers: Clone Repository in Container Volume...` e dê `Enter``.
+2. Informe a url: `https://github.com/leandrolasnor/zrp` e dê `Enter`
+4. :hourglass_flowing_sand: Aguarde até [+] Building **352.7s** (31/31) FINISHED
 
-## Ou use `makefile`
+## Com o processo de build concluido, faça:
 
-1. Faça o clone deste repositório ou copie os arquivos `makefile` e `docker-compose.yml` para um pasta na sua máquina.
-2. Use o comando `make all` para baixar as imagens, subir os containers e rodar os serviços.
-3. :hourglass_flowing_sand:
-
-* Uma image docker foi publicada no [Docker Hub](https://hub.docker.com/layers/leandrolasnor/ruby/zrp/images/sha256-ce5bc45ff7c8721df11ff6fcc61a4e6a578ad314594f90a8af9904e4c4c9ee42?context=explore)
-
-## Com os serviços rodando, faça:
-
+* Rode o comando no terminal: `foreman start`
 * :chart_with_upwards_trend: Acesse o [`frontend`](http://localhost:3001) para ver alguns números relevantes sobre a dinâmica entre alocação e desalocação de heróis em batalhas contra ameaças. :warning: _Em desenvolvimento_
 * Ao acessar a interface web, crie um usuário clicando no botão `sign up`, informe email, senha e confirme sua senha.
-* É possível acelerar o processo de `insurgência`, diminuindo o valor da variável de ambiente `INSURGENCY_TIME` no `docker-compose.yml`
+* É possível acelerar o processo de `insurgência`, diminuindo o valor da variável de ambiente `INSURGENCY_TIME` em `.devcontainer/docker-compose.yml`
 
 ## Documentação
 
@@ -48,84 +50,3 @@
     - remove um herói
     - mostra o histórico decrescente de ameaças ordenada pela sua ocorrencia
     - visualizar os indicadores exibidos no dashboard
-
-
-## Considerações sobre o ambiente
-
-```# docker-compose.yml
-version: '3.8'
-services:
-  rabbitmq:
-    image: rabbitmq:management
-    container_name: zrp.rabbitmq
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-    ports:
-    - 5672:5672
-    - 15672:15672
-
-  redis:
-    image: redis:alpine
-    container_name: zrp.redis
-    environment:
-      ALLOW_EMPTY_PASSWORD: yes
-    ports:
-    - 6379:6379
-
-  api:
-    image: leandrolasnor/ruby:zrp
-    container_name: zrp.api
-    stdin_open: true
-    tty: true
-    command: sh
-    environment:
-      MEILISEARCH_ACCESS_KEY: key
-      MEILISEARCH_URL: http://meilisearch:7700/
-      INSURGENCY_TIME: 30000
-      AMQP_SERVER: amqp://rabbitmq:5672
-      SOCKET_IO_SERVER: http://api
-      SOCKET_IO_SERVER_PORT: 3003
-    ports:
-    - 3000:3000
-    - 3001:3001
-    - 3003:3003
-    depends_on:
-    - redis
-    - db
-    - rabbitmq
-    - meilisearch
-
-  db:
-    image: bitnami/postgresql:latest
-    container_name: zrp.postgresql
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: user
-      POSTGRES_DB: zrp
-    ports:
-    - 5432:5432
-
-  meilisearch:
-    image: getmeili/meilisearch:latest
-    container_name: zrp.meilisearch
-    environment:
-      MEILI_MASTER_KEY: key
-      MEILI_NO_ANALYTICS: true
-    ports:
-    - 7700:7700
-```
-```# makefile
-all: prepare run
-
-prepare:
-	docker compose up api -d
-	docker compose exec api bundle exec rake db:migrate:reset
-	docker compose exec api bundle exec rake db:seed
-
-run:
-  docker compose exec api foreman start
-
-metric:
-	docker compose exec api bundle exec rake metric:show
-```
