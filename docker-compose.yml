@@ -34,6 +34,9 @@ services:
     image: leandrolasnor/ruby:zrp
     container_name: zrp.sneakers
     command: sh -c "bundle exec rake sneakers:run"
+    environment:
+      MEILISEARCH_ACCESS_KEY: 'key'
+      MEILISEARCH_URL: 'http://meilisearch:7700/'
     depends_on:
       - socket.io.client
       - db
@@ -50,6 +53,9 @@ services:
     image: leandrolasnor/ruby:zrp
     container_name: zrp.resque
     command: sh -c "foreman start -f Procfile.resque"
+    environment:
+      MEILISEARCH_ACCESS_KEY: 'key'
+      MEILISEARCH_URL: 'http://meilisearch:7700/'
     depends_on:
       - redis
       - db
