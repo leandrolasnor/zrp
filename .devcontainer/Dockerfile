@@ -9,16 +9,10 @@ WORKDIR $APP_HOME
 RUN gem install bundler --version '2.4.19'
 COPY . $APP_HOME
 
-RUN bundle
-RUN yarn --cwd ./socket.io/server install
-RUN yarn --cwd ./socket.io/client install
-RUN yarn --cwd ./reacting install
-
 RUN dos2unix ./.devcontainer/boot.sh
-RUN dos2unix ./.devcontainer/start.sh
-
-RUN chmod +x ./.devcontainer/start.sh
 RUN chmod +x ./.devcontainer/boot.sh
+RUN dos2unix ./.devcontainer/start.sh
+RUN chmod +x ./.devcontainer/start.sh
 
 COPY entrypoint.sh /usr/bin/
 RUN dos2unix /usr/bin/entrypoint.sh
