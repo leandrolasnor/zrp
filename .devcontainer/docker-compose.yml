@@ -5,72 +5,72 @@ services:
     image: rabbitmq:management
     container_name: zrp.rabbitmq
     environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
     ports:
       - "5672:5672"
       - "15672:15672"
 
-  socket.io.server:
-    image: leandrolasnor/ruby:zrp
-    build:
-      context: ..
-      dockerfile: .devcontainer/Dockerfile
-    container_name: zrp.socket.io.server
-    command: sh -c "yarn --cwd ./socket.io/server start"
-    environment:
-      - INSURGENCY_TIME=30000
+  # socket.io.server:
+  #   image: leandrolasnor/ruby:zrp
+  #   build:
+  #     context: ..
+  #     dockerfile: .devcontainer/Dockerfile
+  #   container_name: zrp.socket.io.server
+  #   command: sh -c "yarn --cwd ./socket.io/server start"
+  #   environment:
+  #     - INSURGENCY_TIME=30000
 
-  socket.io.client:
-    image: leandrolasnor/ruby:zrp
-    build:
-      context: ..
-      dockerfile: .devcontainer/Dockerfile
-    container_name: zrp.socket.io.client
-    command: sh -c "yarn --cwd ./socket.io/client start"
-    environment:
-      - AMQP_SERVER=amqp://rabbitmq:5672
-      - SOCKET_IO_SERVER=http://socket.io.server
-      - SOCKET_IO_SERVER_PORT=3003
-    depends_on:
-      - rabbitmq
-      - socket.io.server
+  # socket.io.client:
+  #   image: leandrolasnor/ruby:zrp
+  #   build:
+  #     context: ..
+  #     dockerfile: .devcontainer/Dockerfile
+  #   container_name: zrp.socket.io.client
+  #   command: sh -c "yarn --cwd ./socket.io/client start"
+  #   environment:
+  #     - AMQP_SERVER=amqp://rabbitmq:5672
+  #     - SOCKET_IO_SERVER=http://socket.io.server
+  #     - SOCKET_IO_SERVER_PORT=3003
+  #   depends_on:
+  #     - rabbitmq
+  #     - socket.io.server
 
-  sneakers:
-    image: leandrolasnor/ruby:zrp
-    build:
-      context: ..
-      dockerfile: .devcontainer/Dockerfile
-    environment:
-      MEILISEARCH_ACCESS_KEY: 'key'
-      MEILISEARCH_URL: 'http://meilisearch:7700/'
-    container_name: zrp.sneakers
-    command: sh -c "bundle exec rake sneakers:run"
-    depends_on:
-      - socket.io.client
-      - db
+  # sneakers:
+  #   image: leandrolasnor/ruby:zrp
+  #   build:
+  #     context: ..
+  #     dockerfile: .devcontainer/Dockerfile
+  #   environment:
+  #     MEILISEARCH_ACCESS_KEY: 'key'
+  #     MEILISEARCH_URL: 'http://meilisearch:7700/'
+  #   container_name: zrp.sneakers
+  #   command: sh -c "bundle exec rake sneakers:run"
+  #   depends_on:
+  #     - socket.io.client
+  #     - db
 
   redis:
     image: redis:alpine
     container_name: zrp.redis
     environment:
-        ALLOW_EMPTY_PASSWORD: 'yes'
+      ALLOW_EMPTY_PASSWORD: yes
     ports:
         - "6379:6379"
 
-  resque:
-    image: leandrolasnor/ruby:zrp
-    build:
-      context: ..
-      dockerfile: .devcontainer/Dockerfile
-    environment:
-      MEILISEARCH_ACCESS_KEY: 'key'
-      MEILISEARCH_URL: 'http://meilisearch:7700/'
-    container_name: zrp.resque
-    command: sh -c "foreman start -f Procfile.resque"
-    depends_on:
-      - redis
-      - db
+  # resque:
+  #   image: leandrolasnor/ruby:zrp
+  #   build:
+  #     context: ..
+  #     dockerfile: .devcontainer/Dockerfile
+  #   environment:
+  #     MEILISEARCH_ACCESS_KEY: 'key'
+  #     MEILISEARCH_URL: 'http://meilisearch:7700/'
+  #   container_name: zrp.resque
+  #   command: sh -c "foreman start -f Procfile.resque"
+  #   depends_on:
+  #     - redis
+  #     - db
 
   api:
     image: leandrolasnor/ruby:zrp
@@ -82,8 +82,12 @@ services:
     tty: true
     command: sh
     environment:
-      MEILISEARCH_ACCESS_KEY: 'key'
-      MEILISEARCH_URL: 'http://meilisearch:7700/'
+      MEILISEARCH_ACCESS_KEY: key
+      MEILISEARCH_URL: http://meilisearch:7700/
+      AMQP_SERVER: amqp://rabbitmq:5672
+      SOCKET_IO_SERVER: http://socket.io.server
+      SOCKET_IO_SERVER_PORT: 3003
+      INSURGENCY_TIME: 30000
     ports:
       - "3000:3000"
       - "3001:3001"
@@ -105,7 +109,7 @@ services:
     image: getmeili/meilisearch:latest
     container_name: zrp.meilisearch
     environment:
-      MEILI_MASTER_KEY: 'key'
+      MEILI_MASTER_KEY: key
       MEILI_NO_ANALYTICS: true
     ports:
       - "7700:7700"
