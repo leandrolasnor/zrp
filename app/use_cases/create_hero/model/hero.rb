@@ -3,4 +3,5 @@
 class CreateHero::Model::Hero < ApplicationRecord
   include Enums::Hero::Rank
   include Enums::Hero::Status
+  include Indexes::Hero::Meilisearch
 end

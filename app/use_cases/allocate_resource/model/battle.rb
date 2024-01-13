@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class AllocateResource::Model::Battle < ApplicationRecord
+  include Indexes::Battle::Meilisearch
+
   delegate :score!, to: :calculator
 
   belongs_to :hero
