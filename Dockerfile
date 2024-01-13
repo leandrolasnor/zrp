@@ -19,7 +19,7 @@ RUN yarn --cwd ./socket.io/server install
 RUN yarn --cwd ./socket.io/client install
 RUN yarn --cwd ./reacting install
 
-COPY .devcontainer/start.sh /usr/bin/
+COPY start.sh /usr/bin/
 RUN dos2unix /usr/bin/start.sh
 RUN chmod +x /usr/bin/start.sh
 ENTRYPOINT ["start.sh"]
