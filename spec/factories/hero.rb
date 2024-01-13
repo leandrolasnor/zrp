@@ -14,5 +14,9 @@ FactoryBot.define do
     trait :dashboard do
       initialize_with { Dashboard::Model::Hero.new(attributes) }
     end
+
+    trait :create_hero do
+      initialize_with { CreateHero::Model::Hero.new(attributes) }
+    end
   end
 end

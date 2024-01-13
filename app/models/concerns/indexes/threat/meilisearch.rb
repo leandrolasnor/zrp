@@ -2,7 +2,6 @@
 
 module Indexes::Threat::Meilisearch
   extend ActiveSupport::Concern
-  include MeiliSearch::Rails
 
   included do
     meilisearch auto_index: !Rails.env.test?, auto_remove: Rails.env.test?
