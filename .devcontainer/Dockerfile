@@ -20,6 +20,11 @@ RUN dos2unix ./.devcontainer/start.sh
 RUN chmod +x ./.devcontainer/start.sh
 RUN chmod +x ./.devcontainer/boot.sh
 
+COPY entrypoint.sh /usr/bin/
+RUN dos2unix /usr/bin/entrypoint.sh
+RUN chmod +x /usr/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
+
 RUN rm -rf /root/.oh-my-zsh
 RUN sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 RUN usermod --shell /bin/zsh root
