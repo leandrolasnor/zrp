@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
+chmod +x ./.devcontainer/start.sh
 bundle
 yarn --cwd ./reacting install
 bundle exec rake db:migrate
