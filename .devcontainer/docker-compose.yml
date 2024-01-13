@@ -41,6 +41,9 @@ services:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
+    environment:
+      MEILISEARCH_ACCESS_KEY: 'key'
+      MEILISEARCH_URL: 'http://meilisearch:7700/'
     container_name: zrp.sneakers
     command: sh -c "bundle exec rake sneakers:run"
     depends_on:
@@ -60,6 +63,9 @@ services:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
+    environment:
+      MEILISEARCH_ACCESS_KEY: 'key'
+      MEILISEARCH_URL: 'http://meilisearch:7700/'
     container_name: zrp.resque
     command: sh -c "foreman start -f Procfile.resque"
     depends_on:
