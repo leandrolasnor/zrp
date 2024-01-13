@@ -7,8 +7,7 @@ prepare:
 	docker compose exec api bundle exec rake db:seed
 
 run:
-	docker compose up resque sneakers -d
-  docker compose exec api foreman start -f Procfile.api
+  docker compose exec api foreman start
 
 metric:
 	docker compose exec api bundle exec rake metric:show
