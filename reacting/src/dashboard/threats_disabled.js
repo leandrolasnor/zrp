@@ -64,32 +64,32 @@ const ThreatsDisabled = props => {
     <Card>
       <Card.Body>
         <Card.Title>Threats</Card.Title>
-        <Card.Subtitle className="mb-0 text-muted">{`${threats_disabled_count() || 0} Disabled`}</Card.Subtitle>
+        <Card.Subtitle className="mb-0 text-muted">{`${threats_disabled_count()} Disabled`}</Card.Subtitle>
         <Row>
           <Col className="mt-4" sm={5}>
-            <StyledCircleProgress strokeWidth={6} percent={Number(threats_disabled_percent().toFixed(0))} strokeColor="#395463" />
+            <StyledCircleProgress strokeWidth={6} percent={~~Number(threats_disabled_percent().toFixed(0)) || 0} strokeColor="#395463" />
           </Col>
           <Col sm={1} className='ms-3'>
-            <Progress.Line strokeWidth={22} vertical percent={Number(threats_god_disabled_percent().toFixed(0))} status="active" strokeColor="#2986cc" />
+            <Progress.Line strokeWidth={22} vertical percent={~~Number(threats_god_disabled_percent().toFixed(0)) || 0} status="active" strokeColor="#2986cc" />
 
             <Whisper placement="bottom" controlId="control-id-hover" trigger="hover" speaker={god_tooltip}>
               <Tag color="blue">G</Tag>
             </Whisper>
           </Col>
           <Col sm={1} className='ms-3' >
-            <Progress.Line strokeWidth={22} vertical percent={Number(threats_dragon_disabled_percent().toFixed(0))} status="active" strokeColor="#0AB653" />
+            <Progress.Line strokeWidth={22} vertical percent={~~Number(threats_dragon_disabled_percent().toFixed(0)) || 0} status="active" strokeColor="#0AB653" />
             <Whisper placement="bottom" controlId="control-id-hover" trigger="hover" speaker={dragon_tooltip}>
               <Tag color="green">D</Tag>
             </Whisper>
           </Col>
           <Col sm={1} className='ms-3'>
-            <Progress.Line strokeWidth={22} vertical percent={Number(threats_tiger_disabled_percent().toFixed(0))} status="active" strokeColor="#a442f5" />
+            <Progress.Line strokeWidth={22} vertical percent={~~Number(threats_tiger_disabled_percent().toFixed(0)) || 0} status="active" strokeColor="#a442f5" />
             <Whisper placement="bottom" controlId="control-id-hover" trigger="hover" speaker={tiger_tooltip}>
               <Tag color="violet">T</Tag>
             </Whisper>
           </Col>
           <Col sm={1} className='ms-3'>
-            <Progress.Line strokeWidth={22} vertical percent={Number(threats_wolf_disabled_percent().toFixed(0))} status="active" strokeColor="#ff0000" />
+            <Progress.Line strokeWidth={22} vertical percent={~~Number(threats_wolf_disabled_percent().toFixed(0)) || 0} status="active" strokeColor="#ff0000" />
             <Whisper placement="bottom" controlId="control-id-hover" trigger="hover" speaker={wolf_tooltip}>
               <Tag color="red">W</Tag>
             </Whisper>
