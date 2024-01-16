@@ -16,9 +16,9 @@ const Dashboard = () => {
 
   const [seconds, setSeconds] = useState(0)
 
-  const average_time_to_match_hours = Number(_.get(metrics, ['average_time_to_match', 'hours'], 0)).toFixed(0)
-  const average_time_to_match_minutes = Number(_.get(metrics, ['average_time_to_match', 'minutes'], 0)).toFixed(0)
-  const average_time_to_match_seconds = Number(_.get(metrics, ['average_time_to_match', 'seconds'], 0)).toFixed(0)
+  const average_time_to_match_hours = ~~Number(_.get(metrics, ['average_time_to_match', 'hours'], 0)).toFixed(0) || 0
+  const average_time_to_match_minutes = ~~Number(_.get(metrics, ['average_time_to_match', 'minutes'], 0)).toFixed(0) || 0
+  const average_time_to_match_seconds = ~~Number(_.get(metrics, ['average_time_to_match', 'seconds'], 0)).toFixed(0) || 0
 
   const sse = () => {
     setSeconds(0)
@@ -53,7 +53,7 @@ const Dashboard = () => {
               average time to match :: {`
                 ${average_time_to_match_hours > 0 ? `${average_time_to_match_hours} hours` : ``}
                 ${average_time_to_match_minutes > 0 ? `${average_time_to_match_minutes} minutes` : ``}
-                ${average_time_to_match_seconds > 0 ? `${average_time_to_match_seconds} seconds` : ``}
+                ${average_time_to_match_seconds > 0 ? `${average_time_to_match_seconds} seconds` : `0 seconds`}
               `}
             </Tag>
           </TagGroup>
