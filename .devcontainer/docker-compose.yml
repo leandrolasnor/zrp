@@ -28,13 +28,6 @@ services:
     stdin_open: true
     tty: true
     command: sh
-    environment:
-      MEILISEARCH_ACCESS_KEY: key
-      MEILISEARCH_URL: http://meilisearch:7700/
-      AMQP_SERVER: amqp://rabbitmq:5672
-      SOCKET_IO_SERVER: http://api
-      SOCKET_IO_SERVER_PORT: 3003
-      INSURGENCY_TIME: 30000
     ports:
     - 3000:3000
     - 3001:3001

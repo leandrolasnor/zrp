@@ -30,7 +30,7 @@
 * Rode o comando no terminal: `foreman start`
 * :chart_with_upwards_trend: Acesse o [`frontend`](http://localhost:3001) para ver alguns números relevantes sobre a dinâmica entre alocação e desalocação de heróis em batalhas contra ameaças. :warning: _Em desenvolvimento_
 * Ao acessar a interface web, crie um usuário clicando no botão `sign up`, informe email, senha e confirme sua senha.
-* É possível acelerar o processo de `insurgência`, diminuindo o valor da variável de ambiente `INSURGENCY_TIME` em `.devcontainer/docker-compose.yml`
+* É possível acelerar o processo de `insurgência`, diminuindo o valor da variável de ambiente `INSURGENCY_TIME` em `.devcontainer/devcontainer.json:34`
 
 ## Documentação
 
