@@ -5,6 +5,7 @@ import { TagGroup, Tag, Progress } from 'rsuite'
 import HeroesWorking from './heroes_working.js'
 import ThreatsDisabled from './threats_disabled.js'
 import BattlesCharts from './battles_charts.js'
+import HistoricalThreats from './historical_threats.js'
 
 const _ = require('lodash')
 
@@ -23,7 +24,7 @@ const Dashboard = () => {
     setSeconds(0)
     let eventSource = new EventSource(
       `http://localhost:3000/v1/metrics/dashboard`,
-      { headers: {'authorization': _.get(user, 'authorization')} }
+      { headers: { 'authorization': _.get(user, 'authorization') } }
     )
     eventSource.onmessage = (e) => dispatch(JSON.parse(e.data))
     eventSource.onerror = (e) => eventSource.close()
@@ -32,8 +33,8 @@ const Dashboard = () => {
   useEffect(() => {
     sse()
     const counter = setInterval(() => {
-      setSeconds(prev => prev+10)
-    },1000)
+      setSeconds(prev => prev + 10)
+    }, 1000)
     const request_sse = setInterval(sse, 11000)
     return () => {
       clearInterval(counter)
@@ -41,7 +42,7 @@ const Dashboard = () => {
     }
   }, [])
 
-  return(
+  return (
     <Row>
       <Row>
         <Progress.Line status="success" strokeWidth={1} percent={seconds} showInfo={false} />
@@ -49,11 +50,11 @@ const Dashboard = () => {
           <TagGroup>
             <Tag color="blue" size="sm">average score :: {`${Number(_.get(metrics, 'average_score', 0)).toFixed(2)}`}</Tag>
             <Tag color="green" size="sm">
-              average time to match :: {
-                `${average_time_to_match_hours > 0 ? `${average_time_to_match_hours} hours` : ``}
+              average time to match :: {`
+                ${average_time_to_match_hours > 0 ? `${average_time_to_match_hours} hours` : ``}
                 ${average_time_to_match_minutes > 0 ? `${average_time_to_match_minutes} minutes` : ``}
-                ${average_time_to_match_seconds > 0 ? `${average_time_to_match_seconds} seconds` : ``}`
-              }
+                ${average_time_to_match_seconds > 0 ? `${average_time_to_match_seconds} seconds` : ``}
+              `}
             </Tag>
           </TagGroup>
         </Col>
@@ -67,6 +68,11 @@ const Dashboard = () => {
         </Col>
         <Col sm={4}>
           <BattlesCharts metrics={metrics} />
+        </Col>
+      </Row>
+      <Row className='mt-4'>
+        <Col>
+          <HistoricalThreats />
         </Col>
       </Row>
     </Row>
