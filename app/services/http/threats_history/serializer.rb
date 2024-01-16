@@ -9,7 +9,7 @@ class Http::ThreatsHistory::Serializer < ActiveModel::Serializer
 end
 
 class BattleSerializer < ActiveModel::Serializer
-  attributes :heroes, :score, :duration
+  attributes :heroes, :score, :duration, :finished_at, :created_at
 
   def heroes
     object.heroes.map do
@@ -24,6 +24,14 @@ class BattleSerializer < ActiveModel::Serializer
   def duration
     diff = object.battles.first.finished_at - object.battles.first.created_at
     ActiveSupport::Duration.build(diff).parts
+  end
+
+  def finished_at
+    object.battles.first.finished_at
+  end
+
+  def created_at
+    object.battles.first.created_at
   end
 end
 
