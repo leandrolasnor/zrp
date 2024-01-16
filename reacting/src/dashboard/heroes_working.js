@@ -62,22 +62,22 @@ const HeroesWorking = props => {
         <Card.Subtitle className="mb-0 text-muted">{`${heroes_working_count() || 0} Working`}</Card.Subtitle>
         <Row>
           <Col className='mt-4' sm={5}>
-            <StyledCircleProgress strokeWidth={6} percent={Number(heroes_working_percent().toFixed(0))} strokeColor="#395463" />
+            <StyledCircleProgress strokeWidth={6} percent={~~Number(heroes_working_percent().toFixed(0)) || 0} strokeColor="#395463" />
           </Col>
           <Col sm={1} className='ms-3'>
-            <Progress.Line strokeWidth={22} vertical percent={Number(heroes_s_working_percent().toFixed(0))} status="active" strokeColor="#2986cc" />
+            <Progress.Line strokeWidth={22} vertical percent={~~Number(heroes_s_working_percent().toFixed(0)) || 0} status="active" strokeColor="#2986cc" />
             <Tag color="blue">S</Tag>
           </Col>
           <Col sm={1} className='ms-3' >
-            <Progress.Line strokeWidth={22} vertical percent={Number(heroes_a_working_percent().toFixed(0))} status="active" strokeColor="#0AB653" />
+            <Progress.Line strokeWidth={22} vertical percent={~~Number(heroes_a_working_percent().toFixed(0)) || 0} status="active" strokeColor="#0AB653" />
             <Tag color="green">A</Tag>
           </Col>
           <Col sm={1} className='ms-3'>
-            <Progress.Line strokeWidth={22} vertical percent={Number(heroes_b_working_percent().toFixed(0))} status="active" strokeColor="#a442f5" />
+            <Progress.Line strokeWidth={22} vertical percent={~~Number(heroes_b_working_percent().toFixed(0)) || 0} status="active" strokeColor="#a442f5" />
             <Tag color="violet">B</Tag>
           </Col>
           <Col sm={1} className='ms-3'>
-            <Progress.Line strokeWidth={22} vertical percent={Number(heroes_c_working_percent().toFixed(0))} status="active" strokeColor="#ff0000" />
+            <Progress.Line strokeWidth={22} vertical percent={~~Number(heroes_c_working_percent().toFixed(0)) || 0} status="active" strokeColor="#ff0000" />
             <Tag color="red">C</Tag>
           </Col>
         </Row>
