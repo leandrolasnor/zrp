@@ -35,7 +35,7 @@ const Duration = props => {
       {`
       ${~~Number(duration.hours).toFixed(0) || '0'}h
       ${~~Number(duration.minutes).toFixed(2) || '0'}min
-      ${~~Number(duration.seconds).toFixed(2) || '0'}seg
+      ${~~Number(duration.seconds).toFixed(2) || '0'}sec
       `}
     </Tag>
   )
