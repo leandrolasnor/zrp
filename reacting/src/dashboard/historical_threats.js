@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Table, Button, IconButton, Row, Col, Badge, Tag, Tooltip, TagGroup } from 'rsuite'
+import { Icon } from '@rsuite/icons'
+import { Table, IconButton, Row, Col, Badge, Tag } from 'rsuite'
 import CollaspedOutlineIcon from '@rsuite/icons/CollaspedOutline';
 import ExpandOutlineIcon from '@rsuite/icons/ExpandOutline';
 import { historical_threats as historical } from './actions.js'
+import { FaArrowRotateRight } from 'react-icons/fa6'
 
 const { Column, HeaderCell, Cell } = Table;
 const rowKey = 'name';
@@ -156,7 +158,11 @@ const HistoricalThreats = () => {
         headerHeight={30}
       >
         <Column align="center">
-          <HeaderCell>#</HeaderCell>
+          <HeaderCell style={{ padding: 0 }}>
+            <Row className='mt-1'>
+              <IconButton onClick={() => dispatch(historical({page: 1, per_page: 50}))} appearance='subtle' circle size="xs" icon={<Icon as={FaArrowRotateRight} />} />
+            </Row>
+          </HeaderCell>
           <ExpandCell dataKey="battle" expandedRowKeys={expandedRowKeys} onChange={handleExpanded} />
         </Column>
         <Column flexGrow={1}>
