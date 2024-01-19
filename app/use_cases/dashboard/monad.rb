@@ -16,20 +16,20 @@ class Dashboard::Monad
     Try do
       metrics = []
 
-      metrics << [:threat_count, threat.not_problem.count]
+      metrics << [:threat_count, threat.fresh.not_problem.count]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
-      battle_count = threat.not_problem.not_enabled.count
+      battle_count = threat.fresh.not_problem.not_enabled.count
       metrics << [:battle_count, battle_count]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
       metrics << [:hero_count, hero.not_disabled.count]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
-      metrics << [:threats_grouped_rank_status, threat.group(:rank, :status).count]
+      metrics << [:threats_grouped_rank_status, threat.fresh.group(:rank, :status).count]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
-      metrics << [:threats_grouped_rank, threat.not_problem.group(:rank).count]
+      metrics << [:threats_grouped_rank, threat.fresh.not_problem.group(:rank).count]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
       metrics << [:heroes_grouped_rank_status, hero.not_disabled.group(:rank, :status).count]
@@ -38,10 +38,10 @@ class Dashboard::Monad
       metrics << [:heroes_grouped_rank, hero.not_disabled.group(:rank).count]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
-      metrics << [:average_score, battle.average(:score)&.round(2)]
+      metrics << [:average_score, battle.fresh.average(:score)&.round(2)]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
-      battles_grouped_two_heroes = battle.group(:threat_id).having('count(*) = 2').count
+      battles_grouped_two_heroes = battle.fresh.group(:threat_id).having('count(*) = 2').count
       battles_two_heroes_count = battles_grouped_two_heroes.count
       battles_one_hero_count = battle_count - battles_two_heroes_count
       battles_two_and_one_percent = [
@@ -54,9 +54,15 @@ class Dashboard::Monad
       metrics << [
         :average_time_to_match,
         ActiveSupport::Duration.build(
-          threat.disabled.includes(:battles).average('battles.created_at - threats.created_at')
+          threat.fresh.disabled.includes(:battles).limit(25).average('battles.created_at - threats.created_at')
         ).parts
       ]
+      publish('metrics.fetched', payload: [metrics.last].to_h)
+
+      super_hero = hero.includes(:battles).where(
+        'battles.finished_at': 45.minutes.ago...::Time.zone.now
+      ).group(:name, :rank).sum(:score).max_by { _1.second }
+      metrics << [:super_hero, super_hero.first]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
       metrics.to_h

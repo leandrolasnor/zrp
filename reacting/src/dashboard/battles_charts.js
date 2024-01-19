@@ -1,4 +1,3 @@
-import React from 'react'
 import { Row, Col, Card } from 'react-bootstrap'
 import { PieChart } from '@rsuite/charts'
 

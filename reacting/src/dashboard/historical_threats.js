@@ -149,15 +149,12 @@ const HistoricalThreats = () => {
         data={historical_threats}
         rowKey={rowKey}
         expandedRowKeys={expandedRowKeys}
-        onRowClick={data => {
-          console.log(data);
-        }}
         renderRowExpanded={renderRowExpanded}
         bordered={true}
         cellBordered={true}
         headerHeight={30}
       >
-        <Column align="center">
+        <Column align="center" flexGrow={0}>
           <HeaderCell style={{ padding: 0 }}>
             <Row className='mt-1'>
               <IconButton onClick={() => dispatch(historical({page: 1, per_page: 50}))} appearance='subtle' circle size="xs" icon={<Icon as={FaArrowRotateRight} />} />
