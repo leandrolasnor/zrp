@@ -28,7 +28,8 @@
         "AiryShift.spaces-inside-braces",
         "streetsidesoftware.code-spell-checker",
         "naumovs.color-highlight",
-        "bierner.github-markdown-preview"
+        "bierner.github-markdown-preview",
+        "usernamehw.errorlens"
 			]
 		}
 	},
