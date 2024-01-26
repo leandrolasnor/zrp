@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CreateThreat::Monad
-  include Dry::Monads[:result, :try]
+  include Dry::Monads[:try]
   include Dry::Events::Publisher[:create_threat]
   include Dry.Types()
   extend  Dry::Initializer

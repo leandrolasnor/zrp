@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class DeallocateResource::Monad
-  include Dry::Monads[:result, :try]
+  include Dry::Monads[:try]
   include Dry.Types()
   extend Dry::Initializer
 
