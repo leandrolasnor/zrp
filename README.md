@@ -14,7 +14,7 @@
 ### :whale: .devcontainer
 
 1. Rode o comando no Visual Code e dê ___Enter___.
-    - `> Dev Containers: Clone Repository in Named Container Volume...`
+    - `> Dev Containers: Clone Repository in Container Volume...`
 2. Informe o _URL_ do repositório e dê ___Enter___
     - `https://github.com/leandrolasnor/zrp`
 4. :hourglass_flowing_sand: Aguarde até [+] Building **352.7s** (31/31) FINISHED
