@@ -17,17 +17,15 @@
     - `> Dev Containers: Clone Repository in Container Volume...`
 2. Informe o _URL_ do repositório e dê ___Enter___
     - `https://github.com/leandrolasnor/zrp`
-4. :hourglass_flowing_sand: Aguarde até [+] Building **352.7s** (31/31) FINISHED
+3. :hourglass_flowing_sand: Aguarde até o ambiente seja construído
 
-### concluiu?
-
-* Abra o terminal e rode:
+4. Abra o terminal integrado e rode:
     - `foreman start`
-* _Acesse o [`frontend`](http://localhost:3001)_
+5. _Acesse o [`frontend`](http://localhost:3001)_
 
-Diminua o valor da variável de ambiente `INSURGENCY_TIME` em `config/application.yml` para acelerar o processo de __insurgência__
+6. _Acesse a [`documentação`](http://localhost:3000/api-docs) :link:_
 
-##### :link: [`documentação`](http://localhost:3000/api-docs)
+Diminua o valor da variável de ambiente `INSURGENCY_TIME` em `socket.io/server/.env` para acelerar o processo de __insurgência__
 
     - cria herói
     - lista heróis
