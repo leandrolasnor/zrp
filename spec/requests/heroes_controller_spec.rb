@@ -6,7 +6,6 @@ RSpec.describe HeroesController do
   path '/v1/heroes/list' do
     get('list heroes') do
       tags 'Heroes'
-      security [{ ApiKeyAuth: [] }]
       parameter name: :page, in: :query, type: :integer, description: 'pagination'
       parameter name: :per_page, in: :query, type: :integer, description: 'pagination'
       response(200, 'successful') do
@@ -55,7 +54,7 @@ RSpec.describe HeroesController do
   path '/v1/heroes' do
     post('create hero') do
       tags 'Heroes'
-      security [{ ApiKeyAuth: [] }]
+
       consumes "application/json"
       parameter name: :params, in: :body, schema: {
         type: :object,
@@ -107,7 +106,7 @@ RSpec.describe HeroesController do
       tags 'Heroes'
       consumes "application/json"
       produces 'application/json'
-      security [{ ApiKeyAuth: [] }]
+
       response(200, 'successful') do
         let(:id) { hero.id }
         let(:expected_body) do
@@ -128,7 +127,7 @@ RSpec.describe HeroesController do
 
     patch('update hero') do
       tags 'Heroes'
-      security [{ ApiKeyAuth: [] }]
+
       consumes "application/json"
       parameter name: :params, in: :body, schema: {
         type: :object,
@@ -171,7 +170,7 @@ RSpec.describe HeroesController do
 
     put('update hero') do
       tags 'Heroes'
-      security [{ ApiKeyAuth: [] }]
+
       consumes "application/json"
       parameter name: :params, in: :body, schema: {
         type: :object,
@@ -215,7 +214,7 @@ RSpec.describe HeroesController do
 
     delete('destroy hero') do
       tags 'Heroes'
-      security [{ ApiKeyAuth: [] }]
+
       consumes "application/json"
       response(200, 'successful') do
         let(:id) { hero.id }

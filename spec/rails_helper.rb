@@ -65,7 +65,6 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
   config.include(Json::Parse::Helper, type: :request)
-  config.include(Auth::Helper, type: :request)
   config.include(Shoulda::Matchers::ActiveModel, type: :model)
   config.include(Shoulda::Matchers::ActiveRecord, type: :model)
 end
@@ -75,8 +74,4 @@ Shoulda::Matchers.configure do |config|
     with.test_framework :rspec
     with.library :rails
   end
-end
-
-def Authorization
-  auth_token['Authorization']
 end

@@ -6,7 +6,6 @@ RSpec.describe ThreatsController do
   path '/v1/threats/historical' do
     get('threat history') do
       tags 'Threats'
-      security [{ ApiKeyAuth: [] }]
       parameter name: :page, in: :query, type: :integer, description: 'pagination'
       parameter name: :per_page, in: :query, type: :integer, description: 'pagination'
       response(200, 'successful') do
@@ -58,7 +57,9 @@ RSpec.describe ThreatsController do
                   }
                 ],
                 score: be_a(Integer),
-                duration: have_key(:seconds)
+                duration: have_key(:seconds),
+                created_at: be_a(String),
+                finished_at: be_a(String)
               }
             }
           ]

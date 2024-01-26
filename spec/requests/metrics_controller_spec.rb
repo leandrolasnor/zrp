@@ -7,7 +7,6 @@ RSpec.describe MetricsController do
   path '/v1/metrics/dashboard' do
     get('dashboard metric') do
       tags 'Metrics'
-      security [{ ApiKeyAuth: [] }]
       response(200, 'successful') do
         let(:heroes) { create_list(:hero, 5, :dashboard) }
         let(:threats) { create_list(:threat, 7, :dashboard) }
@@ -17,8 +16,10 @@ RSpec.describe MetricsController do
         before do
           heroes.first.working!
           heroes.second.working!
-          create(:battle, score: 80, hero_id: heroes.first.id, threat_id: threats.first.id, finished_at: 5.second.from_now)
-          create(:battle, score: 74, hero_id: heroes.second.id, threat_id: threats.second.id, finished_at: 5.second.from_now)
+          create(:battle, score: 80, hero_id: heroes.first.id, threat_id: threats.first.id,
+                          finished_at: 5.seconds.from_now)
+          create(:battle, score: 74, hero_id: heroes.second.id, threat_id: threats.second.id,
+                          finished_at: 5.seconds.from_now)
           threats.first.disabled!
           threats.second.disabled!
           threats.third.problem!

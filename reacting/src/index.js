@@ -3,21 +3,21 @@ import ReactDOM from 'react-dom/client'
 import { applyMiddleware } from 'redux'
 import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
-import './index.css'
-import AuthOrApp from './authOrApp'
 import reducers from './reducers/reducers'
 import ReduxToastr from 'react-redux-toastr'
-import promise from 'redux-promise'
 import multi from 'redux-multi'
+import promise from 'redux-promise'
 import thunk from 'redux-thunk'
+import App from './App.js'
+import axios from 'axios'
+import reportWebVitals from './reportWebVitals'
 import 'rsuite/dist/rsuite.min.css'
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
-import axios from 'axios'
-import reportWebVitals from './reportWebVitals'
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL
+axios.defaults.headers.common['Content-type'] = 'application/json'
 
 const devTools =
   process.env.NODE_ENV === 'development'
@@ -33,7 +33,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <AuthOrApp />
+      <App />
       <ReduxToastr
         timeOut={6000}
         newestOnTop={true}
