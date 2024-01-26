@@ -84,7 +84,6 @@ GEM
     ast (2.4.2)
     base64 (0.2.0)
     bigdecimal (3.1.5)
-    bindex (0.8.1)
     bootsnap (1.17.1)
       msgpack (~> 1.2)
     builder (3.2.4)
@@ -431,11 +430,6 @@ GEM
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
     uniform_notifier (1.16.0)
-    web-console (4.2.1)
-      actionview (>= 6.0.0)
-      activemodel (>= 6.0.0)
-      bindex (>= 0.4.0)
-      railties (>= 6.0.0)
     webmock (3.19.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
@@ -491,7 +485,6 @@ DEPENDENCIES
   sse-client
   timecop
   tzinfo-data
-  web-console
   webmock
 
 RUBY VERSION
