@@ -4,7 +4,6 @@ module Indexes::Battle::Meilisearch
   extend ActiveSupport::Concern
 
   included do
-    meilisearch auto_index: !Rails.env.test?, auto_remove: Rails.env.test?
     meilisearch index_uid: :battle do
       attribute :score
       attribute :finished_at

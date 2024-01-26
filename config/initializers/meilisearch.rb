@@ -5,5 +5,6 @@ MeiliSearch::Rails.configuration = {
   meilisearch_api_key: ENV.fetch('MEILISEARCH_ACCESS_KEY'),
   pagination_backend: :kaminari,
   timeout: 2,
-  max_retries: 1
+  max_retries: 1,
+  active: !Rails.env.test?
 }
