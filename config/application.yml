@@ -1,0 +1,7 @@
+development:
+  INSURGENCY_TIME: "30000"
+  MEILISEARCH_ACCESS_KEY: "key"
+  MEILISEARCH_URL: "http://meilisearch:7700"
+  AMQP_SERVER: "amqp://rabbitmq:5672"
+  SOCKET_IO_SERVER: "http://api"
+  SOCKET_IO_SERVER_PORT: "3003"
