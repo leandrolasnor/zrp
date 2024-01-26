@@ -1,5 +1,8 @@
 import { io } from "socket.io-client";
 import amqp from "amqplib";
+import { config } from 'dotenv'
+
+config()
 
 const queue = "threats";
 

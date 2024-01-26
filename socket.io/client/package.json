@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "amqplib": "^0.10.3",
+    "dotenv": "^16.4.1",
     "socket.io-client": "^4.7.2"
   }
 }

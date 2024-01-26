@@ -1,7 +1,9 @@
 import { Server } from "socket.io"
 import { random } from 'supervillains'
 import _ from 'lodash'
+import { config } from 'dotenv'
 
+config()
 const io = new Server({ /* options */ });
 const occurrence = () => {
   return {

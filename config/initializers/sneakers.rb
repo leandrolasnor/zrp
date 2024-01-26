@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 opts = {
-  amqp: 'amqp://rabbitmq',
+  amqp: ENV.fetch('AMQP_SERVER'),
   username: 'guest',
   password: 'guest',
   exchange: 'sneakers',
