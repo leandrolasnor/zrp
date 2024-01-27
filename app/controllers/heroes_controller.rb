@@ -22,8 +22,8 @@ class HeroesController < BaseController
   end
 
   def search
-    params.permit!(:query, :limit, :offset)
-    render(**Http::SearchHeroes::Service.(params))
+    status, content = Http::SearchHeroes::Service.(search_params)
+    render json: content, status: status
   end
 
   def destroy
@@ -41,8 +41,12 @@ class HeroesController < BaseController
     params.permit(:page, :per_page)
   end
 
+  def search_params
+    params.permit(:query, :page, :per_page, :sort)
+  end
+
   def edit_params
-    params.permit(:id, :name, :rank, :lat, :lng)
+    params.require(:hero).permit(:id, :name, :rank, :lat, :lng)
   end
 
   def destroy_params

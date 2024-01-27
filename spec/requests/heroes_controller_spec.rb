@@ -3,50 +3,43 @@
 require 'swagger_helper'
 
 RSpec.describe HeroesController do
+  path '/v1/heroes/search' do
+    get('search heroes') do
+      tags 'Heroes'
+      parameter name: :query, in: :query, type: :string, description: 'query', example: "Silva"
+      parameter name: :page, in: :query, type: :integer, description: 'pagination', example: "1"
+      parameter name: :per_page, in: :query, type: :integer, description: 'pagination', example: "3"
+      parameter name: :sort, in: :query, type: :string, description: 'sort', required: false, example: "name:desc"
+      response(200, 'successful') do
+        let(:query) { 'query' }
+        let(:page) { 2 }
+        let(:per_page) { 3 }
+        let(:sort) { 'name:desc' }
+        run_test!
+      end
+    end
+  end
+
   path '/v1/heroes/list' do
     get('list heroes') do
       tags 'Heroes'
-      parameter name: :page, in: :query, type: :integer, description: 'pagination'
-      parameter name: :per_page, in: :query, type: :integer, description: 'pagination'
+      parameter name: :page, in: :query, type: :integer, description: 'pagination', example: '1'
+      parameter name: :per_page, in: :query, type: :integer, description: 'pagination', example: '3'
       response(200, 'successful') do
+        schema type: :array, items: {
+          type: :object,
+          properties: {
+            id: { type: :integer },
+            name: { type: :string },
+            rank: { type: :string },
+            lat: { type: :string },
+            lng: { type: :string }
+          }
+        }
         let(:heroes) { create_list(:hero, 6) }
         let(:page) { 2 }
-        let(:per_page) { 3 }
-
-        let(:expected_body) do
-          [
-            {
-              id: be_a(Integer),
-              name: heroes[2].name,
-              rank: heroes[2].rank,
-              lat: heroes[2].lat.to_s,
-              lng: heroes[2].lng.to_s
-            },
-            {
-              id: be_a(Integer),
-              name: heroes[1].name,
-              rank: heroes[1].rank,
-              lat: heroes[1].lat.to_s,
-              lng: heroes[1].lng.to_s
-            },
-            {
-              id: be_a(Integer),
-              name: heroes[0].name,
-              rank: heroes[0].rank,
-              lat: heroes[0].lat.to_s,
-              lng: heroes[0].lng.to_s
-            }
-          ]
-        end
-
-        before do
-          heroes
-        end
-
-        run_test! do |response|
-          expect(response).to have_http_status(:ok)
-          expect(parsed_body).to match(expected_body)
-        end
+        let(:per_page) { heroes.count - 3 }
+        run_test!
       end
     end
   end
@@ -54,185 +47,138 @@ RSpec.describe HeroesController do
   path '/v1/heroes' do
     post('create hero') do
       tags 'Heroes'
-
       consumes "application/json"
       parameter name: :params, in: :body, schema: {
         type: :object,
         properties: {
-          name: { type: :string },
-          rank: { type: :integer },
-          lat: { type: :number },
-          lng: { type: :number }
+          name: { type: :string, example: 'Forrest Gump' },
+          rank: { type: :integer, example: '2' },
+          lat: { type: :number, example: -45.8987657787876755 },
+          lng: { type: :number, example: 66.898790547877123545 }
         },
         required: [:name, :rank, :lat, :lng]
       }
       response(201, 'successful') do
-        let(:lat) { -47.3602244101421 }
-        let(:lng) { 42.35626747005944 }
+        schema type: :object, properties: {
+          id: { type: :integer },
+          name: { type: :string },
+          rank: { type: :string },
+          lat: { type: :string },
+          lng: { type: :string }
+        }, required: ['id', 'name', 'rank', 'lat', 'lng']
         let(:params) do
           {
             name: 'Heroizinho',
             rank: 0,
-            lat: lat,
-            lng: lng
+            lat: -47.3602244101421,
+            lng: 42.35626747005944
           }
         end
-
-        let(:expected_body) do
-          {
-            id: be_a(Integer),
-            name: 'Heroizinho',
-            rank: 'c',
-            lat: lat.to_s,
-            lng: lng.to_s
-          }
-        end
-
-        run_test! do |response|
-          expect(response).to have_http_status(:created)
-          expect(parsed_body).to match(expected_body)
-        end
+        run_test!
       end
     end
   end
 
   path '/v1/heroes/{id}' do
-    let(:hero) { create(:hero, name: 'Hero name', rank: 2, lat: lat, lng: lng) }
-    let(:lat) { -1.691468683929372 }
-    let(:lng) { -90.9745256083916 }
+    let(:hero) { create(:hero) }
     parameter name: 'id', in: :path, type: :string, required: true
-
     get('show hero') do
       tags 'Heroes'
       consumes "application/json"
       produces 'application/json'
-
       response(200, 'successful') do
         let(:id) { hero.id }
-        let(:expected_body) do
-          {
-            name: 'Hero name',
-            rank: 'a',
-            lat: lat.to_s,
-            lng: lng.to_s
-          }
-        end
-
-        run_test! do |response|
-          expect(response).to have_http_status(:ok)
-          expect(parsed_body).to eq(expected_body)
-        end
+        schema type: :object, properties: {
+          name: { type: :string },
+          rank: { type: :string },
+          lat: { type: :string },
+          lng: { type: :string }
+        }, required: ['name', 'rank', 'lat', 'lng']
+        run_test!
       end
     end
 
     patch('update hero') do
       tags 'Heroes'
-
       consumes "application/json"
       parameter name: :params, in: :body, schema: {
         type: :object,
         properties: {
-          name: { type: :string },
-          lat: { type: :numeric },
-          lng: { type: :numeric }
+          id: { type: :integer, example: '1' },
+          name: { type: :string, example: 'Silva' },
+          lat: { type: :numeric, example: 5.529871874122506 },
+          lng: { type: :numeric, example: -162.4156876628909 }
         },
-        required: [:name, :lat, :lng]
+        required: [:id, :name, :lat, :lng]
       }
-
       response(200, 'successful') do
         let(:id) { hero.id }
-        let(:lat) { 5.529871874122506 }
-        let(:lng) { -162.4156876628909 }
-
+        schema type: :object, properties: {
+          name: { type: :string },
+          rank: { type: :string },
+          lat: { type: :string },
+          lng: { type: :string }
+        }, required: ['name', 'rank', 'lat', 'lng']
         let(:params) do
           {
+            id: hero.id,
             name: 'Other name for hero',
-            lat: lat,
-            lng: lng
+            lat: 5.529871874122506,
+            lng: -162.4156876628909
           }
         end
-
-        let(:expected_body) do
-          {
-            name: 'Other name for hero',
-            rank: 'a',
-            lat: lat.to_s,
-            lng: lng.to_s
-          }
-        end
-
-        run_test! do |response|
-          expect(response).to have_http_status(:ok)
-          expect(parsed_body).to match(expected_body)
-        end
+        run_test!
       end
     end
 
     put('update hero') do
       tags 'Heroes'
-
       consumes "application/json"
       parameter name: :params, in: :body, schema: {
         type: :object,
         properties: {
-          name: { type: :string },
-          rank: { type: :integer },
-          lat: { type: :numeric },
-          lng: { type: :numeric }
+          id: { type: :integer, example: '1' },
+          name: { type: :string, example: 'Silva' },
+          rank: { type: :integer, example: '0' },
+          lat: { type: :numeric, example: -22.86210918520104 },
+          lng: { type: :numeric, example: -27.26000247930017 }
         },
-        required: [:name, :rank, :lat, :lng]
+        required: [:id, :name, :rank, :lat, :lng]
       }
       response(200, 'successful') do
+        schema type: :object, properties: {
+          name: { type: :string },
+          rank: { type: :string },
+          lat: { type: :string },
+          lng: { type: :string }
+        }, required: ['name', 'rank', 'lat', 'lng']
         let(:id) { hero.id }
-        let(:lat) { -22.86210918520104 }
-        let(:lng) { -27.26000247930017 }
-
         let(:params) do
           {
+            id: hero.id,
             name: 'Ramon Valdez',
             rank: 3,
-            lat: lat,
-            lng: lng
+            lat: -22.86210918520104,
+            lng: -27.26000247930017
           }
         end
-
-        let(:expected_body) do
-          {
-            name: 'Ramon Valdez',
-            rank: 's',
-            lat: lat.to_s,
-            lng: lng.to_s
-          }
-        end
-
-        run_test! do |response|
-          expect(response).to have_http_status(:ok)
-          expect(parsed_body).to match(expected_body)
-        end
+        run_test!
       end
     end
 
     delete('destroy hero') do
       tags 'Heroes'
-
       consumes "application/json"
       response(200, 'successful') do
         let(:id) { hero.id }
-
-        let(:expected_body) do
-          {
-            id: be_a(Integer),
-            name: 'Hero name',
-            rank: 'a',
-            lat: be_a(String),
-            lng: be_a(String)
-          }
-        end
-
-        run_test! do |response|
-          expect(response).to have_http_status(:ok)
-          expect(parsed_body).to match(expected_body)
-        end
+        schema type: :object, properties: {
+          id: { type: :integer },
+          name: { type: :string },
+          rank: { type: :string },
+          lat: { type: :string },
+          lng: { type: :string }
+        }, required: ['name', 'rank', 'lat', 'lng']
+        run_test!
       end
     end
   end

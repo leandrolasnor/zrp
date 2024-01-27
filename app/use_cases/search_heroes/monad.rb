@@ -5,16 +5,11 @@ class SearchHeroes::Monad
   include Dry.Types()
   extend  Dry::Initializer
 
-  option :model, type: Interface(:page), default: -> { SearchHeroes::Model::Hero }, reader: :private
+  option :model, type: Interface(:ms_raw_search), default: -> { SearchHeroes::Model::Hero }, reader: :private
 
-  def call(query: '', sort: ['name:asc'], limit: 25, offset: 0)
+  def call(query:, page:, per_page:, sort: 'name:asc', **_)
     Try do
-      model.ms_raw_search(
-        query,
-        limit: limit,
-        offset: offset,
-        sort: sort
-      )
+      model.ms_raw_search(query, page: page, hits_per_page: per_page, sort: [sort])
     end
   end
 end

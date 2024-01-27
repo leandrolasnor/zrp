@@ -4,6 +4,40 @@ info:
   title: API V1
   version: v1
 paths:
+  "/v1/heroes/search":
+    get:
+      summary: search heroes
+      tags:
+      - Heroes
+      parameters:
+      - name: query
+        in: query
+        description: query
+        example: Silva
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: pagination
+        example: '1'
+        schema:
+          type: integer
+      - name: per_page
+        in: query
+        description: pagination
+        example: '3'
+        schema:
+          type: integer
+      - name: sort
+        in: query
+        description: sort
+        required: false
+        example: name:desc
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
   "/v1/heroes/list":
     get:
       summary: list heroes
@@ -13,11 +47,13 @@ paths:
       - name: page
         in: query
         description: pagination
+        example: '1'
         schema:
           type: integer
       - name: per_page
         in: query
         description: pagination
+        example: '3'
         schema:
           type: integer
       responses:
@@ -28,8 +64,6 @@ paths:
       summary: create hero
       tags:
       - Heroes
-      security:
-      - ApiKeyAuth: []
       parameters: []
       responses:
         '201':
@@ -42,12 +76,16 @@ paths:
               properties:
                 name:
                   type: string
+                  example: Forrest Gump
                 rank:
                   type: integer
+                  example: '2'
                 lat:
                   type: number
+                  example: -45.89876577878768
                 lng:
                   type: number
+                  example: 66.89879054787713
               required:
               - name
               - rank
@@ -64,17 +102,31 @@ paths:
       summary: show hero
       tags:
       - Heroes
-      security:
-      - ApiKeyAuth: []
       responses:
         '200':
           description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  rank:
+                    type: string
+                  lat:
+                    type: string
+                  lng:
+                    type: string
+                required:
+                - name
+                - rank
+                - lat
+                - lng
     patch:
       summary: update hero
       tags:
       - Heroes
-      security:
-      - ApiKeyAuth: []
       parameters: []
       responses:
         '200':
@@ -85,13 +137,20 @@ paths:
             schema:
               type: object
               properties:
+                id:
+                  type: integer
+                  example: '1'
                 name:
                   type: string
+                  example: Silva
                 lat:
                   type: numeric
+                  example: 5.529871874122506
                 lng:
                   type: numeric
+                  example: -162.4156876628909
               required:
+              - id
               - name
               - lat
               - lng
@@ -99,8 +158,6 @@ paths:
       summary: update hero
       tags:
       - Heroes
-      security:
-      - ApiKeyAuth: []
       parameters: []
       responses:
         '200':
@@ -111,15 +168,23 @@ paths:
             schema:
               type: object
               properties:
+                id:
+                  type: integer
+                  example: '1'
                 name:
                   type: string
+                  example: Silva
                 rank:
                   type: integer
+                  example: '0'
                 lat:
                   type: numeric
+                  example: -22.86210918520104
                 lng:
                   type: numeric
+                  example: -27.26000247930017
               required:
+              - id
               - name
               - rank
               - lat
@@ -128,8 +193,6 @@ paths:
       summary: destroy hero
       tags:
       - Heroes
-      security:
-      - ApiKeyAuth: []
       responses:
         '200':
           description: successful
@@ -138,8 +201,6 @@ paths:
       summary: dashboard metric
       tags:
       - Metrics
-      security:
-      - ApiKeyAuth: []
       responses:
         '200':
           description: successful
@@ -148,8 +209,6 @@ paths:
       summary: threat history
       tags:
       - Threats
-      security:
-      - ApiKeyAuth: []
       parameters:
       - name: page
         in: query

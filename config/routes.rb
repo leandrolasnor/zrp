@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   scope '/v1' do
     resources :heroes, only: [:show, :create, :update, :destroy] do
       get :list, on: :collection
+      get :search, on: :collection
     end
 
     resources :threats, only: [] do

@@ -6,11 +6,11 @@ class Http::SearchHeroes::Service < Http::ApplicationService
   Contract = Http::SearchHeroes::Contract.new
 
   def call
-    res = monad.call(**params.symbolize_keys)
+    res = monad.call(**params)
 
-    return [[:status, :ok], [:content, res.value!]].to_h if res.success?
+    return [:ok, res.value!] if res.success?
 
     Rails.logger.error(res.exception)
-    [[:status, :internal_server_error], [:content, res.exception.message]].to_h
+    [:internal_server_error, res.exception.message]
   end
 end
