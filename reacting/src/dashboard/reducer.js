@@ -1,7 +1,7 @@
 const INITIAL_STATE = {
   metrics: {},
   historical_threats: []
-};
+}
 
 var reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -10,13 +10,13 @@ var reducer = (state = INITIAL_STATE, action) => {
         ...state,
         metrics: { ...state.metrics, ...action.payload }
       }
-      case "LOGOUT":
-        return INITIAL_STATE
-      case "HISTORICAL_THREATS_FETCHED":
-        return {
-          ...state,
-          historical_threats: action.payload
-        }
+    case "LOGOUT":
+      return INITIAL_STATE
+    case "HISTORICAL_THREATS_FETCHED":
+      return {
+        ...state,
+        historical_threats: action.payload
+      }
     default:
       return state
   }
