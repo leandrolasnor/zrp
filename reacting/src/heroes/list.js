@@ -5,15 +5,15 @@ const { Column, HeaderCell, Cell } = Table
 const rowKey = 'name'
 
 const List = props => {
-  const { list } = useSelector(state => state.heroes)
+  const { search: { hits } } = useSelector(state => state.heroes)
 
   return (
     <Col xs={24} className="mt-3">
       <div style={{ position: 'relative' }}>
         <Table
-          shouldUpdateScroll={false} // Prevent the scrollbar from scrolling to the top after the table content area height changes.
+          shouldUpdateScroll={false}
           height={500}
-          data={list}
+          data={hits}
           rowKey={rowKey}
           bordered={true}
           cellBordered={true}

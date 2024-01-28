@@ -1,5 +1,9 @@
 const INITIAL_STATE = {
-  list: []
+  search: {
+    hits: [],
+    query: '',
+    totalHits: 0
+  }
 }
 
 var reducer = (state = INITIAL_STATE, action) => {
@@ -7,7 +11,15 @@ var reducer = (state = INITIAL_STATE, action) => {
     case "HEROES_FETCHED":
       return {
         ...state,
-        list: action.payload
+        search: action.payload
+      }
+    case "QUERY_CHANGED":
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          query: action.payload
+        }
       }
     case "LOGOUT":
       return INITIAL_STATE
