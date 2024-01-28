@@ -8,8 +8,8 @@ class Http::ApplicationService
 
   def self.call(args)
     if defined?(self::Contract)
-      contract = self::Contract.call(args.to_h)
-      return [:unprocessable_entity, contract.errors.to_h] if contract.failure?
+      args = self::Contract.call(args.to_h)
+      return [:unprocessable_entity, args.errors.to_h] if args.failure?
     end
 
     new(args.to_h).call

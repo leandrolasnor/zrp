@@ -21,6 +21,11 @@ class HeroesController < BaseController
     render json: content, status: status, each_serializer: serializer
   end
 
+  def search
+    status, content = Http::SearchHeroes::Service.(search_params)
+    render json: content, status: status
+  end
+
   def destroy
     status, content, serializer = Http::DestroyHero::Service.(destroy_params)
     render json: content, status: status, serializer: serializer
@@ -36,8 +41,12 @@ class HeroesController < BaseController
     params.permit(:page, :per_page)
   end
 
+  def search_params
+    params.permit(:query, :page, :per_page, :sort)
+  end
+
   def edit_params
-    params.permit(:id, :name, :rank, :lat, :lng)
+    params.require(:hero).permit(:id, :name, :rank, :lat, :lng)
   end
 
   def destroy_params

@@ -32,7 +32,7 @@ const Dashboard = () => {
   }, [])
 
   return (
-    <Row>
+    <>
       <Row>
         <Progress.Line status="success" strokeWidth={1} percent={counter} showInfo={false} />
         <Col sm={12}>
@@ -59,7 +59,7 @@ const Dashboard = () => {
           <HistoricalThreats />
         </Col>
       </Row>
-    </Row>
+    </>
   )
 }
 
