@@ -21,8 +21,6 @@ var reducer = (state = INITIAL_STATE, action) => {
           query: action.payload
         }
       }
-    case "LOGOUT":
-      return INITIAL_STATE
     default:
       return state
   }

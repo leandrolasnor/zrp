@@ -10,8 +10,6 @@ var reducer = (state = INITIAL_STATE, action) => {
         ...state,
         metrics: { ...state.metrics, ...action.payload }
       }
-    case "LOGOUT":
-      return INITIAL_STATE
     case "HISTORICAL_THREATS_FETCHED":
       return {
         ...state,
