@@ -8,12 +8,17 @@ const INITIAL_STATE = {
 
 var reducer = (state = INITIAL_STATE, action) => {
   switch(action.type) {
-    case "HEROES_FETCHED":
+    case 'HERO_CREATED':
+      return {
+        ...state,
+        hits: [action.payload, ...state.hits ]
+      }
+    case 'HEROES_FETCHED':
       return {
         ...state,
         search: action.payload
       }
-    case "QUERY_CHANGED":
+    case 'QUERY_CHANGED':
       return {
         ...state,
         search: {

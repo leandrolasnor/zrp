@@ -8,3 +8,11 @@ export const search = (query, pagination) => {
     }).catch(e => handle_errors(e))
   }
 }
+
+export const create_hero = data => {
+  return dispatch => {
+    axios.post('/v1/heroes', { params: { ...data } }).then(resp => {
+      dispatch({type: 'HERO_CREATED', payload: resp.data})
+    }).catch(e => handle_errors(e))
+  }
+}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, Grid } from 'rsuite'
 import { TagGroup, Progress } from 'rsuite'
 import HeroesWorking from './heroes_working.js'
 import ThreatsDisabled from './threats_disabled.js'
@@ -32,10 +32,10 @@ const Dashboard = () => {
   }, [])
 
   return (
-    <>
+    <Grid fluid>
+      <Row className='mb-3'><Progress.Line status="success" strokeWidth={3} percent={counter} showInfo={false} /></Row>
       <Row>
-        <Progress.Line status="success" strokeWidth={1} percent={counter} showInfo={false} />
-        <Col sm={12}>
+        <Col>
           <TagGroup>
             <AverageScore score={average_score}></AverageScore>
             <AverageTimeToMatch data={average_time_to_match} />
@@ -44,22 +44,20 @@ const Dashboard = () => {
         </Col>
       </Row>
       <Row className='mt-2'>
-        <Col sm={4}>
+        <Col sm={8}>
           <HeroesWorking metrics={metrics} />
         </Col>
-        <Col sm={4}>
+        <Col sm={8}>
           <ThreatsDisabled metrics={metrics} />
         </Col>
-        <Col sm={4}>
+        <Col sm={8}>
           <BattlesCharts metrics={metrics} />
         </Col>
       </Row>
       <Row className='mt-4'>
-        <Col>
-          <HistoricalThreats />
-        </Col>
+        <HistoricalThreats />
       </Row>
-    </>
+    </Grid>
   )
 }
 

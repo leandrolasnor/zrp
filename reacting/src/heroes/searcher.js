@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Input, InputGroup, IconButton, Col } from 'rsuite'
+import { Input, InputGroup, IconButton, Row, Col } from 'rsuite'
+import HeroForm from './hero_form.js'
 import SearchIcon from '@rsuite/icons/Search'
 import PlusIcon from '@rsuite/icons/Plus'
 import { styled } from 'styled-components'
@@ -8,13 +9,14 @@ import { styled } from 'styled-components'
 const Searcher = props => {
   const searchRef = useRef(null);
   const dispatch = useDispatch()
+  const [openHeroForm, setOpenHeroForm] = useState(false)
 
   useEffect(() => {
     const keyDownHandler = event => {
       if (event.key === 'Escape') {
         event.preventDefault()
         searchRef.current.value = ''
-      }else if(event.key ==='Enter'){
+      } else if (event.key === 'Enter') {
         event.preventDefault()
         dispatch({ type: 'QUERY_CHANGED', payload: searchRef.current.value })
       }
@@ -41,14 +43,15 @@ const Searcher = props => {
   `
 
   return (
-    <>
+    <Row>
       <Col xs={22}>
-        <CustomInputGroupWidthButton size="md" placeholder="Search" />
+        <CustomInputGroupWidthButtonStyled size="md" placeholder="Search" />
       </Col>
       <Col xs={2}>
-        <IconButton icon={<PlusIcon />}>Hero</IconButton>
+        <IconButton onClick={() => setOpenHeroForm(!openHeroForm)} icon={<PlusIcon />}>Hero</IconButton>
       </Col>
-    </>
+      <HeroForm size='xs' open={openHeroForm} textButton='Save' handleClose={() => setOpenHeroForm(false)} />
+    </Row>
   )
 }
 
