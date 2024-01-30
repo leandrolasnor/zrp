@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Icon } from '@rsuite/icons'
-import { Table, IconButton, Row, Col, Badge, Tag } from 'rsuite'
+import { Table, IconButton, Row, Col, Badge, Tag, TagGroup } from 'rsuite'
 import CollaspedOutlineIcon from '@rsuite/icons/CollaspedOutline';
 import ExpandOutlineIcon from '@rsuite/icons/ExpandOutline';
 import { historical_threats as historical } from './actions.js'
@@ -96,18 +96,12 @@ const renderRowExpanded = rowData => {
 
   return (
     <Row className="mt-3">
-      <Col>
+      <TagGroup>
         <Tag>{battle.score}</Tag>
-      </Col>
-      <Col>
         <BadgeHero hero={heroes[0]} />
-      </Col>
-      <Col>
         <BadgeHero hero={heroes[1]} />
-      </Col>
-      <Col>
         <Duration duration={battle.duration} />
-      </Col>
+      </TagGroup>
     </Row>
   );
 };
@@ -157,7 +151,7 @@ const HistoricalThreats = () => {
         <Column align="center" flexGrow={0}>
           <HeaderCell style={{ padding: 0 }}>
             <Row className='mt-1'>
-              <IconButton onClick={() => dispatch(historical({page: 1, per_page: 50}))} appearance='subtle' circle size="xs" icon={<Icon as={FaArrowRotateRight} />} />
+              <IconButton onClick={() => dispatch(historical({ page: 1, per_page: 50 }))} appearance='subtle' circle size="xs" icon={<Icon as={FaArrowRotateRight} />} />
             </Row>
           </HeaderCell>
           <ExpandCell dataKey="battle" expandedRowKeys={expandedRowKeys} onChange={handleExpanded} />

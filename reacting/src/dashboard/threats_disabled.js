@@ -67,7 +67,7 @@ const ThreatsDisabled = props => {
         <Card.Subtitle className="mb-0 text-muted">{`${threats_disabled_count()} Disabled`}</Card.Subtitle>
         <Row>
           <Col className="mt-4" sm={5}>
-            <StyledCircleProgress strokeWidth={6} percent={~~Number(threats_disabled_percent().toFixed(0)) || 0} strokeColor="#395463" />
+            <StyledCircleProgress strokeWidth={6} percent={~~Number(threats_disabled_percent().toFixed(0)) || 0} strokeColor="#a442f5" />
           </Col>
           <Col sm={1} className='ms-3'>
             <Progress.Line strokeWidth={22} vertical percent={~~Number(threats_god_disabled_percent().toFixed(0)) || 0} status="active" strokeColor="#2986cc" />

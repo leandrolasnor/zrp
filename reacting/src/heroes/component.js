@@ -1,15 +1,19 @@
-import { Row, Col, Grid } from 'rsuite'
+import { useSelector } from 'react-redux'
+import { Grid } from 'rsuite'
 import Searcher from './searcher.js'
 import List from './list.js'
 import Paginate from './paginate.js'
 
 const Heroes = props => {
+  const heroes = useSelector(state => state.heroes)
+  const { search: { query } } = heroes
+
   return (
-    <>
-      <Row><Col xs={24}><Searcher /></Col></Row>
-      <Row><Col sm={24}><List /></Col></Row>
-      <Row><Col sm={24}><Paginate /></Col></Row>
-    </>
+    <Grid>
+      <Searcher query={query} />
+      <Paginate heroes={heroes} />
+      <List heroes={heroes} />
+    </Grid>
   )
 }
 
