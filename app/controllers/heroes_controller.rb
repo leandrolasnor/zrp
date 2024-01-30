@@ -31,10 +31,14 @@ class HeroesController < BaseController
     render json: content, status: status, serializer: serializer
   end
 
+  def ranks
+    render json: CreateHero::Model::Hero.ranks, status: :ok
+  end
+
   private
 
   def create_params
-    params.permit(:name, :rank, :lat, :lng)
+    params.required(:hero).permit(:name, :rank, :lat, :lng)
   end
 
   def list_params

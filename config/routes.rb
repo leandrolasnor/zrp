@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     resources :heroes, only: [:show, :create, :update, :destroy] do
       get :list, on: :collection
       get :search, on: :collection
+      get :ranks, on: :collection
     end
 
     resources :threats, only: [] do
