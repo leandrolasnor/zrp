@@ -33,8 +33,7 @@ const Dashboard = () => {
 
   return (
     <Grid fluid>
-      <Row className='mb-3'><Progress.Line status="success" strokeWidth={3} percent={counter} showInfo={false} /></Row>
-      <Row>
+      <Row className='mt-3'>
         <Col>
           <TagGroup>
             <AverageScore score={average_score}></AverageScore>
@@ -43,7 +42,8 @@ const Dashboard = () => {
           </TagGroup>
         </Col>
       </Row>
-      <Row className='mt-2'>
+      <Row className='mb-0'><Progress.Line status="success" strokeWidth={1} percent={counter} showInfo={false} /></Row>
+      <Row className='mt-0'>
         <Col sm={8}>
           <HeroesWorking metrics={metrics} />
         </Col>

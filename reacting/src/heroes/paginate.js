@@ -1,32 +1,20 @@
 import { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Row, Col, Pagination } from 'rsuite'
 import { search } from './actions.js'
 
 const Paginate = props => {
   const dispatch = useDispatch()
-  const heroes = useSelector(state => state.heroes)
-  const { search: { query, totalHits } } = heroes
-  const [pagination, setPagination] = useState({ page: 0, per_page: 30 })
+  const { heroes: { search: { query, totalHits, page, hitsPerPage } } } = props
+  const [pagination, setPagination] = useState({ page: page || 1, per_page: hitsPerPage || 30 })
   const layout = ['total', '-', 'limit', '|', 'pager', 'skip']
   const limitOptions = [30, 50, 100]
-  const { page, per_page } = pagination
+  const handleChangePerPage = per_page => dispatch([setPagination(prev => ({ ...prev, per_page: per_page, page: 1 })), search(query, { per_page: per_page, page: 1 })])
+  const handleChangePage = page => dispatch([setPagination(prev => ({ ...prev, page: page })), search(query, { ...pagination, page: page })])
 
   useEffect(() => {
-    page > 0 ? dispatch(search(query, pagination)) : setPagination(prev => ({ ...prev, page: 1 }))
-  }, [page])
-
-  useEffect(() => {
-    dispatch([setPagination(prev => ({ ...prev, page: 1 })), search(query, pagination)])
-  }, [query])
-
-  const handleChangePerPage = per_page => {
-    dispatch([setPagination(prev => ({ ...prev, per_page: per_page, page: 1 })), search(query, pagination)])
-  }
-
-  const handleChangePage = page => {
-    dispatch([setPagination(prev => ({ ...prev, page: page })), search(query, pagination)])
-  }
+    dispatch(search(query, { page: page || 1, per_page: hitsPerPage || 30 }))
+  },[query])
 
   return (
     <Row className='mt-3'>
@@ -41,10 +29,10 @@ const Paginate = props => {
           ellipsis={true}
           boundaryLinks={true}
           total={totalHits}
-          limit={per_page}
+          limit={hitsPerPage || pagination.per_page}
           limitOptions={limitOptions}
           maxButtons={5}
-          activePage={page}
+          activePage={page || pagination.page}
           onChangePage={handleChangePage}
           onChangeLimit={handleChangePerPage}
         />

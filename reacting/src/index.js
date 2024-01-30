@@ -11,9 +11,9 @@ import thunk from 'redux-thunk'
 import App from './App.js'
 import axios from 'axios'
 import reportWebVitals from './reportWebVitals'
-import 'rsuite/dist/rsuite.min.css'
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'rsuite/dist/rsuite.min.css'
 import './index.css'
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL
@@ -43,6 +43,7 @@ root.render(
         transitionIn='fadeIn'
         transitionOut='fadeOut'
         progressBar
+        as={<b></b>}
         closeOnToastrClick/>
     </Provider>
   </React.StrictMode>

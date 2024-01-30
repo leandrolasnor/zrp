@@ -1,11 +1,10 @@
-import { useSelector } from 'react-redux'
 import { Table, Row, Col } from 'rsuite'
 
 const { Column, HeaderCell, Cell } = Table
-const rowKey = 'name'
+const rowKey = 'id'
 
 const List = props => {
-  const { search: { hits } } = useSelector(state => state.heroes)
+  const { heroes: { search: { hits } } } = props
 
   return (
     <Row>

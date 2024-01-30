@@ -4,14 +4,15 @@ import { Input, InputGroup, IconButton, Row, Col } from 'rsuite'
 import HeroForm from './hero_form.js'
 import SearchIcon from '@rsuite/icons/Search'
 import PlusIcon from '@rsuite/icons/Plus'
-import { styled } from 'styled-components'
 
 const Searcher = props => {
-  const searchRef = useRef(null);
+  const {query} = props
+  const searchRef = useRef(null)
   const dispatch = useDispatch()
   const [openHeroForm, setOpenHeroForm] = useState(false)
 
   useEffect(() => {
+    searchRef.current.value = query
     const keyDownHandler = event => {
       if (event.key === 'Escape') {
         event.preventDefault()
@@ -27,7 +28,7 @@ const Searcher = props => {
     return () => {
       document.removeEventListener('keydown', keyDownHandler)
     }
-  }, [])
+  })
 
   const CustomInputGroupWidthButton = ({ placeholder, ...props }) => (
     <InputGroup {...props} inside>
@@ -38,14 +39,10 @@ const Searcher = props => {
     </InputGroup>
   )
 
-  const CustomInputGroupWidthButtonStyled = styled(CustomInputGroupWidthButton)`
-    marginBottom: 10
-  `
-
   return (
-    <Row>
+    <Row className='mt-3'>
       <Col xs={22}>
-        <CustomInputGroupWidthButtonStyled size="md" placeholder="Search" />
+        <CustomInputGroupWidthButton size="md" placeholder="Search" />
       </Col>
       <Col xs={2}>
         <IconButton onClick={() => setOpenHeroForm(!openHeroForm)} icon={<PlusIcon />}>Hero</IconButton>

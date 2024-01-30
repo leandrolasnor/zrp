@@ -1,4 +1,5 @@
 const INITIAL_STATE = {
+  ranks: [],
   search: {
     hits: [],
     query: '',
@@ -7,11 +8,19 @@ const INITIAL_STATE = {
 }
 
 var reducer = (state = INITIAL_STATE, action) => {
-  switch(action.type) {
+  switch (action.type) {
+    case 'RANKS_FETCHED':
+      return {
+        ...state,
+        ranks: action.payload
+      }
     case 'HERO_CREATED':
       return {
         ...state,
-        hits: [action.payload, ...state.hits ]
+        search: {
+          ...state.search,
+          hits: [action.payload, ...state.search.hits]
+        }
       }
     case 'HEROES_FETCHED':
       return {
