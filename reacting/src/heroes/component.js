@@ -9,7 +9,7 @@ const Heroes = props => {
   const { search: { query } } = heroes
 
   return (
-    <Grid>
+    <Grid fluid>
       <Searcher query={query} />
       <Paginate heroes={heroes} />
       <List heroes={heroes} />

@@ -12,7 +12,7 @@ const List = props => {
         <div style={{ position: 'relative' }}>
           <Table
             shouldUpdateScroll={false}
-            height={500}
+            autoHeight={true}
             data={hits}
             rowKey={rowKey}
             bordered={true}

@@ -1,89 +1,96 @@
-import { Row, Col } from 'rsuite'
-import { Card } from 'react-bootstrap'
-import { Tag, Progress } from 'rsuite'
+import { Row, Col, Panel, Tooltip } from 'rsuite'
+import { Whisper, Progress } from 'rsuite'
 import { styled } from 'styled-components'
 
 const _ = require('lodash')
 
-const StyledCircleProgress = styled(Progress.Circle)`
-  width: 120,
-  display: 'inline-block',
-  marginRight: 10
-`;
+const heroes_s_count = metrics => _.get(metrics, ['heroes_grouped_rank', 's'])
+const heroes_a_count = metrics => _.get(metrics, ['heroes_grouped_rank', 'a'])
+const heroes_b_count = metrics => _.get(metrics, ['heroes_grouped_rank', 'b'])
+const heroes_c_count = metrics => _.get(metrics, ['heroes_grouped_rank', 'c'])
+
+const heroes_working_count = metrics => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
+  (sum, key) => {
+    if (JSON.stringify(key).match(/working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
+    return sum
+  }, 0
+)
+
+const heroes_s_working_count = metrics => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
+  (sum, key) => {
+    if (JSON.parse(key).join('-').match(/s-working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
+    return sum
+  }, 0
+)
+const heroes_a_working_count = metrics => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
+  (sum, key) => {
+    if (JSON.parse(key).join('-').match(/a-working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
+    return sum
+  }, 0
+)
+const heroes_b_working_count = metrics => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
+  (sum, key) => {
+    if (JSON.parse(key).join('-').match(/b-working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
+    return sum
+  }, 0
+)
+const heroes_c_working_count = metrics => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
+  (sum, key) => {
+    if (JSON.parse(key).join('-').match(/c-working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
+    return sum
+  }, 0
+)
+
+const heroes_working_percent = metrics => (heroes_working_count(metrics) / hero_count(metrics)) * 100
+const heroes_s_working_percent = metrics => (heroes_s_working_count(metrics) / heroes_s_count(metrics)) * 100
+const heroes_a_working_percent = metrics => (heroes_a_working_count(metrics) / heroes_a_count(metrics)) * 100
+const heroes_b_working_percent = metrics => (heroes_b_working_count(metrics) / heroes_b_count(metrics)) * 100
+const heroes_c_working_percent = metrics => (heroes_c_working_count(metrics) / heroes_c_count(metrics)) * 100
+const hero_count = metrics => _.get(metrics, 'hero_count', 0)
+
+const s_tooltip = <Tooltip><i>S</i></Tooltip>
+const a_tooltip = <Tooltip><i>A</i></Tooltip>
+const b_tooltip = <Tooltip><i>B</i></Tooltip>
+const c_tooltip = (<Tooltip><i>C</i></Tooltip>)
 
 const HeroesWorking = props => {
   const { metrics } = props
-  const hero_count = () => _.get(metrics, 'hero_count', 0)
-  const heroes_working_count = () => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
-    (sum, key) => {
-      if (JSON.stringify(key).match(/working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
-      return sum
-    }, 0
-  )
-
-  const heroes_s_working_count = () => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
-    (sum, key) => {
-      if (JSON.parse(key).join('-').match(/s-working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
-      return sum
-    }, 0
-  )
-  const heroes_a_working_count = () => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
-    (sum, key) => {
-      if (JSON.parse(key).join('-').match(/a-working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
-      return sum
-    }, 0
-  )
-  const heroes_b_working_count = () => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
-    (sum, key) => {
-      if (JSON.parse(key).join('-').match(/b-working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
-      return sum
-    }, 0
-  )
-  const heroes_c_working_count = () => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
-    (sum, key) => {
-      if (JSON.parse(key).join('-').match(/c-working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
-      return sum
-    }, 0
-  )
-  const heroes_s_count = () => _.get(metrics, ['heroes_grouped_rank', 's'])
-  const heroes_a_count = () => _.get(metrics, ['heroes_grouped_rank', 'a'])
-  const heroes_b_count = () => _.get(metrics, ['heroes_grouped_rank', 'b'])
-  const heroes_c_count = () => _.get(metrics, ['heroes_grouped_rank', 'c'])
-
-  const heroes_working_percent = () => (heroes_working_count() / hero_count()) * 100
-  const heroes_s_working_percent = () => (heroes_s_working_count() / heroes_s_count()) * 100
-  const heroes_a_working_percent = () => (heroes_a_working_count() / heroes_a_count()) * 100
-  const heroes_b_working_percent = () => (heroes_b_working_count() / heroes_b_count()) * 100
-  const heroes_c_working_percent = () => (heroes_c_working_count() / heroes_c_count()) * 100
 
   return (
-    <Card>
-      <Card.Body>
-        <Card.Title>Heroes</Card.Title>
-        <Card.Subtitle className="mb-0 text-muted">{`${heroes_working_count() || 0} Working`}</Card.Subtitle>
-        <Row>
-          <Col className='mt-4' sm={9}>
-            <StyledCircleProgress strokeWidth={6} percent={~~Number(heroes_working_percent().toFixed(0)) || 0} strokeColor="#395463" />
-          </Col>
-          <Col sm={2} className='ms-3'>
-            <Progress.Line strokeWidth={22} vertical percent={~~Number(heroes_s_working_percent().toFixed(0)) || 0} status="active" strokeColor="#2986cc" />
-            <Tag color="blue">S</Tag>
-          </Col>
-          <Col sm={3} className='ms-3' >
-            <Progress.Line strokeWidth={22} vertical percent={~~Number(heroes_a_working_percent().toFixed(0)) || 0} status="active" strokeColor="#0AB653" />
-            <Tag color="green">A</Tag>
-          </Col>
-          <Col sm={2} className='ms-3'>
-            <Progress.Line strokeWidth={22} vertical percent={~~Number(heroes_b_working_percent().toFixed(0)) || 0} status="active" strokeColor="#a442f5" />
-            <Tag color="violet">B</Tag>
-          </Col>
-          <Col sm={2} className='ms-3'>
-            <Progress.Line strokeWidth={22} vertical percent={~~Number(heroes_c_working_percent().toFixed(0)) || 0} status="active" strokeColor="#ff0000" />
-            <Tag color="red">C</Tag>
-          </Col>
-        </Row>
-      </Card.Body>
-    </Card>
+    <Panel shaded bordered bodyFill>
+      <Row>
+        <Col className='mt-3 ms-4' sm={8}>
+          <Progress.Circle percent={~~Number(heroes_working_percent(metrics).toFixed(0)) || 0} strokeColor="#ffdb58" />
+        </Col>
+        <Col className='mt-5' sm={3}>
+          <Whisper placement="bottom" controlId="control-id-hover" trigger="hover" speaker={s_tooltip}>
+            <Progress.Circle percent={~~Number(heroes_s_working_percent(metrics).toFixed(0)) || 0} status="active" strokeColor="#2986cc" />
+          </Whisper>
+        </Col>
+        <Col className='mt-5' sm={3}>
+          <Whisper placement="bottom" controlId="control-id-hover" trigger="hover" speaker={a_tooltip}>
+            <Progress.Circle percent={~~Number(heroes_a_working_percent(metrics).toFixed(0)) || 0} status="active" strokeColor="#0AB653" />
+          </Whisper>
+        </Col>
+        <Col className='mt-5' sm={3}>
+          <Whisper placement="bottom" controlId="control-id-hover" trigger="hover" speaker={b_tooltip}>
+            <Progress.Circle percent={~~Number(heroes_b_working_percent(metrics).toFixed(0)) || 0} status="active" strokeColor="#a442f5" />
+          </Whisper>
+        </Col>
+        <Col className='mt-5' sm={3}>
+          <Whisper placement="bottom" controlId="control-id-hover" trigger="hover" speaker={c_tooltip}>
+            <Progress.Circle percent={~~Number(heroes_c_working_percent(metrics).toFixed(0)) || 0} status="active" strokeColor="#ff0000" />
+          </Whisper>
+        </Col>
+      </Row>
+      <Panel header={`${heroes_working_count(metrics) || 0} Working`}>
+        <p>
+          <small>
+            Percentage of busy heroes
+          </small>
+        </p>
+      </Panel>
+    </Panel>
   )
 }
 

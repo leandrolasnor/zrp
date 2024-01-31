@@ -8,7 +8,7 @@ import { historical_threats as historical } from './actions.js'
 import { FaArrowRotateRight } from 'react-icons/fa6'
 
 const { Column, HeaderCell, Cell } = Table;
-const rowKey = 'name';
+const rowKey = 'id';
 const ExpandCell = ({ rowData, dataKey, expandedRowKeys, onChange, ...props }) => (
   <Cell {...props} style={{ padding: 5 }}>
     <IconButton
@@ -31,13 +31,11 @@ const Duration = props => {
   const { duration } = props
 
   return (
-    <Tag>
-      {`
+    `
       ${~~Number(duration.hours).toFixed(0) || '0'}h
       ${~~Number(duration.minutes).toFixed(2) || '0'}min
       ${~~Number(duration.seconds).toFixed(2) || '0'}sec
-      `}
-    </Tag>
+    `
   )
 }
 
@@ -73,21 +71,26 @@ const FinishedAtCell = ({ rowData, dataKey, ...props }) => {
   return <Cell {...props}>{battle.finished_at}</Cell>
 }
 
-const BadgeHero = props => {
-  const { hero } = props
-  if (!hero) return null
-
+const Heroes = props => {
+  const { heroes } = props
   const colors = {
     s: 'blue',
     a: 'green',
     b: 'violet',
     c: 'red'
   }
+  if (heroes.length === 1) return <Badge color={colors[heroes[0].rank]} content={heroes[0].rank}>{heroes[0].name}</Badge>
   return (
-    <Badge color={colors[hero.rank]} content={hero.rank}>
-      <Tag>{hero.name}</Tag>
-    </Badge>
+    <>
+      <Tag>
+        <Badge color={colors[heroes[0].rank]} content={heroes[0].rank}>{heroes[0].name}</Badge>
+      </Tag>
+      <Tag>
+        <Badge color={colors[heroes[1].rank]} content={heroes[1].rank}>{heroes[1].name}</Badge>
+      </Tag>
+    </>
   )
+
 }
 
 const renderRowExpanded = rowData => {
@@ -98,16 +101,15 @@ const renderRowExpanded = rowData => {
     <Row className="mt-3">
       <TagGroup>
         <Tag>{battle.score}</Tag>
-        <BadgeHero hero={heroes[0]} />
-        <BadgeHero hero={heroes[1]} />
-        <Duration duration={battle.duration} />
+        <Tag><Heroes heroes={heroes} /></Tag>
+        <Tag><Duration duration={battle.duration} /></Tag>
       </TagGroup>
     </Row>
   );
 };
 
-const HistoricalThreats = () => {
-  const { historical_threats } = useSelector(state => state.metrics)
+const HistoricalThreats = props => {
+  const { historical_threats } = props
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -139,7 +141,7 @@ const HistoricalThreats = () => {
     <div style={{ position: 'relative' }}>
       <Table
         shouldUpdateScroll={false} // Prevent the scrollbar from scrolling to the top after the table content area height changes.
-        height={500}
+        autoHeight={true}
         data={historical_threats}
         rowKey={rowKey}
         expandedRowKeys={expandedRowKeys}

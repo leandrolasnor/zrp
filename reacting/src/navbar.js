@@ -1,10 +1,13 @@
-import { Navbar } from 'rsuite'
+import { Navbar, Nav } from 'rsuite'
 
 const NavBar = () => {
-  return(
-    <Navbar variant='pills'>
-      <Navbar.Brand href='#'>Dashboard</Navbar.Brand>
-      <Navbar.Brand href='#heroes'>Heroes</Navbar.Brand>
+  return (
+    <Navbar variant='pills' appearance='inverse'>
+      <Navbar.Brand href="https://zrp.github.io/challenges/dev/" target='_blank'>Description</Navbar.Brand>
+      <Nav>
+        <Nav.Item href='/#'>Dashboard</Nav.Item>
+        <Nav.Item href='#heroes'>Heroes</Nav.Item>
+      </Nav>
     </Navbar>
   )
 }

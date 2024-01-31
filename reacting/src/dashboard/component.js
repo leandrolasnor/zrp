@@ -16,7 +16,7 @@ const _ = require('lodash')
 const Dashboard = () => {
   const dispatch = useDispatch()
   const [counter, setCounter] = useState(0)
-  const { metrics } = useSelector(state => state.metrics)
+  const { metrics, historical_threats } = useSelector(state => state.metrics)
   const average_score = _.get(metrics, 'average_score', 0)
   const average_time_to_match = _.get(metrics, 'average_time_to_match', 0)
   const super_hero = _.get(metrics, 'super_hero', 0)
@@ -33,7 +33,7 @@ const Dashboard = () => {
 
   return (
     <Grid fluid>
-      <Row className='mt-3'>
+      <Row className='mt-4'>
         <Col>
           <TagGroup>
             <AverageScore score={average_score}></AverageScore>
@@ -42,8 +42,8 @@ const Dashboard = () => {
           </TagGroup>
         </Col>
       </Row>
-      <Row className='mb-0'><Progress.Line status="success" strokeWidth={1} percent={counter} showInfo={false} /></Row>
-      <Row className='mt-0'>
+      <Row><Progress.Line status="success" strokeWidth={1} percent={counter} showInfo={false} /></Row>
+      <Row>
         <Col sm={8}>
           <HeroesWorking metrics={metrics} />
         </Col>
@@ -55,7 +55,7 @@ const Dashboard = () => {
         </Col>
       </Row>
       <Row className='mt-4'>
-        <HistoricalThreats />
+        <HistoricalThreats historical_threats={historical_threats} />
       </Row>
     </Grid>
   )

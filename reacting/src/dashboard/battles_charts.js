@@ -1,25 +1,24 @@
-import { Row, Col, Card } from 'react-bootstrap'
+import { Row, Col, Panel } from 'rsuite'
 import { PieChart } from '@rsuite/charts'
+import { styled } from 'styled-components'
 
 const _ = require('lodash')
-
 const colors = ['#34c3ff', '#1464ac']
-
+const PanelStyled = styled(Panel)`
+  display: 'inline-block'
+  width: 240
+`
 const BattlesCharts = props => {
   const { metrics } = props
 
-  return(
-    <Card>
-      <Card.Body>
-        <Card.Title>Battles</Card.Title>
-        <Card.Subtitle className="mb-0 text-muted">{`${_.get(metrics, 'battle_count', 0)} Altogether`}</Card.Subtitle>
-        <Row>
-          <Col sm={12}>
-            <PieChart height={162} className='mt-0' data={_.get(metrics, 'battles_two_and_one_percent', [])} donut color={colors} />
-          </Col>
-        </Row>
-      </Card.Body>
-    </Card>
+  return (
+    <PanelStyled shaded bordered bodyFill>
+      <Row>
+        <Col sm={24}>
+          <PieChart className='mt-0' data={_.get(metrics, 'battles_two_and_one_percent', [])} donut color={colors} />
+        </Col>
+      </Row>
+    </PanelStyled>
   )
 }
 

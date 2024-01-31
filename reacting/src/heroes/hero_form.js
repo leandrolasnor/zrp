@@ -1,6 +1,6 @@
 import { useRef, useState, forwardRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal, Button, Schema, Form, InputPicker } from 'rsuite'
+import { Modal, Button, Schema, Form, InputPicker, Tag } from 'rsuite'
 import { create_hero, get_ranks } from './actions.js'
 
 const TextField = forwardRef((props, ref) => {
@@ -44,8 +44,15 @@ const HeroForm = props => {
     handleClose()
   }
 
+  const colors = {
+    s: 'blue',
+    a: 'green',
+    b: 'violet',
+    c: 'red'
+  }
+
   const selectData = Object.entries(ranks).map(([k, v]) => ({
-    label: k,
+    label: <Tag size='sm' color={colors[k]}>{k}</Tag>,
     value: v
   }))
 
