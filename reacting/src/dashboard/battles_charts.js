@@ -15,7 +15,7 @@ const BattlesCharts = props => {
     <PanelStyled shaded bordered bodyFill>
       <Row>
         <Col sm={24}>
-          <PieChart className='mt-0' data={_.get(metrics, 'battles_two_and_one_percent', [])} donut color={colors} />
+          <PieChart height={250} data={_.get(metrics, 'battles_two_and_one_percent', [])} donut color={colors} />
         </Col>
       </Row>
     </PanelStyled>

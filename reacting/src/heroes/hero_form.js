@@ -1,7 +1,9 @@
-import { useRef, useState, forwardRef } from 'react'
+import { useRef, useState, forwardRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Modal, Button, Schema, Form, InputPicker, Tag } from 'rsuite'
-import { create_hero, get_ranks } from './actions.js'
+import { create_hero, get_ranks, update_hero } from './actions.js'
+
+const _ = require('lodash')
 
 const TextField = forwardRef((props, ref) => {
   const { name, label, accepter, ...rest } = props;
@@ -21,42 +23,44 @@ const model = Schema.Model({
 })
 
 const HeroForm = props => {
-  const { size, open, handleClose, textButton } = props
+  const { size, open, handleClose, textButton, title, data } = props
   const dispatch = useDispatch()
   const { ranks } = useSelector(state => state.heroes)
   const formRef = useRef()
   const [formError, setFormError] = useState({})
-
   const INITIAL_VALUES = {
-    name: '',
-    rank: '',
-    lat: '',
-    lng: ''
+    id: _.get(data, 'id', ''),
+    name: _.get(data, 'name', ''),
+    rank: ranks[_.get(data, 'rank', '')],
+    lat: _.get(data, 'lat', ''),
+    lng: _.get(data, 'lng', '')
   }
   const [formValue, setFormValue] = useState(INITIAL_VALUES)
-
-  const handleSubmit = () => {
-    if (formRef.current.check()) dispatch([create_hero(formValue), close()])
-  }
-
   const close = () => {
-    setFormValue(INITIAL_VALUES)
+    setFormValue({})
     handleClose()
   }
-
+  const handleSubmit = () => {
+    if (formRef.current.check()) _.get(data, 'id', false) ? dispatch([update_hero(formValue), close()]) : dispatch([create_hero(formValue), close()])
+  }
   const colors = {
     s: 'blue',
     a: 'green',
     b: 'violet',
     c: 'red'
   }
-
   const selectData = Object.entries(ranks).map(([k, v]) => ({
     label: <Tag size='sm' color={colors[k]}>{k}</Tag>,
     value: v
   }))
 
-  const handleRankSelect = () => ranks?.length === 0 ? dispatch(get_ranks()) : null
+  useEffect(() => {
+    if (ranks?.length === 0) dispatch(get_ranks())
+  }, [])
+
+  useEffect(() => {
+    setFormValue(INITIAL_VALUES)
+  }, [data])
 
   return (
     <Form
@@ -69,11 +73,11 @@ const HeroForm = props => {
     >
       <Modal size={size} open={open} onClose={close}>
         <Modal.Header>
-          <Modal.Title>New Hero</Modal.Title>
+          <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <TextField name='name' label="Name" />
-          <TextField name='rank' onClick={() => handleRankSelect()} label="Rank" accepter={InputPicker} data={selectData} />
+          <TextField name='rank' label="Rank" accepter={InputPicker} data={selectData} />
           <TextField name='lat' label="Lat" />
           <TextField name='lng' label="Lng" />
         </Modal.Body>
@@ -85,6 +89,5 @@ const HeroForm = props => {
     </Form>
   )
 }
-
 
 export default HeroForm

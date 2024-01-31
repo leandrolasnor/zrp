@@ -1,10 +1,18 @@
-import { Table, Row, Col } from 'rsuite'
+import { useState, useEffect } from 'react'
+import { Table, Row, Col, Button } from 'rsuite'
+import HeroForm from './hero_form'
 
 const { Column, HeaderCell, Cell } = Table
 const rowKey = 'id'
 
 const List = props => {
   const { heroes: { search: { hits } } } = props
+  const [openUpdateHeroForm, setOpenUpdateHeroForm] = useState(false)
+  const [dataHeroForm, setDataHeroForm] = useState({})
+
+  useEffect(() => {
+    setOpenUpdateHeroForm(Object.keys(dataHeroForm).length > 0)
+  }, [dataHeroForm])
 
   return (
     <Row>
@@ -35,9 +43,21 @@ const List = props => {
               <HeaderCell>LNG</HeaderCell>
               <Cell dataKey="lng" />
             </Column>
+            <Column width={80} fixed="right">
+              <HeaderCell>...</HeaderCell>
+
+              <Cell style={{ padding: '6px' }}>
+                {rowData => (
+                  <Button appearance="link" onClick={() => setDataHeroForm(rowData)}>
+                    Edit
+                  </Button>
+                )}
+              </Cell>
+            </Column>
           </Table>
         </div>
       </Col>
+      <HeroForm size='xs' open={openUpdateHeroForm} textButton='Update' title='Update Hero' data={dataHeroForm} handleClose={() => setDataHeroForm({})} />
     </Row>
   )
 }

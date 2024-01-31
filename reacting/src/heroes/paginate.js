@@ -6,14 +6,13 @@ import { search } from './actions.js'
 const Paginate = props => {
   const dispatch = useDispatch()
   const { heroes: { search: { query, totalHits, page, hitsPerPage } } } = props
-  const [pagination, setPagination] = useState({ page: page || 1, per_page: hitsPerPage || 30 })
   const layout = ['total', '-', 'limit', '|', 'pager', 'skip']
   const limitOptions = [30, 50, 100]
-  const handleChangePerPage = per_page => dispatch([setPagination(prev => ({ ...prev, per_page: per_page, page: 1 })), search(query, { per_page: per_page, page: 1 })])
-  const handleChangePage = page => dispatch([setPagination(prev => ({ ...prev, page: page })), search(query, { ...pagination, page: page })])
+  const handleChangePerPage = per_page => dispatch(search(query, { per_page: per_page, page: 1 }))
+  const handleChangePage = page => dispatch(search(query, { per_page: hitsPerPage || limitOptions[0], page: page }))
 
   useEffect(() => {
-    dispatch(search(query, { page: page || 1, per_page: hitsPerPage || 30 }))
+    dispatch(search(query, { page: 1, per_page: hitsPerPage || limitOptions[0] }))
   },[query])
 
   return (
@@ -29,10 +28,10 @@ const Paginate = props => {
           ellipsis={true}
           boundaryLinks={true}
           total={totalHits}
-          limit={hitsPerPage || pagination.per_page}
+          limit={hitsPerPage || limitOptions[0]}
           limitOptions={limitOptions}
           maxButtons={5}
-          activePage={page || pagination.page}
+          activePage={page || 1}
           onChangePage={handleChangePage}
           onChangeLimit={handleChangePerPage}
         />
