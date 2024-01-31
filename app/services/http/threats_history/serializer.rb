@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Http::ThreatsHistory::Serializer < ActiveModel::Serializer
-  attributes :name, :rank, :lat, :lng, :battle
+  attributes :id, :name, :rank, :lat, :lng, :battle
 
   def battle
     BattleSerializer.new(object)
