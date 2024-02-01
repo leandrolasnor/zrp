@@ -28,12 +28,15 @@ const HeroForm = props => {
   const { ranks } = useSelector(state => state.heroes)
   const formRef = useRef()
   const [formError, setFormError] = useState({})
-  const INITIAL_VALUES = {
-    id: _.get(data, 'id', ''),
-    name: _.get(data, 'name', ''),
-    rank: ranks[_.get(data, 'rank', '')],
-    lat: _.get(data, 'lat', ''),
-    lng: _.get(data, 'lng', '')
+  const INITIAL_VALUES = () => {
+    const values = {
+      name: _.get(data, 'name', ''),
+      rank: ranks[_.get(data, 'rank', '')],
+      lat: _.get(data, 'lat', ''),
+      lng: _.get(data, 'lng', '')
+    }
+    if(_.get(data, 'id', false)) values.id = data.id
+    return values
   }
   const [formValue, setFormValue] = useState(INITIAL_VALUES)
   const close = () => {
