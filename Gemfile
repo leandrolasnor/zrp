@@ -26,7 +26,7 @@ gem 'dry-validation'
 
 gem 'redis'
 
-gem 'hiredis'
+gem 'connection_pool'
 
 gem 'kaminari'
 
