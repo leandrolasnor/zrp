@@ -35,12 +35,13 @@ const HeroForm = props => {
       lat: _.get(data, 'lat', ''),
       lng: _.get(data, 'lng', '')
     }
-    if(_.get(data, 'id', false)) values.id = data.id
+    if (_.get(data, 'id', false)) values.id = data.id
     return values
   }
   const [formValue, setFormValue] = useState(INITIAL_VALUES)
   const close = () => {
     setFormValue({})
+    setFormError({})
     handleClose()
   }
   const handleSubmit = () => {
@@ -57,13 +58,8 @@ const HeroForm = props => {
     value: v
   }))
 
-  useEffect(() => {
-    if (ranks?.length === 0) dispatch(get_ranks())
-  }, [])
-
-  useEffect(() => {
-    setFormValue(INITIAL_VALUES)
-  }, [data])
+  useEffect(() => { if (ranks?.length === 0) dispatch(get_ranks()) }, [])
+  useEffect(() => { setFormValue(INITIAL_VALUES) }, [data])
 
   return (
     <Form
@@ -74,12 +70,12 @@ const HeroForm = props => {
       formValue={formValue}
       model={model}
     >
-      <Modal size={size} open={open} onClose={close}>
+      <Modal autoFocus size={size} open={open} onClose={close}>
         <Modal.Header>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <TextField name='name' label="Name" />
+          <TextField autoFocus name='name' label="Name" />
           <TextField name='rank' label="Rank" accepter={InputPicker} data={selectData} />
           <TextField name='lat' label="Lat" />
           <TextField name='lng' label="Lng" />

@@ -14,6 +14,22 @@ var reducer = (state = INITIAL_STATE, action) => {
         ...state,
         ranks: action.payload
       }
+    case 'HERO_UPDATED':
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          hits: state.search.hits.map(hit => hit.id == action.payload.id ? action.payload : hit)
+        }
+      }
+    case 'HERO_DESTROYED':
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          hits: state.search.hits.filter(hit => hit.id != action.payload.id)
+        }
+      }
     case 'HERO_CREATED':
       return {
         ...state,

@@ -31,6 +31,15 @@ export const update_hero = data => {
   }
 }
 
+export const destroy_hero = data => {
+  return dispatch => {
+    axios.delete(`/v1/heroes/${data.id}`).then(resp => {
+      dispatch({ type: 'HERO_DESTROYED', payload: resp.data })
+      toastr.success('Hero destroyed!', _.get(resp, 'data.name', ''))
+    }).catch(e => handle_errors(e))
+  }
+}
+
 export const get_ranks = () => {
   return dispatch => {
     axios.get('/v1/heroes/ranks').then(resp => {

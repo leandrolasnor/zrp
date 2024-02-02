@@ -22,12 +22,12 @@ axios.defaults.headers.common['Content-type'] = 'application/json'
 const devTools =
   process.env.NODE_ENV === 'development'
     ? window.__REDUX_DEVTOOLS_EXTENSION__ &&
-      window.__REDUX_DEVTOOLS_EXTENSION__()
+    window.__REDUX_DEVTOOLS_EXTENSION__()
     : null
 const store =
   process.env.NODE_ENV === 'development'
-    ? applyMiddleware(multi, thunk, promise)(configureStore)({reducer: reducers}, devTools)
-    : applyMiddleware(multi, thunk, promise)(configureStore)({reducer: reducers})
+    ? applyMiddleware(multi, thunk, promise)(configureStore)({ reducer: reducers }, devTools)
+    : applyMiddleware(multi, thunk, promise)(configureStore)({ reducer: reducers })
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
@@ -35,16 +35,14 @@ root.render(
     <Provider store={store}>
       <App />
       <ReduxToastr
-        timeOut={6000}
+        timeOut={3000}
         newestOnTop={true}
         preventDuplicates
-        position='top-right'
+        position='bottom-right'
         getState={(state) => state.toastr}
         transitionIn='fadeIn'
         transitionOut='fadeOut'
-        progressBar
-        as={<b></b>}
-        closeOnToastrClick/>
+        progressBar />
     </Provider>
   </React.StrictMode>
 )

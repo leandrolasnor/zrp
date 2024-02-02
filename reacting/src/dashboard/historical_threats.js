@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Icon } from '@rsuite/icons'
 import { Table, IconButton, Row, Col, Badge, Tag, TagGroup } from 'rsuite'
 import CollaspedOutlineIcon from '@rsuite/icons/CollaspedOutline';
@@ -159,23 +159,29 @@ const HistoricalThreats = props => {
           <ExpandCell dataKey="battle" expandedRowKeys={expandedRowKeys} onChange={handleExpanded} />
         </Column>
         <Column flexGrow={1}>
-          <HeaderCell>Name</HeaderCell>
+          <HeaderCell>NAME</HeaderCell>
           <NameCell dataKey="name" />
         </Column>
         <Column flexGrow={1}>
-          <HeaderCell>Latitude</HeaderCell>
-          <Cell dataKey="lat" />
+          <HeaderCell>LOCATION</HeaderCell>
+          <Cell>
+            {row => {
+              return (
+                <TagGroup>
+                  <Tag>{row.lat}</Tag>
+                  <Tag>{row.lng}</Tag>
+                </TagGroup>
+              )
+            }
+            }
+          </Cell>
         </Column>
         <Column flexGrow={1}>
-          <HeaderCell>Longitude</HeaderCell>
-          <Cell dataKey="lng" />
-        </Column>
-        <Column flexGrow={1}>
-          <HeaderCell>Initial date</HeaderCell>
+          <HeaderCell>INITIAL DATE</HeaderCell>
           <CreatedAtCell dataKey="created_at" />
         </Column>
         <Column flexGrow={1}>
-          <HeaderCell>Finish date</HeaderCell>
+          <HeaderCell>FINISH DATE</HeaderCell>
           <FinishedAtCell dataKey="finished_at" />
         </Column>
       </Table>
