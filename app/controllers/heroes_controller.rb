@@ -54,10 +54,10 @@ class HeroesController < BaseController
   end
 
   def destroy_params
-    params.permit(:id)
+    params.permit(:id, hero: {})
   end
 
   def show_params
-    params.permit(:id)
+    params.permit(:id, hero: {})
   end
 end
