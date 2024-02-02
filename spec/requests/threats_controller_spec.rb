@@ -9,6 +9,40 @@ RSpec.describe ThreatsController do
       parameter name: :page, in: :query, type: :integer, description: 'pagination'
       parameter name: :per_page, in: :query, type: :integer, description: 'pagination'
       response(200, 'successful') do
+        schema type: :array, items: {
+          type: :object,
+          properties: {
+            id: { type: :numeric },
+            name: { type: :string },
+            rank: { type: :string },
+            lat: { type: :string },
+            lng: { type: :string },
+            battle: {
+              type: :object, properties: {
+                heroes: {
+                  type: :array, items: {
+                    type: :object, properties: {
+                      name: { type: :string },
+                      rank: { type: :string },
+                      lat: { type: :string },
+                      lng: { type: :string }
+                    }, required: %w[name rank lat lng]
+                  }
+                },
+                score: { type: :numeric },
+                duration: {
+                  type: :object, properties: {
+                    seconds: { type: :numeric },
+                    minutes: { type: :numeric },
+                    hours: { type: :numeric }
+                  }, required: [:seconds]
+                },
+                finished_at: { type: :string },
+                created_at: { type: :string }
+              }, required: %w[heroes score duration finished_at created_at]
+            }
+          }, required: %w[id name rank lat lng battle]
+        }
         let(:page) { 1 }
         let(:per_page) { 1 }
         let(:threat) do
@@ -40,39 +74,12 @@ RSpec.describe ThreatsController do
           )
         end
 
-        let(:expected_body) do
-          [
-            {
-              name: be_a(String),
-              rank: be_a(String),
-              lat: be_a(String),
-              lng: be_a(String),
-              battle: {
-                heroes: [
-                  {
-                    name: be_a(String),
-                    rank: be_a(String),
-                    lat: be_a(String),
-                    lng: be_a(String)
-                  }
-                ],
-                score: be_a(Integer),
-                duration: have_key(:seconds),
-                created_at: be_a(String),
-                finished_at: be_a(String)
-              }
-            }
-          ]
-        end
-
         before do
           battle
+          submit_request(_1.metadata)
         end
 
-        run_test! do |response|
-          expect(response).to have_http_status(:ok)
-          expect(parsed_body).to match(expected_body)
-        end
+        run_test!
       end
     end
   end

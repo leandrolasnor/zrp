@@ -196,6 +196,8 @@ paths:
       responses:
         '200':
           description: successful
+        '422':
+          description: when hero is working
   "/v1/metrics/dashboard":
     get:
       summary: dashboard metric

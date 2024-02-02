@@ -180,6 +180,14 @@ RSpec.describe HeroesController do
         }, required: ['name', 'rank', 'lat', 'lng']
         run_test!
       end
+
+      response(422, 'when hero is working') do
+        let(:hero) { create(:hero, :create_hero, status: :working) }
+        let(:id) { hero.id }
+        let(:params) { { id: hero.id } }
+        schema type: :string
+        run_test!
+      end
     end
   end
 end
