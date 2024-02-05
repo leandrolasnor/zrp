@@ -15,8 +15,13 @@ class Dashboard::Monad
   def call
     Try do
       metrics = []
-
-      metrics << [:threat_count, threat.fresh.not_problem.count]
+      REDIS.with do
+        unless _1.get('threat_count')
+          _1.set('threat_count', threat.fresh.not_problem.count)
+          _1.expire('threat_count', 30)
+        end
+        metrics << [:threat_count, _1.get('threat_count')]
+      end
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
       battle_count = threat.fresh.not_problem.not_enabled.count

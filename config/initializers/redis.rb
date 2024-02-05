@@ -1,7 +1,10 @@
 REDIS = ConnectionPool.new(size: 4) do
-  Redis.new(
-    host: ENV.fetch('REDIS_HOST', 'localhost'),
-    port: ENV.fetch('REDIS_PORT', '6379')
+  Redis::Namespace.new(
+    Rails.env,
+    redis: Redis.new(
+      host: ENV.fetch('REDIS_HOST', 'localhost'),
+      port: ENV.fetch('REDIS_PORT', '6379')
+    )
   )
 end
 
