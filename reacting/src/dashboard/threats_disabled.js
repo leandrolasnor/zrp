@@ -56,7 +56,7 @@ const ThreatsDisabled = props => {
   const { metrics } = props
 
   return (
-    <Panel shaded bodyFill>
+    <Panel bodyFill>
       <Row>
         <Col className="mt-3 ms-4" sm={8}>
           <Progress.Circle percent={~~Number(threats_disabled_percent(metrics).toFixed(0)) || 0} strokeColor="#ffdb58" />

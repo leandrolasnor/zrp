@@ -11,8 +11,8 @@ const SuperHero = props => {
 
   if (hero) return (
     <Tag>
-      <Badge color={colors[hero[1]]} content={hero[1]}>
-        {hero[0]}
+      <Badge color={colors[hero.rank]} content={hero.rank}>
+        {hero.name}
       </Badge>
     </Tag>
   )

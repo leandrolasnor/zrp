@@ -1,6 +1,16 @@
-REDIS = ConnectionPool.new(size: 4) do
+REDIS = ConnectionPool.new(size: 2) do
   Redis::Namespace.new(
     Rails.env,
+    redis: Redis.new(
+      host: ENV.fetch('REDIS_HOST', 'localhost'),
+      port: ENV.fetch('REDIS_PORT', '6379')
+    )
+  )
+end
+
+REDIS_DASHBOARD = ConnectionPool.new(size: 2) do
+  Redis::Namespace.new(
+    "dashboard-#{Rails.env}",
     redis: Redis.new(
       host: ENV.fetch('REDIS_HOST', 'localhost'),
       port: ENV.fetch('REDIS_PORT', '6379')
