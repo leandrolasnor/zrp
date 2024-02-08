@@ -18,25 +18,25 @@ const threats_disabled_count = metrics => Object.keys(_.get(metrics, 'threats_gr
 
 const threats_god_disabled_count = metrics => Object.keys(_.get(metrics, 'threats_grouped_rank_status', {})).reduce(
   (sum, key) => {
-    if (JSON.parse(key).join('-').match(/god-disabled/)) return sum + parseFloat(_.get(metrics, ['threats_grouped_rank_status', `${key}`], 0) || 0)
+    if (key.match(/god#disabled/)) return sum + parseFloat(_.get(metrics, ['threats_grouped_rank_status', `${key}`], 0) || 0)
     return sum
   }, 0
 )
 const threats_dragon_disabled_count = metrics => Object.keys(_.get(metrics, 'threats_grouped_rank_status', {})).reduce(
   (sum, key) => {
-    if (JSON.parse(key).join('-').match(/dragon-disabled/)) return sum + parseFloat(_.get(metrics, ['threats_grouped_rank_status', `${key}`], 0) || 0)
+    if (key.match(/dragon#disabled/)) return sum + parseFloat(_.get(metrics, ['threats_grouped_rank_status', `${key}`], 0) || 0)
     return sum
   }, 0
 )
 const threats_tiger_disabled_count = metrics => Object.keys(_.get(metrics, 'threats_grouped_rank_status', {})).reduce(
   (sum, key) => {
-    if (JSON.parse(key).join('-').match(/tiger-disabled/)) return sum + parseFloat(_.get(metrics, ['threats_grouped_rank_status', `${key}`], 0) || 0)
+    if (key.match(/tiger#disabled/)) return sum + parseFloat(_.get(metrics, ['threats_grouped_rank_status', `${key}`], 0) || 0)
     return sum
   }, 0
 )
 const threats_wolf_disabled_count = metrics => Object.keys(_.get(metrics, 'threats_grouped_rank_status', {})).reduce(
   (sum, key) => {
-    if (JSON.parse(key).join('-').match(/wolf-disabled/)) return sum + parseFloat(_.get(metrics, ['threats_grouped_rank_status', `${key}`], 0) || 0)
+    if (key.match(/wolf#disabled/)) return sum + parseFloat(_.get(metrics, ['threats_grouped_rank_status', `${key}`], 0) || 0)
     return sum
   }, 0
 )
@@ -56,7 +56,7 @@ const ThreatsDisabled = props => {
   const { metrics } = props
 
   return (
-    <Panel shaded bodyFill>
+    <Panel bodyFill>
       <Row>
         <Col className="mt-3 ms-4" sm={8}>
           <Progress.Circle percent={~~Number(threats_disabled_percent(metrics).toFixed(0)) || 0} strokeColor="#ffdb58" />

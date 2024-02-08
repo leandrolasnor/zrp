@@ -36,7 +36,7 @@ const List = props => {
             <Badge color={statusColors[rowData.status]} content={rowData.status} />
           </Col>
           <Col>
-            {_.get(super_hero, '[0]', '') == rowData.name ? <Badge color='orange' content={<Icon as={FaTrophy} />}>{rowData[dataKey]}</Badge> : rowData[dataKey]}
+            {_.get(super_hero, 'name', '') == rowData.name ? <Badge color='orange' content={<Icon as={FaTrophy} />}>{rowData[dataKey]}</Badge> : rowData[dataKey]}
           </Col>
         </Row>
       </Cell>

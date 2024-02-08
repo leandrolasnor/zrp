@@ -18,25 +18,25 @@ const heroes_working_count = metrics => Object.keys(_.get(metrics, 'heroes_group
 
 const heroes_s_working_count = metrics => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
   (sum, key) => {
-    if (JSON.parse(key).join('-').match(/s-working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
+    if (key.match(/s#working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
     return sum
   }, 0
 )
 const heroes_a_working_count = metrics => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
   (sum, key) => {
-    if (JSON.parse(key).join('-').match(/a-working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
+    if (key.match(/a#working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
     return sum
   }, 0
 )
 const heroes_b_working_count = metrics => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
   (sum, key) => {
-    if (JSON.parse(key).join('-').match(/b-working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
+    if (key.match(/b#working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
     return sum
   }, 0
 )
 const heroes_c_working_count = metrics => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
   (sum, key) => {
-    if (JSON.parse(key).join('-').match(/c-working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
+    if (key.match(/c#working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
     return sum
   }, 0
 )
@@ -57,7 +57,7 @@ const HeroesWorking = props => {
   const { metrics } = props
 
   return (
-    <Panel shaded bodyFill>
+    <Panel bodyFill>
       <Row>
         <Col className='mt-3 ms-4' sm={8}>
           <Progress.Circle percent={~~Number(heroes_working_percent(metrics).toFixed(0)) || 0} strokeColor="#ffdb58" />
