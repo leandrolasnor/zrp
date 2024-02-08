@@ -4,6 +4,8 @@ development:
   AMQP_SERVER: "amqp://rabbitmq"
   REDIS_HOST: "redis"
   REDIS_PORT: "6379"
+  REDIS_URL: "redis://redis:6379/0"
+  RAILS_MAX_THREADS: "4"
 
 test:
   MEILISEARCH_ACCESS_KEY: "key"
@@ -11,3 +13,5 @@ test:
   AMQP_SERVER: "amqp://rabbitmq"
   REDIS_HOST: "redis"
   REDIS_PORT: "6379"
+  REDIS_URL: "redis://redis:6379/0"
+  RAILS_MAX_THREADS: "4"

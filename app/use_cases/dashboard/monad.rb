@@ -11,124 +11,111 @@ class Dashboard::Monad
   option :threat, type: Interface(:find), default: -> { Dashboard::Model::Threat }, reader: :private
   option :hero, type: Interface(:find), default: -> { Dashboard::Model::Hero }, reader: :private
   option :battle, type: Interface(:find), default: -> { Dashboard::Model::Battle }, reader: :private
+  option :duration, type: Instance(Proc), default: -> { proc { ActiveSupport::Duration.build(_1).parts } }
 
   def call
     Try do
       metrics = []
-      REDIS_DASHBOARD.with do
-        unless _1.get('threat_count')
-          _1.set('threat_count', threat.fresh.not_problem.count)
-          _1.expire('threat_count', 30)
-        end
-        metrics << [:threat_count, _1.get('threat_count')]
-        publish('metrics.fetched', payload: [metrics.last].to_h)
 
-        unless _1.get('battle_count')
-          _1.set('battle_count', threat.fresh.not_problem.not_enabled.count)
-          _1.expire('battle_count', 10)
+      metrics << [
+        :threat_count,
+        Rails.cache.fetch('threat_count', expires_in: 30.seconds) do
+          threat.fresh.not_problem.count
         end
-        battle_count = _1.get('battle_count').to_i
-        metrics << [:battle_count, _1.get('battle_count')]
-        publish('metrics.fetched', payload: [metrics.last].to_h)
+      ]
+      publish('metrics.fetched', payload: [metrics.last].to_h)
 
-        unless _1.get('hero_count')
-          _1.set('hero_count', hero.not_disabled.count)
-          _1.expire('hero_count', 10)
+      metrics << [
+        :battle_count,
+        Rails.cache.fetch('battle_count', expires_in: 10.seconds) do
+          threat.fresh.not_problem.not_enabled.count
         end
-        metrics << [:hero_count, _1.get('hero_count')]
-        publish('metrics.fetched', payload: [metrics.last].to_h)
+      ]
+      publish('metrics.fetched', payload: [metrics.last].to_h)
 
-        unless _1.hgetall('threats_grouped_rank_status').presence
-          threats_grouped_rank_status = threat.fresh
-            .group(:rank, :status)
-            .count
-            .transform_keys { |k| k.join('#') }
-          if threats_grouped_rank_status.present?
-            _1.mapped_hmset('threats_grouped_rank_status', threats_grouped_rank_status)
-            _1.expire('threats_grouped_rank_status', 10)
-          end
+      metrics << [
+        :hero_count,
+        Rails.cache.fetch('hero_count', expires_in: 10.seconds) do
+          hero.not_disabled.count
         end
-        metrics << [:threats_grouped_rank_status, _1.hgetall('threats_grouped_rank_status')]
-        publish('metrics.fetched', payload: [metrics.last].to_h)
+      ]
+      publish('metrics.fetched', payload: [metrics.last].to_h)
 
-        unless _1.hgetall('threats_grouped_rank').presence
-          threats_grouped_rank = threat.fresh.not_problem.group(:rank).count
-          if threats_grouped_rank.present?
-            _1.mapped_hmset('threats_grouped_rank', threats_grouped_rank)
-            _1.expire('threats_grouped_rank', 30)
-          end
+      metrics << [
+        :threats_grouped_rank_status,
+        Rails.cache.fetch('threats_grouped_rank_status', expires_in: 10.seconds) do
+          threat.fresh.group(:rank, :status).count.transform_keys { |k| k.join('#') }
         end
-        metrics << [:threats_grouped_rank, _1.hgetall('threats_grouped_rank')]
-        publish('metrics.fetched', payload: [metrics.last].to_h)
+      ]
+      publish('metrics.fetched', payload: [metrics.last].to_h)
 
-        unless _1.hgetall('heroes_grouped_rank_status').presence
-          heroes_grouped_rank_status = hero.not_disabled.group(:rank, :status).count.transform_keys { |k| k.join('#') }
-          if heroes_grouped_rank_status.present?
-            _1.mapped_hmset('heroes_grouped_rank_status', heroes_grouped_rank_status)
-            _1.expire('heroes_grouped_rank_status', 10)
-          end
+      metrics << [
+        :threats_grouped_rank,
+        Rails.cache.fetch('threats_grouped_rank', expires_in: 30.seconds) do
+          threat.fresh.not_problem.group(:rank).count
         end
-        metrics << [:heroes_grouped_rank_status, _1.hgetall('heroes_grouped_rank_status')]
-        publish('metrics.fetched', payload: [metrics.last].to_h)
+      ]
+      publish('metrics.fetched', payload: [metrics.last].to_h)
 
-        unless _1.hgetall('heroes_grouped_rank').presence
-          heroes_grouped_rank = hero.not_disabled.group(:rank).count
-          if heroes_grouped_rank.present?
-            _1.mapped_hmset('heroes_grouped_rank', heroes_grouped_rank)
-            _1.expire('heroes_grouped_rank', 10)
-          end
+      metrics << [
+        :heroes_grouped_rank_status,
+        Rails.cache.fetch('heroes_grouped_rank_status', expires_in: 10.seconds) do
+          hero.not_disabled.group(:rank, :status).count.transform_keys { |k| k.join('#') }
         end
-        metrics << [:heroes_grouped_rank, _1.hgetall('heroes_grouped_rank')]
-        publish('metrics.fetched', payload: [metrics.last].to_h)
+      ]
+      publish('metrics.fetched', payload: [metrics.last].to_h)
 
-        unless _1.get('average_score')
-          _1.set('average_score', battle.fresh.average(:score)&.round(2))
-          _1.expire('average_score', 30)
+      metrics << [
+        :heroes_grouped_rank,
+        Rails.cache.fetch('heroes_grouped_rank', expires_in: 10.seconds) do
+          hero.not_disabled.group(:rank).count
         end
-        metrics << [:average_score, _1.get('average_score')]
-        publish('metrics.fetched', payload: [metrics.last].to_h)
+      ]
+      publish('metrics.fetched', payload: [metrics.last].to_h)
 
-        unless _1.get('battles_two_heroes_count')
-          _1.set('battles_two_heroes_count', battle.fresh.group(:threat_id).having('count(*) = 2').count.count)
-          _1.expire('battles_two_heroes_count', 30)
+      metrics << [
+        :average_score,
+        Rails.cache.fetch('average_score', expires_in: 30.seconds) do
+          battle.fresh.average(:score)&.round(2)
         end
-        battles_two_heroes_count = _1.get('battles_two_heroes_count').to_i
-        battles_one_hero_count = battle_count - battles_two_heroes_count
-        battles_two_and_one_percent = [
-          ['One Hero', ((battles_one_hero_count.to_f / battle_count) * 100).round(2)],
-          ['Two Heroes', ((battles_two_heroes_count.to_f / battle_count) * 100).round(2)]
-        ]
-        metrics << [:battles_two_and_one_percent, battles_two_and_one_percent]
-        publish('metrics.fetched', payload: [metrics.last].to_h)
+      ]
+      publish('metrics.fetched', payload: [metrics.last].to_h)
 
-        unless _1.hgetall('average_time_to_match').presence
-          average_time_to_match = threat.fresh.disabled
-            .includes(:battles).limit(25)
-            .average('battles.created_at - threats.created_at')
-          if average_time_to_match.present?
-            _1.mapped_hmset(
-              'average_time_to_match',
-              ActiveSupport::Duration.build(average_time_to_match).parts
-            )
-            _1.expire('average_time_to_match', 30)
-          end
+      metrics << [
+        :battles_two_heroes_count,
+        Rails.cache.fetch('battles_two_heroes_count', expires_in: 30.seconds) do
+          battles_two_heroes_count = battle.fresh.group(:threat_id).having('count(*) = 2').count.count
+          battle_count = Rails.cache.fetch('battle_count')
+          battles_one_hero_count = battle_count - battles_two_heroes_count
+          [
+            ['One Hero', ((battles_one_hero_count.to_f / battle_count) * 100).round(2)],
+            ['Two Heroes', ((battles_two_heroes_count.to_f / battle_count) * 100).round(2)]
+          ]
         end
-        metrics << [:average_time_to_match, _1.hgetall('average_time_to_match')]
-        publish('metrics.fetched', payload: [metrics.last].to_h)
+      ]
+      publish('metrics.fetched', payload: [metrics.last].to_h)
 
-        unless _1.hgetall('super_hero').presence
+      metrics << [
+        :average_time_to_match,
+        Rails.cache.fetch('average_time_to_match', expires_in: 30.seconds) do
+          duration.(threat.fresh.disabled
+            .includes(:battles)
+            .limit(25)
+            .average('battles.created_at - threats.created_at'))
+        end
+      ]
+      publish('metrics.fetched', payload: [metrics.last].to_h)
+
+      metrics << [
+        :super_hero,
+        Rails.cache.fetch('super_hero', expires_in: 30.seconds) do
           name, rank = hero.includes(:battles)
             .where('battles.finished_at': 20.minutes.ago...::Time.zone.now)
             .group(:name, :rank).sum(:score).max_by(&:second)&.first
-          if name && rank
-            _1.mapped_hmset('super_hero', { name: name, rank: rank })
-            _1.expire('super_hero', 30)
-          end
+          { name: name, rank: rank }
         end
-        metrics << [:super_hero, _1.hgetall('super_hero')]
-        publish('metrics.fetched', payload: [metrics.last].to_h)
-      end
-
+      ]
+      publish('metrics.fetched', payload: [metrics.last].to_h)
       metrics.to_h
     end
   end
