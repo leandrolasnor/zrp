@@ -41,7 +41,7 @@ RSpec.describe MetricsController do
 
             expect(response).to have_http_status(:ok)
             expect(response.headers['Content-Type']).to eq('text/event-stream')
-            expect(events.count).to eq(10)
+            expect(events.count).to eq(11)
             expect(events.first['payload'].keys.first).to eq('threat_count')
             expect(events.second['payload'].keys.first).to eq('battle_count')
             expect(events.third['payload'].keys.first).to eq('hero_count')
@@ -52,6 +52,7 @@ RSpec.describe MetricsController do
             expect(events[7]['payload'].keys.first).to eq('average_score')
             expect(events[8]['payload'].keys.first).to eq('battles_two_and_one_percent')
             expect(events[9]['payload'].keys.first).to eq('average_time_to_match')
+            expect(events[10]['payload'].keys.first).to eq('super_hero')
           end
         end
       end

@@ -11,4 +11,8 @@ RSpec.describe CreateThreat::Model::Threat, type: :model do
       expect(subject).to define_enum_for(:rank).with_values(enum_rank)
     end
   end
+
+  describe 'MeiliSearch' do
+    it { expect(described_class).to respond_to(:ms_raw_search) }
+  end
 end
