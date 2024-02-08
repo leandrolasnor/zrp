@@ -82,8 +82,8 @@ class Dashboard::Monad
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
       metrics << [
-        :battles_two_heroes_count,
-        Rails.cache.fetch('battles_two_heroes_count', expires_in: 30.seconds) do
+        :battles_two_and_one_percent,
+        Rails.cache.fetch('battles_two_and_one_percent', expires_in: 30.seconds) do
           battles_two_heroes_count = battle.fresh.group(:threat_id).having('count(*) = 2').count.count
           battle_count = Rails.cache.fetch('battle_count')
           battles_one_hero_count = battle_count - battles_two_heroes_count
