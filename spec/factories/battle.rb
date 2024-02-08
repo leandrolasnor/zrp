@@ -7,6 +7,7 @@ FactoryBot.define do
     trait :allocate_resource do
       hero factory: %i[hero allocate_resource]
       threat factory: %i[threat allocate_resource]
+      finished_at { TIMES[threat.rank].() }
       initialize_with { AllocateResource::Model::Battle.new(attributes) }
     end
   end
