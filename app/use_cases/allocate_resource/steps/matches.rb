@@ -15,10 +15,8 @@ class AllocateResource::Steps::Matches
   def call(demand)
     time_to_end = finisher.(demand)
     matches = resources.allocatable(limit).map { matcher.new(threat: demand, hero: _1, finished_at: time_to_end) }
-    return Success(matches) if matches.count >= 2
+    return matches if matches.count >= 2
 
-    Failure(I18n.t(:insufficient_resources))
-  rescue StandardError => error
-    Failure(error)
+    raise StandardError.new(I18n.t(:insufficient_resources))
   end
 end

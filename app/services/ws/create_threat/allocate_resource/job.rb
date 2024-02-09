@@ -26,17 +26,17 @@ class Ws::CreateThreat::AllocateResource::Job
         end
 
         _1.failure :matches do |f|
-          Rails.logger.error(f)
+          Rails.logger.error(f.message)
           Resque.enqueue_at(1.minute.from_now, self.class, threat_id)
         end
 
         _1.failure :allocate do |f|
-          Rails.logger.error(f)
+          Rails.logger.error(f.message)
           Resque.enqueue_at(3.seconds.from_now, self.class, threat_id)
         end
 
         _1.failure do |f|
-          Rails.logger.error(f)
+          Rails.logger.error(f.message)
         end
 
         _1.success {}
