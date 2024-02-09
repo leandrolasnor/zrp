@@ -2,5 +2,5 @@
 set -e
 rm -f tmp/pids/server.pid
 git pull
-rails rswag
+bundle exec rails rswag
 exec "$@"

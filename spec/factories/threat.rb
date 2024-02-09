@@ -29,6 +29,7 @@ FactoryBot.define do
     end
 
     trait :deallocate_resource do
+      status { :working }
       initialize_with { DeallocateResource::Model::Threat.new(attributes) }
     end
 
