@@ -36,5 +36,9 @@ FactoryBot.define do
     trait :create_threat do
       initialize_with { CreateThreat::Model::Threat.new(attributes) }
     end
+
+    trait :threats_history do
+      initialize_with { ThreatsHistory::Model::Threat.new(attributes) }
+    end
   end
 end

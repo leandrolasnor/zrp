@@ -23,5 +23,9 @@ FactoryBot.define do
     trait :create_hero do
       initialize_with { CreateHero::Model::Hero.new(attributes) }
     end
+
+    trait :threats_history do
+      initialize_with { ThreatsHistory::Model::Hero.new(attributes) }
+    end
   end
 end

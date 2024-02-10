@@ -16,5 +16,11 @@ FactoryBot.define do
       threat factory: %i[threat deallocate_resource]
       initialize_with { DeallocateResource::Model::Battle.new(attributes) }
     end
+
+    trait :threats_history do
+      hero factory: %i[hero threats_history]
+      threat factory: %i[threat threats_history]
+      initialize_with { ThreatsHistory::Model::Battle.new(attributes) }
+    end
   end
 end
