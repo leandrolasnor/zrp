@@ -26,10 +26,3 @@
 6. _Acesse a [`documentação`](http://localhost:3000/api-docs) :link:_
 
 Diminua o valor da variável de ambiente `INSURGENCY_TIME` em `socket.io/server/.env` para acelerar o processo de __insurgência__
-
-    - cria herói
-    - lista heróis
-    - atualiza herói
-    - remove herói
-    - lista ameaças
-    - métricas e indicadores
