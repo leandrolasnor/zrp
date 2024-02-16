@@ -8,6 +8,11 @@ class ThreatsHistory::Monad
   option :model, type: Interface(:page), default: -> { ThreatsHistory::Model::Threat }, reader: :private
 
   def call(page: 1, per_page: 25)
-    Try { model.fresh.disabled.includes([:battles, :heroes]).page(page).per(per_page).order(id: :desc) }
+    Try do
+      model.fresh.disabled
+        .includes([:battles, :heroes])
+        .page(page).per(per_page)
+        .order('battles.finished_at desc')
+    end
   end
 end
