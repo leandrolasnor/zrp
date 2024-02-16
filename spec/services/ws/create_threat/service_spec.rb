@@ -3,11 +3,12 @@
 require 'rails_helper'
 RSpec.describe Ws::CreateThreat::Service do
   describe '#call' do
-    let(:call) { described_class.call(params) }
-    let(:attributes) { call.attributes.symbolize_keys }
+    let(:res) { described_class.call(params) }
     let(:job) { Ws::CreateThreat::AllocateResource::Job }
 
     context 'on Success' do
+      let(:threat) { res.value!.attributes.symbolize_keys.except(:created_at, :updated_at) }
+
       context 'when payload layout is correct' do
         let(:params) do
           {
@@ -38,9 +39,9 @@ RSpec.describe Ws::CreateThreat::Service do
           allow(Resque).to receive(:enqueue).with(job, kind_of(Integer))
         end
 
-        it 'must be able to create a threat' do
-          expect(attributes.except(:created_at, :updated_at, :time)).to match(expected_record)
-          expect(call).to be_a(CreateThreat::Model::Threat)
+        it 'must be able to create a threat with enable status' do
+          expect(res).to be_success
+          expect(threat).to match(expected_record)
           expect(Resque).to have_received(:enqueue).with(job, kind_of(Integer))
         end
       end
@@ -76,26 +77,25 @@ RSpec.describe Ws::CreateThreat::Service do
           allow(Resque).to receive(:enqueue).with(job, kind_of(Integer))
         end
 
-        it 'must be able to get a threat with layout problem' do
-          expect(attributes.except(:created_at, :updated_at)).to match(expected_record)
-          expect(call).to be_a(CreateThreat::Model::Threat)
+        it 'must be able to create a threat with problem status' do
+          expect(res).to be_success
+          expect(threat).to match(expected_record)
           expect(Resque).not_to have_received(:enqueue).with(job, kind_of(Integer))
         end
       end
     end
 
     context 'on Failure' do
-      let(:call) { described_class.call(params) }
+      let(:res) { described_class.call({}) }
       let(:error) { StandardError.new }
-      let(:params) { {} }
 
       before do
-        allow(CreateThreat::Model::Threat).to receive(:create).and_raise(error)
+        allow(described_class).to receive(:new).and_raise(error)
         allow(Rails.logger).to receive(:error).with(error)
       end
 
-      it 'must not be able to create a threat' do
-        expect(call).to be_falsy
+      it 'must be able to get a failure response' do
+        expect(res).to be_failure
         expect(Rails.logger).to have_received(:error).with(error)
       end
     end

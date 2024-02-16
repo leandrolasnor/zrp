@@ -6,11 +6,9 @@ RSpec.describe CreateThreat::Monad do
     let(:res) { described_class.new.call params }
 
     context 'with wrong params' do
-      let(:params) do
-        {}
-      end
+      let(:params) { {} }
 
-      it 'must be able to persist a threat with problem on database' do
+      it 'must be able to persist a threat with problem status' do
         expect(res).to be_success
         expect(res.value!).to be_problem
       end
@@ -30,7 +28,7 @@ RSpec.describe CreateThreat::Monad do
         }
       end
 
-      it 'must be able to persist a threat without errors' do
+      it 'must be able to persist a threat with enabled status' do
         expect(res).to be_success
         expect(res.value!).to be_enabled
       end
