@@ -17,7 +17,7 @@
     - `> Dev Containers: Clone Repository in Container Volume...`
 2. Informe o _URL_ do repositório e dê ___Enter___
     - `https://github.com/leandrolasnor/zrp`
-3. :hourglass_flowing_sand: Aguarde até o ambiente seja construído
+3. :hourglass_flowing_sand: Aguarde o ambiente ser construído
 
 4. Abra o terminal integrado e rode:
     - `foreman start`
