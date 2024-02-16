@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Ws::CreateThreat::Service < Ws::Service
+class Ws::CreateThreat::Service < Ws::ApplicationService
   option :monad, type: Interface(:call), default: -> { CreateThreat::Monad.new }, reader: :private
   option :worker,
          type: Interface(:perform),
@@ -12,10 +12,6 @@ class Ws::CreateThreat::Service < Ws::Service
       queueer.(_1[:threat].id)
     end
 
-    res = monad.call(params)
-    return res.value! if res.success?
-
-    Rails.logger.error(res.exception)
-    false
+    monad.call(params)
   end
 end
