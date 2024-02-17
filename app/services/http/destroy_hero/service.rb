@@ -3,11 +3,15 @@
 class Http::DestroyHero::Service < Http::ApplicationService
   option :serializer, type: Interface(:serializer_for), default: -> { Http::DestroyHero::Serializer }, reader: :private
   option :transaction, type: Interface(:call), default: -> { DestroyHero::Transaction.new }, reader: :private
+  option :listener_destroy,
+         type: Interface(:on_step_succeeded),
+         default: -> { Http::DestroyHero::Listeners::Destroy },
+         reader: :private
 
   Contract = Http::DestroyHero::Contract.new
 
   def call
-    transaction.subscribe(destroy: Http::DestroyHero::Listeners::Destroy)
+    transaction.subscribe(destroy: listener_destroy)
     transaction.call(params) do
       _1.failure :find do |f|
         [:not_found, f.message]

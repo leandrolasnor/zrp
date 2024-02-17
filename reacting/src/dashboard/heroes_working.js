@@ -4,49 +4,28 @@ import { styled } from 'styled-components'
 
 const _ = require('lodash')
 
-const heroes_s_count = metrics => _.get(metrics, ['heroes_grouped_rank', 's'])
-const heroes_a_count = metrics => _.get(metrics, ['heroes_grouped_rank', 'a'])
-const heroes_b_count = metrics => _.get(metrics, ['heroes_grouped_rank', 'b'])
-const heroes_c_count = metrics => _.get(metrics, ['heroes_grouped_rank', 'c'])
+const heroes_s = metrics => _.get(metrics, ['heroes_facets_rank', 'facetDistribution', 'rank', 's'], 0)
+const heroes_a = metrics => _.get(metrics, ['heroes_facets_rank', 'facetDistribution', 'rank', 'a'], 0)
+const heroes_b = metrics => _.get(metrics, ['heroes_facets_rank', 'facetDistribution', 'rank', 'b'], 0)
+const heroes_c = metrics => _.get(metrics, ['heroes_facets_rank', 'facetDistribution', 'rank', 'c'], 0)
 
-const heroes_working_count = metrics => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
-  (sum, key) => {
-    if (JSON.stringify(key).match(/working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
-    return sum
-  }, 0
-)
+const heroes = metrics => _.get(metrics, 'hero_count', 0)
+const heroes_working = metrics => {
+  const by_rank = _.get(metrics, ['heroes_working_facets_rank', 'facetDistribution', 'rank'], {})
+  const sum = Object.values(by_rank).reduce((r, v) => r + v, 0)
+  return sum
+}
 
-const heroes_s_working_count = metrics => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
-  (sum, key) => {
-    if (key.match(/s#working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
-    return sum
-  }, 0
-)
-const heroes_a_working_count = metrics => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
-  (sum, key) => {
-    if (key.match(/a#working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
-    return sum
-  }, 0
-)
-const heroes_b_working_count = metrics => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
-  (sum, key) => {
-    if (key.match(/b#working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
-    return sum
-  }, 0
-)
-const heroes_c_working_count = metrics => Object.keys(_.get(metrics, 'heroes_grouped_rank_status', {})).reduce(
-  (sum, key) => {
-    if (key.match(/c#working/)) return sum + parseFloat(_.get(metrics, ['heroes_grouped_rank_status', `${key}`], 0) || 0)
-    return sum
-  }, 0
-)
+const heroes_s_working = metrics => _.get(metrics, ['heroes_working_facets_rank', 'facetDistribution', 'rank', 's'], 0)
+const heroes_a_working = metrics => _.get(metrics, ['heroes_working_facets_rank', 'facetDistribution', 'rank', 'a'], 0)
+const heroes_b_working = metrics => _.get(metrics, ['heroes_working_facets_rank', 'facetDistribution', 'rank', 'b'], 0)
+const heroes_c_working = metrics => _.get(metrics, ['heroes_working_facets_rank', 'facetDistribution', 'rank', 'c'], 0)
 
-const heroes_working_percent = metrics => (heroes_working_count(metrics) / hero_count(metrics)) * 100
-const heroes_s_working_percent = metrics => (heroes_s_working_count(metrics) / heroes_s_count(metrics)) * 100
-const heroes_a_working_percent = metrics => (heroes_a_working_count(metrics) / heroes_a_count(metrics)) * 100
-const heroes_b_working_percent = metrics => (heroes_b_working_count(metrics) / heroes_b_count(metrics)) * 100
-const heroes_c_working_percent = metrics => (heroes_c_working_count(metrics) / heroes_c_count(metrics)) * 100
-const hero_count = metrics => _.get(metrics, 'hero_count', 0)
+const heroes_working_percent = metrics => (heroes_working(metrics) / heroes(metrics)) * 100
+const heroes_s_working_percent = metrics => (heroes_s_working(metrics) / heroes_s(metrics)) * 100
+const heroes_a_working_percent = metrics => (heroes_a_working(metrics) / heroes_a(metrics)) * 100
+const heroes_b_working_percent = metrics => (heroes_b_working(metrics) / heroes_b(metrics)) * 100
+const heroes_c_working_percent = metrics => (heroes_c_working(metrics) / heroes_c(metrics)) * 100
 
 const s_tooltip = <Tooltip><i>S</i></Tooltip>
 const a_tooltip = <Tooltip><i>A</i></Tooltip>
@@ -83,7 +62,7 @@ const HeroesWorking = props => {
           </Whisper>
         </Col>
       </Row>
-      <Panel header={`${heroes_working_count(metrics) || 0} Working`}>
+      <Panel header={`${heroes_working(metrics) || 0} Working`}>
         <p>
           <small>
             Percentage of busy heroes
