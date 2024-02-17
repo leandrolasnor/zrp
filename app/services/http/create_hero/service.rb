@@ -5,6 +5,7 @@ class Http::CreateHero::Service < Http::ApplicationService
   option :transaction, type: Interface(:call), default: -> { CreateHero::Transaction.new }, reader: :private
 
   def call
+    transaction.subscribe(create: Http::CreateHero::Listeners::Create)
     transaction.call(params) do
       _1.failure :validate do |f|
         [:unprocessable_entity, f.errors.to_h]

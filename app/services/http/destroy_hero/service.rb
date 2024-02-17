@@ -7,6 +7,7 @@ class Http::DestroyHero::Service < Http::ApplicationService
   Contract = Http::DestroyHero::Contract.new
 
   def call
+    transaction.subscribe(destroy: Http::DestroyHero::Listeners::Destroy)
     transaction.call(params) do
       _1.failure :find do |f|
         [:not_found, f.message]

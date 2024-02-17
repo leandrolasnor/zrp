@@ -41,7 +41,7 @@ class Dashboard::Monad
             page: 0,
             filter: [
               "created_at > #{20.minutes.ago.to_time.to_i}",
-              'status NOT IN [problem, enabled]'
+              'status IN [working, disabled]'
             ]
           )['totalHits']
         end
