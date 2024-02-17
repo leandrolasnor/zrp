@@ -20,7 +20,14 @@ class Dashboard::Monad
       metrics << [
         :threat_count,
         Rails.cache.fetch('threat_count', expires_in: 30.seconds) do
-          threat.fresh.not_problem.count
+          threat.ms_raw_search(
+            '',
+            page: 0,
+            filter: [
+              "created_at > #{20.minutes.ago.to_time.to_i}",
+              'status != problem'
+            ]
+          )['totalHits']
         end
       ]
       publish('metrics.fetched', payload: [metrics.last].to_h)
@@ -28,7 +35,15 @@ class Dashboard::Monad
       metrics << [
         :battle_count,
         Rails.cache.fetch('battle_count', expires_in: 10.seconds) do
-          threat.fresh.not_problem.not_enabled.count
+          # threat.fresh.not_problem.not_enabled.count
+          threat.ms_raw_search(
+            '',
+            page: 0,
+            filter: [
+              "created_at > #{20.minutes.ago.to_time.to_i}",
+              'status NOT IN [problem, enabled]'
+            ]
+          )['totalHits']
         end
       ]
       publish('metrics.fetched', payload: [metrics.last].to_h)
@@ -36,7 +51,12 @@ class Dashboard::Monad
       metrics << [
         :hero_count,
         Rails.cache.fetch('hero_count', expires_in: 10.seconds) do
-          hero.not_disabled.count
+          # hero.not_disabled.count
+          hero.ms_raw_search(
+            '',
+            page: 0,
+            filter: ['status != disabled']
+          )['totalHits']
         end
       ]
       publish('metrics.fetched', payload: [metrics.last].to_h)
@@ -44,7 +64,12 @@ class Dashboard::Monad
       metrics << [
         :threats_grouped_rank_status,
         Rails.cache.fetch('threats_grouped_rank_status', expires_in: 10.seconds) do
-          threat.fresh.group(:rank, :status).count.transform_keys { |k| k.join('#') }
+          # threat.fresh.group(:rank, :status).count.transform_keys { |k| k.join('#') }
+          threat.ms_raw_search(
+            '',
+            page: 0,
+            facets: [:rank, :status]
+          )
         end
       ]
       publish('metrics.fetched', payload: [metrics.last].to_h)
