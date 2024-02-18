@@ -48,10 +48,10 @@ const Dashboard = () => {
           <HeroesWorking metrics={metrics} />
         </Col>
         <Col sm={8}>
-          {/* <ThreatsDisabled metrics={metrics} /> */}
+          <ThreatsDisabled metrics={metrics} />
         </Col>
         <Col sm={8}>
-          {/* <BattlesCharts metrics={metrics} /> */}
+          <BattlesCharts metrics={metrics} />
         </Col>
       </Row>
       <Row className='mt-4'>

@@ -34,8 +34,7 @@ class Dashboard::Monad
 
       metrics << [
         :battle_count,
-        Rails.cache.fetch('battle_count', expires_in: 10.seconds) do
-          # threat.fresh.not_problem.not_enabled.count
+        Rails.cache.fetch('battle_count', expires_in: 30.seconds) do
           threat.ms_raw_search(
             '',
             page: 0,
@@ -50,7 +49,7 @@ class Dashboard::Monad
 
       metrics << [
         :hero_count,
-        Rails.cache.fetch('hero_count', expires_in: 10.seconds) do
+        Rails.cache.fetch('hero_count', expires_in: 1.minute) do
           # hero.not_disabled.count
           hero.ms_raw_search(
             '',
@@ -63,8 +62,7 @@ class Dashboard::Monad
 
       metrics << [
         :threats_disabled_facets_rank,
-        Rails.cache.fetch('threats_grouped_rank_status', expires_in: 10.seconds) do
-          # threat.fresh.group(:rank, :status).count.transform_keys { |k| k.join('#') }
+        Rails.cache.fetch('threats_disabled_facets_rank', expires_in: 10.seconds) do
           threat.ms_raw_search(
             '',
             page: 0,
@@ -80,8 +78,7 @@ class Dashboard::Monad
 
       metrics << [
         :threats_facets_rank,
-        Rails.cache.fetch('threats_grouped_rank', expires_in: 30.seconds) do
-          # threat.fresh.not_problem.group(:rank).count
+        Rails.cache.fetch('threats_facets_rank', expires_in: 30.seconds) do
           threat.ms_raw_search(
             '',
             page: 0,
@@ -94,8 +91,7 @@ class Dashboard::Monad
 
       metrics << [
         :heroes_working_facets_rank,
-        Rails.cache.fetch('heroes_grouped_rank_status', expires_in: 10.seconds) do
-          # hero.not_disabled.group(:rank, :status).count.transform_keys { |k| k.join('#') }
+        Rails.cache.fetch('heroes_working_facets_rank', expires_in: 10.seconds) do
           hero.ms_raw_search(
             '',
             page: 0,
@@ -108,8 +104,7 @@ class Dashboard::Monad
 
       metrics << [
         :heroes_facets_rank,
-        Rails.cache.fetch('heroes_facets_rank', expires_in: 10.seconds) do
-          # hero.not_disabled.group(:rank).count
+        Rails.cache.fetch('heroes_facets_rank', expires_in: 1.minute) do
           hero.ms_raw_search(
             '',
             page: 0,
@@ -121,8 +116,7 @@ class Dashboard::Monad
 
       metrics << [
         :average_score,
-        Rails.cache.fetch('average_score', expires_in: 30.seconds) do
-          # battle.fresh.average(:score)&.round(2)
+        Rails.cache.fetch('average_score', expires_in: 1.minute) do
           search = battle.ms_raw_search(
             '',
             page: 1,

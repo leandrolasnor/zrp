@@ -13,7 +13,7 @@ module Indexes::Hero::Meilisearch
       displayed_attributes [:id, :name, :rank, :status, :lat, :lng]
       searchable_attributes [:name, :rank, :status]
       sortable_attributes [:name, :rank, :status]
-      filterable_attributes [:status]
+      filterable_attributes [:status, :rank]
     end
   end
 end
