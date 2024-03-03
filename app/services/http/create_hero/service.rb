@@ -3,8 +3,13 @@
 class Http::CreateHero::Service < Http::ApplicationService
   option :serializer, type: Interface(:serializer_for), default: -> { Http::CreateHero::Serializer }, reader: :private
   option :transaction, type: Interface(:call), default: -> { CreateHero::Transaction.new }, reader: :private
+  option :listener_create,
+         type: Interface(:on_step_succeeded),
+         default: -> { Http::CreateHero::Listeners::Create },
+         reader: :private
 
   def call
+    transaction.subscribe(create: listener_create)
     transaction.call(params) do
       _1.failure :validate do |f|
         [:unprocessable_entity, f.errors.to_h]

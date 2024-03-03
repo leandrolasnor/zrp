@@ -8,13 +8,13 @@ class EditHero::Steps::Edit
 
   register_event 'hero.edited'
 
-  option :model, type: Interface(:update), default: -> { EditHero::Model::Hero }, reader: :private
+  option :hero, type: Interface(:update), default: -> { EditHero::Model::Hero }, reader: :private
 
   def call(params)
     updated = ApplicationRecord.transaction do
-      hero = model.lock.find(params[:id])
-      hero.update!(params.to_h.except(:id))
-      hero
+      record = hero.lock.find(params[:id])
+      record.update!(params.to_h.except(:id))
+      record
     end
     publish('hero.edited', hero: updated)
     updated

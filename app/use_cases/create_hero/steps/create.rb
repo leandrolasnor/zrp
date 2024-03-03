@@ -8,10 +8,10 @@ class CreateHero::Steps::Create
 
   register_event 'hero.created'
 
-  option :model, type: Interface(:create), default: -> { CreateHero::Model::Hero }, reader: :private
+  option :hero, type: Interface(:create), default: -> { CreateHero::Model::Hero }, reader: :private
 
   def call(params)
-    created = model.create do
+    created = hero.create do
       _1.name = params[:name]
       _1.rank = params[:rank]
       _1.lat = params[:lat]

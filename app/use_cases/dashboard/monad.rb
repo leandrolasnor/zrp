@@ -20,63 +20,111 @@ class Dashboard::Monad
       metrics << [
         :threat_count,
         Rails.cache.fetch('threat_count', expires_in: 30.seconds) do
-          threat.fresh.not_problem.count
+          threat.ms_raw_search(
+            '',
+            page: 0,
+            filter: [
+              "created_at > #{20.minutes.ago.to_time.to_i}",
+              'status != problem'
+            ]
+          )['totalHits']
         end
       ]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
       metrics << [
         :battle_count,
-        Rails.cache.fetch('battle_count', expires_in: 10.seconds) do
-          threat.fresh.not_problem.not_enabled.count
+        Rails.cache.fetch('battle_count', expires_in: 30.seconds) do
+          threat.ms_raw_search(
+            '',
+            page: 0,
+            filter: [
+              "created_at > #{20.minutes.ago.to_time.to_i}",
+              'status IN [working, disabled]'
+            ]
+          )['totalHits']
         end
       ]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
       metrics << [
         :hero_count,
-        Rails.cache.fetch('hero_count', expires_in: 10.seconds) do
-          hero.not_disabled.count
+        Rails.cache.fetch('hero_count', expires_in: 1.minute) do
+          hero.ms_raw_search(
+            '',
+            page: 0,
+            filter: ['status != disabled']
+          )['totalHits']
         end
       ]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
       metrics << [
-        :threats_grouped_rank_status,
-        Rails.cache.fetch('threats_grouped_rank_status', expires_in: 10.seconds) do
-          threat.fresh.group(:rank, :status).count.transform_keys { |k| k.join('#') }
+        :threats_disabled_facets_rank,
+        Rails.cache.fetch('threats_disabled_facets_rank', expires_in: 10.seconds) do
+          threat.ms_raw_search(
+            '',
+            page: 0,
+            filter: [
+              'status = disabled',
+              "created_at > #{20.minutes.ago.to_time.to_i}"
+            ],
+            facets: [:rank]
+          )
         end
       ]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
       metrics << [
-        :threats_grouped_rank,
-        Rails.cache.fetch('threats_grouped_rank', expires_in: 30.seconds) do
-          threat.fresh.not_problem.group(:rank).count
+        :threats_facets_rank,
+        Rails.cache.fetch('threats_facets_rank', expires_in: 30.seconds) do
+          threat.ms_raw_search(
+            '',
+            page: 0,
+            filter: ["created_at > #{20.minutes.ago.to_time.to_i}"],
+            facets: [:rank]
+          )
         end
       ]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
       metrics << [
-        :heroes_grouped_rank_status,
-        Rails.cache.fetch('heroes_grouped_rank_status', expires_in: 10.seconds) do
-          hero.not_disabled.group(:rank, :status).count.transform_keys { |k| k.join('#') }
+        :heroes_working_facets_rank,
+        Rails.cache.fetch('heroes_working_facets_rank', expires_in: 10.seconds) do
+          hero.ms_raw_search(
+            '',
+            page: 0,
+            filter: ['status = working'],
+            facets: [:rank]
+          )
         end
       ]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
       metrics << [
-        :heroes_grouped_rank,
-        Rails.cache.fetch('heroes_grouped_rank', expires_in: 10.seconds) do
-          hero.not_disabled.group(:rank).count
+        :heroes_facets_rank,
+        Rails.cache.fetch('heroes_facets_rank', expires_in: 1.minute) do
+          hero.ms_raw_search(
+            '',
+            page: 0,
+            facets: [:rank]
+          )
         end
       ]
       publish('metrics.fetched', payload: [metrics.last].to_h)
 
       metrics << [
         :average_score,
-        Rails.cache.fetch('average_score', expires_in: 30.seconds) do
-          battle.fresh.average(:score)&.round(2)
+        Rails.cache.fetch('average_score', expires_in: 1.minute) do
+          search = battle.ms_raw_search(
+            '',
+            page: 1,
+            hits_per_page: 300,
+            filter: ["finished_at > #{20.minutes.ago.to_time.to_i}"]
+          )
+          hits = search['hits']
+          sum_score = hits.reduce(0.0) { |sum, i| sum + i['score'].to_f }
+          (sum_score / search['totalHits']).round(2)
         end
       ]
       publish('metrics.fetched', payload: [metrics.last].to_h)

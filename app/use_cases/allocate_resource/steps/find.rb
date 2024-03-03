@@ -5,9 +5,9 @@ class AllocateResource::Steps::Find
   include Dry.Types()
   extend  Dry::Initializer
 
-  option :model, type: Interface(:find), default: -> { AllocateResource::Model::Threat }, reader: :private
+  option :threat, type: Interface(:find), default: -> { AllocateResource::Model::Threat }, reader: :private
 
   def call(id)
-    model.find(id)
+    threat.find(id)
   end
 end
