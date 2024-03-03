@@ -50,7 +50,6 @@ class Dashboard::Monad
       metrics << [
         :hero_count,
         Rails.cache.fetch('hero_count', expires_in: 1.minute) do
-          # hero.not_disabled.count
           hero.ms_raw_search(
             '',
             page: 0,
