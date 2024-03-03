@@ -5,15 +5,15 @@ class DeallocateResource::Monad
   include Dry.Types()
   extend Dry::Initializer
 
-  option :model, type: Interface(:find), default: -> { DeallocateResource::Model::Threat }, reader: :private
+  option :threat, type: Interface(:find), default: -> { DeallocateResource::Model::Threat }, reader: :private
 
   def call(id)
     Try do
       ApplicationRecord.transaction do
-        threat = model.find(id).lock!
-        threat.touch
-        threat.disabled!
-        threat.heroes.each do
+        record = threat.find(id).lock!
+        record.touch
+        record.disabled!
+        record.heroes.each do
           _1.lock!
           _1.enabled!
         end

@@ -8,17 +8,17 @@ class CreateThreat::Monad
 
   register_event 'threat.created'
 
-  option :model, type: Interface(:create), default: -> { CreateThreat::Model::Threat }, reader: :private
+  option :threat, type: Interface(:create), default: -> { CreateThreat::Model::Threat }, reader: :private
 
   def call(params)
     Try do
-      record = model.connection_pool.with_connection do
-        model.create do
+      record = threat.connection_pool.with_connection do
+        threat.create do
           _1.name = params[:monsterName] rescue nil
           _1.rank = params[:dangerLevel].downcase rescue nil
           _1.lat = params[:location].first[:lat] rescue nil
           _1.lng = params[:location].first[:lng] rescue nil
-          _1.status = model.statuses['problem'] unless (params[:location].first[:lng] rescue nil) &&
+          _1.status = threat.statuses['problem'] unless (params[:location].first[:lng] rescue nil) &&
                                                        (params[:location].first[:lat] rescue nil) &&
                                                        params[:monsterName] &&
                                                        params[:dangerLevel]

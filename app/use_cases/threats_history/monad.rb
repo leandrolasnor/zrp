@@ -5,11 +5,11 @@ class ThreatsHistory::Monad
   include Dry.Types()
   extend  Dry::Initializer
 
-  option :model, type: Interface(:page), default: -> { ThreatsHistory::Model::Threat }, reader: :private
+  option :threat, type: Interface(:page), default: -> { ThreatsHistory::Model::Threat }, reader: :private
 
   def call(page: 1, per_page: 25)
     Try do
-      model.fresh.disabled
+      threat.fresh.disabled
         .includes([:battles, :heroes])
         .page(page).per(per_page)
         .order('battles.finished_at desc')

@@ -5,9 +5,9 @@ class ShowHero::Monad
   include Dry.Types()
   extend  Dry::Initializer
 
-  option :model, type: Interface(:find), default: -> { ShowHero::Model::Hero }, reader: :private
+  option :hero, type: Interface(:find), default: -> { ShowHero::Model::Hero }, reader: :private
 
   def call(id)
-    Try(ActiveRecord::RecordNotFound) { model.find(id) }
+    Try(ActiveRecord::RecordNotFound) { hero.find(id) }
   end
 end

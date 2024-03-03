@@ -5,9 +5,9 @@ class ListHeroes::Monad
   include Dry.Types()
   extend  Dry::Initializer
 
-  option :model, type: Interface(:page), default: -> { ListHeroes::Model::Hero }, reader: :private
+  option :hero, type: Interface(:page), default: -> { ListHeroes::Model::Hero }, reader: :private
 
   def call(page: 1, per_page: 25)
-    Try { model.page(page).per(per_page).order(id: :desc) }
+    Try { hero.page(page).per(per_page).order(id: :desc) }
   end
 end
