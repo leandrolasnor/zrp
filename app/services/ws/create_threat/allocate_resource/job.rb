@@ -5,16 +5,21 @@ class Ws::CreateThreat::AllocateResource::Job
   extend Dry::Initializer
 
   option :transaction, type: Interface(:call), default: -> { AllocateResource::Transaction.new }, reader: :private
+  option :deallocate_resource_job,
+         type: Interface(:perform),
+         default: -> { Ws::CreateThreat::DeallocateResource::Job }, reader: :private
+  option :queuer, type: Instance(Proc), default: -> { proc { Resque.enqueue(_1, _2) } }, reader: :private
+  option :scheduler, type: Instance(Proc), default: -> { proc { Resque.enqueue_at(_1, _2, _3) } }
 
   def call(threat_id)
     transaction.operations[:allocate].subscribe('resource.not.allocated') do
-      Resque.enqueue(self.class, threat_id)
+      queuer.(self.class, threat_id)
     end
 
     transaction.operations[:allocate].subscribe('resource.allocated') do
-      Resque.enqueue_at(
+      scheduler.(
         _1[:threat].battles.first.finished_at,
-        Ws::CreateThreat::DeallocateResource::Job,
+        deallocate_resource_job,
         _1[:threat].id
       )
     end
@@ -27,12 +32,12 @@ class Ws::CreateThreat::AllocateResource::Job
 
         _1.failure :matches do |f|
           Rails.logger.error(f.message)
-          Resque.enqueue_at(1.minute.from_now, self.class, threat_id)
+          scheduler.(1.minute.from_now, self.class, threat_id)
         end
 
         _1.failure :allocate do |f|
           Rails.logger.error(f.message)
-          Resque.enqueue_at(3.seconds.from_now, self.class, threat_id)
+          scheduler.(3.seconds.from_now, self.class, threat_id)
         end
 
         _1.failure do |f|
