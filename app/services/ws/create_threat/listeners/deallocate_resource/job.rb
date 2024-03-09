@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Ws::CreateThreat::DeallocateResource::Job
+class Ws::CreateThreat::Listeners::DeallocateResource::Job
   include Dry.Types()
   extend Dry::Initializer
 

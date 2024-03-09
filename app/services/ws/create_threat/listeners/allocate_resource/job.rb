@@ -1,28 +1,21 @@
 # frozen_string_literal: true
 
-class Ws::CreateThreat::AllocateResource::Job
+class Ws::CreateThreat::Listeners::AllocateResource::Job
   include Dry.Types()
   extend Dry::Initializer
 
   option :transaction, type: Interface(:call), default: -> { AllocateResource::Transaction.new }, reader: :private
-  option :deallocate_resource_job,
-         type: Interface(:perform),
-         default: -> { Ws::CreateThreat::DeallocateResource::Job }, reader: :private
-  option :queuer, type: Instance(Proc), default: -> { proc { Resque.enqueue(_1, _2) } }, reader: :private
+  option :allocate_resource_listener,
+         type: Instance(Object),
+         default: -> { Ws::CreateThreat::Listeners::AllocateResource::Listener.new }, reader: :private
+  option :deallocate_resource_listener,
+         type: Instance(Object),
+         default: -> { Ws::CreateThreat::Listeners::DeallocateResource::Listener.new }, reader: :private
   option :scheduler, type: Instance(Proc), default: -> { proc { Resque.enqueue_at(_1, _2, _3) } }
 
   def call(threat_id)
-    transaction.operations[:allocate].subscribe('resource.not.allocated') do
-      queuer.(self.class, threat_id)
-    end
-
-    transaction.operations[:allocate].subscribe('resource.allocated') do
-      scheduler.(
-        _1[:threat].battles.first.finished_at,
-        deallocate_resource_job,
-        _1[:threat].id
-      )
-    end
+    transaction.operations[:allocate].subscribe(allocate_resource_listener)
+    transaction.operations[:allocate].subscribe(deallocate_resource_listener)
 
     ApplicationRecord.connection_pool.with_connection do
       transaction.call(threat_id) do
