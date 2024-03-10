@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-RSpec.describe Ws::CreateThreat::AllocateResource::Job do
+RSpec.describe Ws::CreateThreat::Listeners::AllocateResource::Job do
   let(:call) { described_class.new.call(threat.id) }
   let(:threat) { create(:threat, :allocate_resource) }
 
