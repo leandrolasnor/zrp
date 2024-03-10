@@ -12,7 +12,7 @@ class Ws::CreateThreat::Listeners::DeallocateResource::Job
 
       if res.failure?
         Rails.logger.error(res.exception)
-        Resque.enqueue(Ws::CreateThreat::DeallocateResource::Job, threat_id)
+        Resque.enqueue(self.class, threat_id)
       end
     end
   end
