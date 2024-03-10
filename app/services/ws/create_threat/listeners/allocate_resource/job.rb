@@ -11,7 +11,6 @@ class Ws::CreateThreat::Listeners::AllocateResource::Job
   option :deallocate_resource_listener,
          type: Instance(Object),
          default: -> { Ws::CreateThreat::Listeners::DeallocateResource::Listener.new }, reader: :private
-  option :scheduler, type: Instance(Proc), default: -> { proc { Resque.enqueue_at(_1, _2, _3) } }
 
   def call(threat_id)
     transaction.operations[:allocate].subscribe(allocate_resource_listener)
@@ -25,12 +24,12 @@ class Ws::CreateThreat::Listeners::AllocateResource::Job
 
         _1.failure :matches do |f|
           Rails.logger.error(f.message)
-          scheduler.(1.minute.from_now, self.class, threat_id)
+          Resque.enqueue_at(1.minute.from_now, self.class, threat_id)
         end
 
         _1.failure :allocate do |f|
           Rails.logger.error(f.message)
-          scheduler.(3.seconds.from_now, self.class, threat_id)
+          Resque.enqueue_at(3.seconds.from_now, self.class, threat_id)
         end
 
         _1.failure do |f|
