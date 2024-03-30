@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Ws::CreateThreat::DeallocateResource::Job
+class Ws::CreateThreat::Listeners::DeallocateResource::Job
   include Dry.Types()
   extend Dry::Initializer
 
@@ -12,7 +12,7 @@ class Ws::CreateThreat::DeallocateResource::Job
 
       if res.failure?
         Rails.logger.error(res.exception)
-        Resque.enqueue(Ws::CreateThreat::DeallocateResource::Job, threat_id)
+        Resque.enqueue(self.class, threat_id)
       end
     end
   end

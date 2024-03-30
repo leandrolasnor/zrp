@@ -61,7 +61,7 @@ class AllocateResource::Steps::Allocate
         publish('resource.allocated', threat: threat)
       end
     else
-      publish('resource.not.allocated')
+      publish('resource.not.allocated', threat: threat)
     end
 
     threat
