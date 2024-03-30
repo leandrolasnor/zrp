@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe Ws::CreateThreat::Service do
   describe '#call' do
     let(:res) { described_class.call(params) }
-    let(:job) { Ws::CreateThreat::AllocateResource::Job }
+    let(:job) { Ws::CreateThreat::Listeners::AllocateResource::Job }
 
     context 'on Success' do
       let(:threat) { res.value!.attributes.symbolize_keys.except(:created_at, :updated_at) }

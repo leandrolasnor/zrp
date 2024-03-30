@@ -57,7 +57,7 @@ RSpec.describe Ws::CreateThreat::Listeners::AllocateResource::Job do
     before do
       allow(Resque).
         to receive(:enqueue_at).
-        with(duck_type(:to_time), Ws::CreateThreat::DeallocateResource::Job, threat.id)
+        with(duck_type(:to_time), Ws::CreateThreat::Listeners::DeallocateResource::Job, threat.id)
       heroes
       call
     end
@@ -65,7 +65,7 @@ RSpec.describe Ws::CreateThreat::Listeners::AllocateResource::Job do
     it 'must be able to create a threat and allocate heroes' do
       expect(Resque).
         to have_received(:enqueue_at).
-        with(duck_type(:to_time), Ws::CreateThreat::DeallocateResource::Job, threat.id)
+        with(duck_type(:to_time), Ws::CreateThreat::Listeners::DeallocateResource::Job, threat.id)
     end
   end
 end

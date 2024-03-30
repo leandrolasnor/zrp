@@ -109,7 +109,7 @@ RSpec.describe AllocateResource::Steps::Allocate do
       end
 
       before do
-        allow(subject).to receive(:publish).with('resource.not.allocated')
+        allow(subject).to receive(:publish).with('resource.not.allocated', threat: threat)
         call
       end
 
@@ -119,7 +119,7 @@ RSpec.describe AllocateResource::Steps::Allocate do
         expect(heroes.second).to be_enabled
         expect(matches_sorted.first).not_to be_persisted
         expect(matches_sorted.second).not_to be_persisted
-        expect(subject).to have_received(:publish).with('resource.not.allocated')
+        expect(subject).to have_received(:publish).with('resource.not.allocated', threat: threat)
       end
     end
   end
