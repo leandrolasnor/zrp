@@ -36,6 +36,15 @@ services:
     - redis
     - db
 
+  cable:
+    image: leandrolasnor/ruby:zrp
+    container_name: zrp.cable
+    command: sh -c "puma -p 28080 cable/config.ru"
+    ports:
+    - '28080:28080'
+    depends_on:
+    - redis
+
   db:
     image: bitnami/postgresql:latest
     container_name: zrp.postgresql
