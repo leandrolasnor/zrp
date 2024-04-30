@@ -10,6 +10,7 @@ import promise from 'redux-promise'
 import thunk from 'redux-thunk'
 import App from './App.js'
 import axios from 'axios'
+import { ActionCableProvider } from 'react-actioncable-provider';
 import reportWebVitals from './reportWebVitals'
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -33,7 +34,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <ActionCableProvider url={process.env.REACT_APP_CABLE_URL}>
+        <App />
+      </ActionCableProvider>
       <ReduxToastr
         timeOut={3000}
         newestOnTop={true}
