@@ -13,6 +13,8 @@ FileUtils.chdir APP_ROOT do
   # This script is idempotent, so that you can run it at any time and get an expectable outcome.
   # Add necessary setup steps to this file.
 
+  system! "bin/rails resque:clear"
+
   puts "\n== Preparing database =="
   system! "bin/rails meilisearch:clear_indexes"
   system! "bin/rails db:reset"
