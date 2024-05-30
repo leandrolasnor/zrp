@@ -8,6 +8,6 @@ class ListenersAmqp::Threats
   def work(threat)
     parsed = JSON.parse(threat, symbolize_names: true)
     res = Ws::CreateThreat::Service.(parsed)
-    res.success? ? ack! : Rails.cache.error(res.exception)
+    res.success? ? ack! : Rails.logger.error(res.exception)
   end
 end
