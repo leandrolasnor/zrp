@@ -6,7 +6,7 @@ class Http::Sse::ApplicationService
   extend Dry::Initializer
 
   param :params, type: Hash, reader: :private
-  option :sse, type: Interface(:write), default: -> { params[:sse] }, reader: :private
+  option :sse, type: Interface(:write), reader: :private
 
   def self.call(response:, **args)
     response.headers['Content-Type'] = 'text/event-stream'
@@ -22,7 +22,7 @@ class Http::Sse::ApplicationService
       end
     end
 
-    new(args.merge(sse: sse)).call
+    new(args, sse: sse).call
   rescue ActionController::Live::ClientDisconnected
     sse.close
   rescue StandardError => error
