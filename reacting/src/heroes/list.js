@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { Table, Row, Col, Button, Badge, TagGroup, Tag } from 'rsuite'
+import { Table, Row, Col, Button, Badge, TagGroup, Tag, IconButton } from 'rsuite'
 import { Icon } from '@rsuite/icons'
-import { FaTrashCan, FaFilePen, FaTrophy } from 'react-icons/fa6'
+import { FaTrashCan, FaFilePen, FaTrophy, FaClipboardCheck } from 'react-icons/fa6'
 import HeroForm from './hero_form'
 import { destroy_hero } from './actions'
 
@@ -94,6 +94,12 @@ const List = props => {
                     <TagGroup>
                       <Tag>{row.lat}</Tag>
                       <Tag>{row.lng}</Tag>
+                      <IconButton
+                        onClick={() => { navigator.clipboard.writeText(`${row.lat} ${row.lng}`) }}
+                        appearance='subtle'
+                        circle size="xs"
+                        icon={<Icon as={FaClipboardCheck} />}
+                      />
                     </TagGroup>
                   )
                 }
