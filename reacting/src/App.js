@@ -19,7 +19,7 @@ const App = () => {
             channel="NotificationChannel"
             onReceived={props => console.log(props)}
             onConnected={props => console.log("Cable Online")}
-            onDisconected={props => console.log("Cable Offline")}
+            onDisconnected={props => console.log("Cable Offline")}
             onInitialized={props => console.log("Cable Initialized")}
             onRejected={props => console.log("Cable Rejected")}
           />

@@ -7,11 +7,16 @@ class Http::DestroyHero::Service < Http::ApplicationService
          type: Interface(:on_step_succeeded),
          default: -> { Http::DestroyHero::Listeners::Destroy },
          reader: :private
+  option :widget_heroes_working_listener,
+         type: Interface(:on_step_succeeded),
+         default: -> { Http::DestroyHero::Listeners::Dashboard::Widgets::HeroesWorking::Listener },
+         reader: :private
 
   Contract = Http::DestroyHero::Contract.new
 
   def call
     transaction.subscribe(destroy: listener_destroy)
+    transaction.subscribe(destroy: widget_heroes_working_listener)
     transaction.call(params) do
       _1.failure :find do |f|
         [:not_found, f.message]

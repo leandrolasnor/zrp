@@ -5,8 +5,14 @@ class Ws::CreateThreat::Listeners::DeallocateResource::Job
   extend Dry::Initializer
 
   option :monad, type: Interface(:call), default: -> { DeallocateResource::Monad.new }, reader: :private
+  option :widget_heroes_working_listener,
+         type: Interface(:on_resource_allocated),
+         default: -> { Ws::CreateThreat::Listeners::Dashboard::Widgets::HeroesWorking::Listener.new },
+         reader: :private
 
   def call(threat_id)
+    monad.subscribe(widget_heroes_working_listener)
+
     ApplicationRecord.connection_pool.with_connection do
       res = monad.call(threat_id)
 
@@ -20,5 +26,11 @@ class Ws::CreateThreat::Listeners::DeallocateResource::Job
   @queue = :allocated
   def self.perform(threat_id)
     new.call(threat_id)
+  end
+
+  private
+
+  def queue_empty?
+    Resque.size(:widget_heroes_working).zero?
   end
 end
