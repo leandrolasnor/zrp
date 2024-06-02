@@ -1,5 +1,4 @@
-import { Row, Col, Panel, Tooltip } from 'rsuite'
-import { Whisper, Progress } from 'rsuite'
+import { Row, Col, Panel, Tooltip, Whisper, Progress } from 'rsuite'
 import { useSelector } from 'react-redux'
 
 const _ = require('lodash')
@@ -11,7 +10,7 @@ const HeroesWorking = props => {
     <Panel bodyFill>
       <Row>
         <Col className='mt-3 ms-4' sm={8}>
-          <Progress.Circle percent={_.get(heroes_working,'global', 0)} strokeColor="#ffdb58" />
+          <Progress.Circle percent={_.get(heroes_working, 'global', 0)} strokeColor="#ffdb58" />
         </Col>
         <Col className='mt-5' sm={3}>
           <Whisper placement="bottom" controlId="control-id-hover" trigger="hover" speaker={<Tooltip><i>S</i></Tooltip>}>
@@ -34,7 +33,7 @@ const HeroesWorking = props => {
           </Whisper>
         </Col>
       </Row>
-      <Panel header={`${_.get(heroes_working, 'count', 0) } Working`}>
+      <Panel header={`${_.get(heroes_working, 'count', 0)} Working`}>
         <p>
           <small>
             Percentage of busy heroes
