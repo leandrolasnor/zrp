@@ -9,7 +9,7 @@ class Dashboard::Widgets::HeroesWorking::Monad
 
   def call
     Try do
-      heroes = model.ms_raw_search('', page: 0, facets: [:rank], filter: ['status = enabled'])
+      heroes = model.ms_raw_search('', page: 0, facets: [:rank], filter: ['status != disabled'])
       heroes_working = model.ms_raw_search('', page: 0, facets: [:rank], filter: ['status = working'])
 
       {
