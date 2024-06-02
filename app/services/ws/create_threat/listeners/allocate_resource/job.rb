@@ -14,11 +14,15 @@ class Ws::CreateThreat::Listeners::AllocateResource::Job
   option :widget_heroes_working_listener,
          type: Instance(Object),
          default: -> { Ws::CreateThreat::Listeners::Dashboard::Widgets::HeroesWorking::Listener.new }, reader: :private
+  option :widget_battles_lineup_listener,
+         type: Instance(Object),
+         default: -> { Ws::CreateThreat::Listeners::Dashboard::Widgets::BattlesLineup::Listener.new }, reader: :private
 
   def call(threat_id)
     transaction.operations[:allocate].subscribe(allocate_resource_listener)
     transaction.operations[:allocate].subscribe(deallocate_resource_listener)
     transaction.operations[:allocate].subscribe(widget_heroes_working_listener)
+    transaction.operations[:allocate].subscribe(widget_battles_lineup_listener)
 
     ApplicationRecord.connection_pool.with_connection do
       transaction.call(threat_id) do

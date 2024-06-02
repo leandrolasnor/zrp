@@ -12,10 +12,13 @@ module Indexes::Threat::Meilisearch
       attribute :created_at do
         created_at.to_time.to_i
       end
+      attribute :lineup do
+        heroes.count rescue nil
+      end
       displayed_attributes [:id, :name, :rank, :status, :payload]
       searchable_attributes [:name, :rank, :payload]
       sortable_attributes [:name, :rank, :status]
-      filterable_attributes [:created_at, :status, :rank]
+      filterable_attributes [:created_at, :status, :rank, :lineup]
     end
   end
 end
