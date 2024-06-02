@@ -45,7 +45,7 @@ const Dashboard = () => {
       <Row><Progress.Line status="success" strokeWidth={1} percent={counter} showInfo={false} /></Row>
       <Row>
         <Col sm={8}>
-          <HeroesWorking metrics={metrics} />
+          <HeroesWorking />
         </Col>
         <Col sm={8}>
           <ThreatsDisabled metrics={metrics} />
