@@ -18,21 +18,6 @@ class Dashboard::Monad
       metrics = []
 
       metrics << [
-        :threat_count,
-        Rails.cache.fetch('threat_count', expires_in: 30.seconds) do
-          threat.ms_raw_search(
-            '',
-            page: 0,
-            filter: [
-              "created_at > #{20.minutes.ago.to_time.to_i}",
-              'status != problem'
-            ]
-          )['totalHits']
-        end
-      ]
-      publish('metrics.fetched', payload: [metrics.last].to_h)
-
-      metrics << [
         :battle_count,
         Rails.cache.fetch('battle_count', expires_in: 30.seconds) do
           threat.ms_raw_search(
@@ -43,72 +28,6 @@ class Dashboard::Monad
               'status IN [working, disabled]'
             ]
           )['totalHits']
-        end
-      ]
-      publish('metrics.fetched', payload: [metrics.last].to_h)
-
-      metrics << [
-        :hero_count,
-        Rails.cache.fetch('hero_count', expires_in: 1.minute) do
-          hero.ms_raw_search(
-            '',
-            page: 0,
-            filter: ['status != disabled']
-          )['totalHits']
-        end
-      ]
-      publish('metrics.fetched', payload: [metrics.last].to_h)
-
-      metrics << [
-        :threats_disabled_facets_rank,
-        Rails.cache.fetch('threats_disabled_facets_rank', expires_in: 10.seconds) do
-          threat.ms_raw_search(
-            '',
-            page: 0,
-            filter: [
-              'status = disabled',
-              "created_at > #{20.minutes.ago.to_time.to_i}"
-            ],
-            facets: [:rank]
-          )
-        end
-      ]
-      publish('metrics.fetched', payload: [metrics.last].to_h)
-
-      metrics << [
-        :threats_facets_rank,
-        Rails.cache.fetch('threats_facets_rank', expires_in: 30.seconds) do
-          threat.ms_raw_search(
-            '',
-            page: 0,
-            filter: ["created_at > #{20.minutes.ago.to_time.to_i}"],
-            facets: [:rank]
-          )
-        end
-      ]
-      publish('metrics.fetched', payload: [metrics.last].to_h)
-
-      metrics << [
-        :heroes_working_facets_rank,
-        Rails.cache.fetch('heroes_working_facets_rank', expires_in: 10.seconds) do
-          hero.ms_raw_search(
-            '',
-            page: 0,
-            filter: ['status = working'],
-            facets: [:rank]
-          )
-        end
-      ]
-      publish('metrics.fetched', payload: [metrics.last].to_h)
-
-      metrics << [
-        :heroes_facets_rank,
-        Rails.cache.fetch('heroes_facets_rank', expires_in: 1.minute) do
-          hero.ms_raw_search(
-            '',
-            page: 0,
-            facets: [:rank]
-          )
         end
       ]
       publish('metrics.fetched', payload: [metrics.last].to_h)
