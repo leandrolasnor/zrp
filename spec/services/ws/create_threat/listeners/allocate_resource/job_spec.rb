@@ -58,6 +58,12 @@ RSpec.describe Ws::CreateThreat::Listeners::AllocateResource::Job do
       allow(Resque).
         to receive(:enqueue_at).
         with(duck_type(:to_time), Ws::CreateThreat::Listeners::DeallocateResource::Job, threat.id)
+      allow(Resque).
+        to receive(:enqueue_at).
+        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::HeroesWorking::Job)
+      allow(Resque).
+        to receive(:enqueue_at).
+        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::BattlesLineup::Job)
       heroes
       call
     end
@@ -66,6 +72,12 @@ RSpec.describe Ws::CreateThreat::Listeners::AllocateResource::Job do
       expect(Resque).
         to have_received(:enqueue_at).
         with(duck_type(:to_time), Ws::CreateThreat::Listeners::DeallocateResource::Job, threat.id)
+      expect(Resque).
+        to have_received(:enqueue_at).
+        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::HeroesWorking::Job)
+      expect(Resque).
+        to have_received(:enqueue_at).
+        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::BattlesLineup::Job)
     end
   end
 end
