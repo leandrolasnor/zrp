@@ -1,5 +1,5 @@
-rails: bundle exec rails s -p 3000 -b 0.0.0.0
-cable: bundle exec puma -p 28080 -P tmp/pids/cable.pid cable/config.ru
+rails: bundle exec rails s -p 3000 -b 0.0.0.0 -P tmp/pids/rails.pid
+cable: bundle exec puma -p 28080 cable/config.ru
 react: yarn --cwd ./reacting start
 resque: bundle exec rake resque:workers COUNT=4 QUEUE=*
 scheduler: bundle exec rake resque:scheduler
