@@ -4,7 +4,12 @@ class Ws::CreateThreat::Service < Ws::ApplicationService
   option :monad, type: Interface(:call), default: -> { CreateThreat::Monad.new }, reader: :private
   option :listeners,
          type: Array,
-         default: -> { [Ws::CreateThreat::Listeners::AllocateResource::Listener.new] },
+         default: -> {
+                    [
+                      Ws::CreateThreat::Listeners::AllocateResource::Listener.new,
+                      Ws::CreateThreat::Listeners::Dashboard::Widgets::ThreatsDisabled::Listener.new
+                    ]
+                  },
          reader: :private
 
   def call

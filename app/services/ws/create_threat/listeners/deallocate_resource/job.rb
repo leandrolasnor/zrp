@@ -9,9 +9,14 @@ class Ws::CreateThreat::Listeners::DeallocateResource::Job
          type: Interface(:on_resource_allocated),
          default: -> { Ws::CreateThreat::Listeners::Dashboard::Widgets::HeroesWorking::Listener.new },
          reader: :private
+  option :widget_threats_disabled_listener,
+         type: Interface(:on_resource_deallocated),
+         default: -> { Ws::CreateThreat::Listeners::Dashboard::Widgets::ThreatsDisabled::Listener.new },
+         reader: :private
 
   def call(threat_id)
     monad.subscribe(widget_heroes_working_listener)
+    monad.subscribe(widget_threats_disabled_listener)
 
     ApplicationRecord.connection_pool.with_connection do
       res = monad.call(threat_id)
