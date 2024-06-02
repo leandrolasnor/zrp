@@ -3,10 +3,12 @@ import NavBar from './navbar.js'
 import Routes from './routes'
 import { ActionCableConsumer } from 'react-actioncable-provider'
 import { EventSourcePolyfill } from 'event-source-polyfill'
+import { useDispatch } from 'react-redux'
 
 global.EventSource = EventSourcePolyfill
 
 const App = () => {
+  const dispatch = useDispatch()
   return (
     <CustomProvider theme="dark">
       <Container>
@@ -17,11 +19,11 @@ const App = () => {
           <Routes />
           <ActionCableConsumer
             channel="NotificationChannel"
-            onReceived={props => console.log(props)}
-            onConnected={props => console.log("Cable Online")}
-            onDisconected={props => console.log("Cable Offline")}
-            onInitialized={props => console.log("Cable Initialized")}
-            onRejected={props => console.log("Cable Rejected")}
+            onReceived={e => dispatch(e)}
+            onConnected={e => console.log("Cable Online")}
+            onDisconnected={e => console.log("Cable Offline")}
+            onInitialized={e => console.log("Cable Initialized")}
+            onRejected={e => console.log("Cable Rejected")}
           />
         </Content>
       </Container>

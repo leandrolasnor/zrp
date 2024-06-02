@@ -7,9 +7,14 @@ class Http::CreateHero::Service < Http::ApplicationService
          type: Interface(:on_step_succeeded),
          default: -> { Http::CreateHero::Listeners::Create },
          reader: :private
+  option :widget_heroes_working_listener,
+         type: Interface(:on_step_succeeded),
+         default: -> { Http::CreateHero::Listeners::Dashboard::Widgets::HeroesWorking::Listener },
+         reader: :private
 
   def call
     transaction.subscribe(create: listener_create)
+    transaction.subscribe(create: widget_heroes_working_listener)
     transaction.call(params) do
       _1.failure :validate do |f|
         [:unprocessable_entity, f.errors.to_h]
