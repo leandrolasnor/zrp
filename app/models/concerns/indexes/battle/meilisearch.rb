@@ -21,7 +21,10 @@ module Indexes::Battle::Meilisearch
       attribute :lng do
         threat.lng
       end
-      displayed_attributes [:id, :score, :hero, :threat, :lat, :lng]
+      attribute :time_to_match do
+        self.created_at - threat.created_at
+      end
+      displayed_attributes [:id, :score, :hero, :threat, :lat, :lng, :time_to_match]
       searchable_attributes [:score, :hero, :threat]
       sortable_attributes [:score, :threat]
       filterable_attributes [:finished_at]
