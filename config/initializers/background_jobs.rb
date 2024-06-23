@@ -12,9 +12,3 @@ end
 REDIS.with do
   Resque.redis = _1
 end
-
-# accessing data
-# CACHE.with do |conn|
-#   conn.get(<key>)
-#   conn.set(<key>, <value>)
-# end
