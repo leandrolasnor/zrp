@@ -1,8 +1,9 @@
 import { Tag, Badge } from 'rsuite'
+import { useSelector } from 'react-redux'
 
-const AverageScore = props => {
-  const { score } = props
+const AverageScore = () => {
+  const { average_score } = useSelector(state => state.metrics)
 
-  if (score) return <Tag><Badge color="cyan" content={Number(score).toFixed(2)}>average score</Badge></Tag>
+  if (average_score) return <Tag><Badge color="cyan" content={average_score}>average score</Badge></Tag>
 }
 export default AverageScore

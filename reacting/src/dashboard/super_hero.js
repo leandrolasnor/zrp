@@ -1,7 +1,8 @@
+import { useSelector } from 'react-redux'
 import { Tag, Badge } from 'rsuite'
 
-const SuperHero = props => {
-  const { hero } = props
+const SuperHero = () => {
+  const { super_hero } = useSelector(state => state.metrics)
   const colors = {
     s: 'blue',
     a: 'green',
@@ -9,10 +10,10 @@ const SuperHero = props => {
     c: 'red'
   }
 
-  if (hero) return (
+  if (super_hero) return (
     <Tag>
-      <Badge color={colors[hero.rank]} content={hero.rank}>
-        {hero.name}
+      <Badge color={colors[super_hero.rank]} content={super_hero.rank}>
+        {super_hero.name}
       </Badge>
     </Tag>
   )

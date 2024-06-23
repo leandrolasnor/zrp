@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Table, Row, Col, Button, Badge, TagGroup, Tag, IconButton } from 'rsuite'
 import { Icon } from '@rsuite/icons'
 import { FaTrashCan, FaFilePen, FaTrophy, FaClipboardCheck } from 'react-icons/fa6'
@@ -13,7 +13,8 @@ const rowKey = 'id'
 
 const List = props => {
   const dispatch = useDispatch()
-  const { heroes: { search: { hits } }, super_hero } = props
+  const { search: { hits } } = useSelector(state => state.heroes)
+  const { super_hero } = useSelector(state => state.metrics)
   const [openUpdateHeroForm, setOpenUpdateHeroForm] = useState(false)
   const [dataHeroForm, setDataHeroForm] = useState({})
   const statusColors = {
@@ -36,7 +37,7 @@ const List = props => {
             <Badge color={statusColors[rowData.status]} content={rowData.status} />
           </Col>
           <Col>
-            {_.get(super_hero, 'name', '') == rowData.name ? <Badge color='orange' content={<Icon as={FaTrophy} />}>{rowData[dataKey]}</Badge> : rowData[dataKey]}
+            {_.get(super_hero, 'name', '') === rowData.name ? <Badge color='orange' content={<Icon as={FaTrophy} />}>{rowData[dataKey]}</Badge> : rowData[dataKey]}
           </Col>
         </Row>
       </Cell>

@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Input, InputGroup, IconButton, Row, Col } from 'rsuite'
 import HeroForm from './hero_form.js'
 import SearchIcon from '@rsuite/icons/Search'
 import PlusIcon from '@rsuite/icons/Plus'
 
 const Searcher = props => {
-  const { query } = props
+  const { search: { query } } = useSelector(state => state.heroes)
   const searchRef = useRef(null)
   const dispatch = useDispatch()
   const [openCreateHeroForm, setOpenCreateHeroForm] = useState(false)

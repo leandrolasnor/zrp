@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Icon } from '@rsuite/icons'
 import { Table, IconButton, Row, Col, Badge, Tag, TagGroup } from 'rsuite'
 import CollaspedOutlineIcon from '@rsuite/icons/CollaspedOutline';
@@ -98,7 +98,7 @@ const renderRowExpanded = rowData => {
   const { heroes } = battle
 
   return (
-    <Row className="mt-3">
+    <Row className="mt-1">
       <TagGroup>
         <Tag>{battle.score}</Tag>
         <Tag><Heroes heroes={heroes} /></Tag>
@@ -108,12 +108,12 @@ const renderRowExpanded = rowData => {
   );
 };
 
-const HistoricalThreats = props => {
-  const { historical_threats } = props
+const HistoricalThreats = () => {
+  const { historical_threats } = useSelector(state => state.metrics)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(historical({ page: 1, per_page: 50 }))
+    if (historical_threats.length === 0) dispatch(historical({ page: 1, per_page: 50 }))
   }, [])
 
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);

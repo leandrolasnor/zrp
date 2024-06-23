@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, Pagination } from 'rsuite'
 import { search } from './actions.js'
 
-const Paginate = props => {
+const Paginate = () => {
   const dispatch = useDispatch()
-  const { heroes: { search: { query, totalHits, page, hitsPerPage } } } = props
+  const { search: { query, totalHits, page, hitsPerPage } }  = useSelector(state => state.heroes)
   const layout = ['total', '-', 'limit', '|', 'pager', 'skip']
   const limitOptions = [30, 50, 100]
   const handleChangePerPage = per_page => dispatch(search(query, { per_page: per_page, page: 1 }))
