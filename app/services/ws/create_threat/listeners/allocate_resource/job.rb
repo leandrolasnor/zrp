@@ -17,12 +17,24 @@ class Ws::CreateThreat::Listeners::AllocateResource::Job
   option :widget_battles_lineup_listener,
          type: Instance(Object),
          default: -> { Ws::CreateThreat::Listeners::Dashboard::Widgets::BattlesLineup::Listener.new }, reader: :private
+  option :widget_average_score_listener,
+         type: Instance(Object),
+         default: -> { Ws::CreateThreat::Listeners::Dashboard::Widgets::AverageScore::Listener.new }, reader: :private
+  option :widget_average_time_to_match_listener,
+         type: Instance(Object),
+         default: -> { Ws::CreateThreat::Listeners::Dashboard::Widgets::AverageTimeToMatch::Listener.new }, reader: :private
+  option :widget_super_hero_listener,
+         type: Instance(Object),
+         default: -> { Ws::CreateThreat::Listeners::Dashboard::Widgets::SuperHero::Listener.new }, reader: :private
 
   def call(threat_id)
     transaction.operations[:allocate].subscribe(allocate_resource_listener)
     transaction.operations[:allocate].subscribe(deallocate_resource_listener)
     transaction.operations[:allocate].subscribe(widget_heroes_working_listener)
     transaction.operations[:allocate].subscribe(widget_battles_lineup_listener)
+    transaction.operations[:allocate].subscribe(widget_average_score_listener)
+    transaction.operations[:allocate].subscribe(widget_average_time_to_match_listener)
+    transaction.operations[:allocate].subscribe(widget_super_hero_listener)
 
     ApplicationRecord.connection_pool.with_connection do
       transaction.call(threat_id) do
