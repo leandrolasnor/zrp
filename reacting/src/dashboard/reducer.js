@@ -1,6 +1,8 @@
 const INITIAL_STATE = {
-  metrics: {},
+  super_hero: null,
   historical_threats: [],
+  average_score: 0,
+  average_time_to_match: { hours: 0, minutes: 0, seconds: 0 },
   heroes_working: { global: 0, s: 0, a: 0, b: 0, c: 0, count: 0 },
   threats_disabled: { global: 0, god: 0, dragon: 0, tiger: 0, wolf: 0, count: 0 },
   battles_lineup: [
@@ -14,7 +16,7 @@ var reducer = (state = INITIAL_STATE, action) => {
     case "METRICS_FETCHED":
       return {
         ...state,
-        metrics: { ...state.metrics, ...action.payload }
+        ...action.payload
       }
     case "HISTORICAL_THREATS_FETCHED":
       return {
@@ -35,6 +37,21 @@ var reducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         battles_lineup: action.payload
+      }
+    case "WIDGET_AVERAGE_SCORE_FETCHED":
+      return {
+        ...state,
+        average_score: action.payload
+      }
+    case "WIDGET_AVERAGE_TIME_TO_MATCH_FETCHED":
+      return {
+        ...state,
+        average_time_to_match: action.payload
+      }
+    case "WIDGET_SUPER_HERO_FETCHED":
+      return {
+        ...state,
+        super_hero: action.payload
       }
     default:
       return state
