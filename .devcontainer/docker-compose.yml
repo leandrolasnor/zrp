@@ -8,8 +8,8 @@ services:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
     ports:
-    - 5672:5672
-    - 15672:15672
+    - 5672
+    - 15672
 
   redis:
     image: redis:alpine
@@ -17,7 +17,7 @@ services:
     environment:
       ALLOW_EMPTY_PASSWORD: yes
     ports:
-    - 6379:6379
+    - 6379
 
   api:
     image: leandrolasnor/ruby:zrp
@@ -31,7 +31,7 @@ services:
     ports:
     - 3000:3000
     - 3001:3001
-    - 3003:3003
+    - 3003
     depends_on:
     - redis
     - db
@@ -44,7 +44,7 @@ services:
       POSTGRES_PASSWORD: user
       POSTGRES_DB: zrp
     ports:
-    - 5432:5432
+    - 5432
 
   meilisearch:
     image: getmeili/meilisearch:latest
