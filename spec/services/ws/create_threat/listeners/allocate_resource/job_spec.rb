@@ -64,6 +64,15 @@ RSpec.describe Ws::CreateThreat::Listeners::AllocateResource::Job do
       allow(Resque).
         to receive(:enqueue_at).
         with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::BattlesLineup::Job)
+      allow(Resque).
+        to receive(:enqueue_at).
+        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::AverageScore::Job)
+      allow(Resque).
+        to receive(:enqueue_at).
+        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::AverageTimeToMatch::Job)
+      allow(Resque).
+        to receive(:enqueue_at).
+        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::SuperHero::Job)
       heroes
       call
     end
@@ -78,6 +87,15 @@ RSpec.describe Ws::CreateThreat::Listeners::AllocateResource::Job do
       expect(Resque).
         to have_received(:enqueue_at).
         with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::BattlesLineup::Job)
+      expect(Resque).
+        to have_received(:enqueue_at).
+        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::AverageScore::Job)
+      expect(Resque).
+        to have_received(:enqueue_at).
+        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::AverageTimeToMatch::Job)
+      expect(Resque).
+        to have_received(:enqueue_at).
+        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::SuperHero::Job)
     end
   end
 end

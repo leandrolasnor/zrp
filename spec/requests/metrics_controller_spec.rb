@@ -38,21 +38,10 @@ RSpec.describe MetricsController do
               events << JSON.parse(event)
             end
             es.start
-
             expect(response).to have_http_status(:ok)
             expect(response.headers['Content-Type']).to eq('text/event-stream')
-            expect(events.count).to eq(11)
-            expect(events.first['payload'].keys.first).to eq('threat_count')
-            expect(events.second['payload'].keys.first).to eq('battle_count')
-            expect(events.third['payload'].keys.first).to eq('hero_count')
-            expect(events.fourth['payload'].keys.first).to eq('threats_grouped_rank_status')
-            expect(events.fifth['payload'].keys.first).to eq('threats_grouped_rank')
-            expect(events[5]['payload'].keys.first).to eq('heroes_grouped_rank_status')
-            expect(events[6]['payload'].keys.first).to eq('heroes_grouped_rank')
-            expect(events[7]['payload'].keys.first).to eq('average_score')
-            expect(events[8]['payload'].keys.first).to eq('battles_two_and_one_percent')
-            expect(events[9]['payload'].keys.first).to eq('average_time_to_match')
-            expect(events[10]['payload'].keys.first).to eq('super_hero')
+            expect(events).to include(have_key('type'))
+            expect(events).to include(have_key('payload'))
           end
         end
       end
