@@ -19,6 +19,7 @@ module Indexes::Threat::Meilisearch
       searchable_attributes [:name, :rank, :payload]
       sortable_attributes [:name, :rank, :status]
       filterable_attributes [:created_at, :status, :rank, :lineup]
+      pagination max_total_hits: 5000
     end
   end
 end
