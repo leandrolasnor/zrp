@@ -8,13 +8,8 @@ class Dashboard::Widgets::AverageScore::Monad
   option :model, type: Interface(:ms_raw_search), default: -> { Dashboard::Model::Battle }, reader: :private
   option :numerator,
          type: Instance(Proc),
-         default: -> {
-                    proc {
-                      product_score = _1['hits'].reduce(1) { |acc, battle| acc * battle['score'] }
-                      product_score**(1.to_f / _1['totalHits'])
-                    }
-                  }, reader: :private
-  option :denominator, type: Instance(Proc), default: -> { proc { 1 } }, reader: :private
+         default: -> { proc { _1['hits'].reduce(0) { |acc, battle| acc + battle['score'] } } }, reader: :private
+  option :denominator, type: Instance(Proc), default: -> { proc { _1["totalHits"] } }, reader: :private
 
   def call
     Try do
