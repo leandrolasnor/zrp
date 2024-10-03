@@ -9,6 +9,10 @@ services:
     ports:
     - 5672
     - 15672
+    deploy:
+      resources:
+        limits:
+          memory: 300m
 
   redis:
     image: redis:alpine
@@ -17,6 +21,10 @@ services:
       ALLOW_EMPTY_PASSWORD: yes
     ports:
     - 6379
+    deploy:
+      resources:
+        limits:
+          memory: 50m
 
   api:
     image: leandrolasnor/ruby:zrp
@@ -34,6 +42,10 @@ services:
     depends_on:
     - redis
     - db
+    deploy:
+      resources:
+        limits:
+          memory: 150m
 
   db:
     image: bitnami/postgresql:latest
@@ -44,6 +56,10 @@ services:
       POSTGRES_DB: zrp
     ports:
     - 5432
+    deploy:
+      resources:
+        limits:
+          memory: 300m
 
   meilisearch:
     image: getmeili/meilisearch:latest
@@ -53,3 +69,7 @@ services:
       MEILI_NO_ANALYTICS: true
     ports:
     - 7700:7700
+    deploy:
+      resources:
+        limits:
+          memory: 512m

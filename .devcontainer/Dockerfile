@@ -3,7 +3,13 @@ RUN apk update && apk add \
     build-base tzdata git sqlite sqlite-dev zsh bash wget \
     nano curl font-meslo-nerd shadow zsh-vcs redis dos2unix yarn \
     postgresql-dev postgresql-client
+RUN wget -O - https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2 | tar -xj && \
+    cd jemalloc-5.2.1 && \
+    ./configure && \
+    make && \
+    make install
 
+ENV LD_PRELOAD=/usr/local/lib/libjemalloc.so.2
 ENV APP_HOME /workspaces/zrp
 WORKDIR $APP_HOME
 RUN gem install bundler --version '2.4.19'
