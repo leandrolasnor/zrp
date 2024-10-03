@@ -114,7 +114,7 @@ const HistoricalThreats = () => {
 
   useEffect(() => {
     if (historical_threats.length === 0) dispatch(historical({ page: 1, per_page: 50 }))
-  }, [])
+  }, [historical_threats, dispatch])
 
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
 

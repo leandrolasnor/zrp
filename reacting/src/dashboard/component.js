@@ -14,7 +14,7 @@ import { get_metrics } from './actions.js'
 
 const Dashboard = () => {
   const dispatch = useDispatch()
-  useEffect(() => { dispatch(get_metrics()) }, [])
+  useEffect(() => { dispatch(get_metrics()) }, [dispatch])
 
   return (
     <Grid fluid>

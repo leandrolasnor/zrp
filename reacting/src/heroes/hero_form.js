@@ -27,7 +27,6 @@ const HeroForm = props => {
   const dispatch = useDispatch()
   const { ranks } = useSelector(state => state.heroes)
   const formRef = useRef()
-  const [formError, setFormError] = useState({})
   const INITIAL_VALUES = () => {
     const values = {
       name: _.get(data, 'name', ''),
@@ -41,7 +40,6 @@ const HeroForm = props => {
   const [formValue, setFormValue] = useState(INITIAL_VALUES)
   const close = () => {
     setFormValue({})
-    setFormError({})
     handleClose()
   }
   const handleSubmit = () => {
@@ -58,7 +56,7 @@ const HeroForm = props => {
     value: v
   }))
 
-  useEffect(() => { if (ranks?.length === 0) dispatch(get_ranks()) }, [])
+  useEffect(() => { if (ranks?.length === 0) dispatch(get_ranks()) }, [ranks, dispatch])
   useEffect(() => { setFormValue(INITIAL_VALUES) }, [data])
 
   return (
@@ -66,7 +64,6 @@ const HeroForm = props => {
       layout="horizontal"
       ref={formRef}
       onChange={setFormValue}
-      onCheck={setFormError}
       formValue={formValue}
       model={model}
     >

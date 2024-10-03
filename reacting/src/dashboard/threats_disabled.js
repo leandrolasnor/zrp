@@ -1,4 +1,4 @@
-import { Tooltip, Whisper, Tag, Progress, Panel, Row, Col } from 'rsuite'
+import { Tooltip, Whisper, Progress, Panel, Row, Col } from 'rsuite'
 import { useSelector } from 'react-redux'
 
 const _ = require('lodash')
