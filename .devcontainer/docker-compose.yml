@@ -45,7 +45,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 150m
+          memory: 2G
 
   db:
     image: bitnami/postgresql:latest
