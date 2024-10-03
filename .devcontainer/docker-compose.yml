@@ -42,10 +42,6 @@ services:
     depends_on:
     - redis
     - db
-    deploy:
-      resources:
-        limits:
-          memory: 2G
 
   db:
     image: bitnami/postgresql:latest
