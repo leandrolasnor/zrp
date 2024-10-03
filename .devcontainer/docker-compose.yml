@@ -55,7 +55,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 300m
+          memory: 2GB
 
   meilisearch:
     image: getmeili/meilisearch:latest
