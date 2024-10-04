@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+require "fileutils"
+
+# path to your application root.
+APP_ROOT = File.expand_path("..", __dir__)
+
+def system!(*args)
+  system(*args, exception: true)
+end
+
+FileUtils.chdir APP_ROOT do
+  system! "docker compose --file './.devcontainer/docker-compose.yml' --project-name 'zrp_devcontainer' down -v"
+end
