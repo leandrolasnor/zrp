@@ -10,8 +10,13 @@
 `React` `MeiliSearch` `Socket.io`
 
 `Redis` `RabbitMQ` `PostgreSQL`
+##
+### pelo prompt :zap:
 
-### :whale: .devcontainer
+1. Faça o clone do repositório e dentro da raiz do projeto rode `bin/build`
+2. Acesse o shell do container `zrp.api` e rode `foreman start`
+##
+### pelo vscode :rocket:
 
 1. Rode o comando no Visual Code e dê ___Enter___.
     - `> Dev Containers: Clone Repository in Container Volume...`
@@ -19,10 +24,8 @@
     - `https://github.com/leandrolasnor/zrp`
 3. :hourglass_flowing_sand: Aguarde o ambiente ser construído
 
-4. Abra o terminal integrado e rode:
-    - `foreman start`
-5. _Acesse o [`frontend`](http://localhost:3001)_
+4. Abra o terminal integrado e rode `foreman start`
+##
+Acesse o [`frontend`](http://localhost:3001) e a [`documentação`](http://localhost:3000/api-docs) :link:
 
-6. _Acesse a [`documentação`](http://localhost:3000/api-docs) :link:_
-
-Diminua o valor da variável de ambiente `INSURGENCY_TIME` em `socket.io/server/.env` para acelerar o processo de __insurgência__
+Para acelerar o processo de __insurgência__, diminua o valor da variável de ambiente `INSURGENCY_TIME` em `socket.io/server/.env`
