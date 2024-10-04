@@ -37,3 +37,8 @@ Acesse a [`documentação`](http://localhost:3000/api-docs)
 Acesse as rotas da API [`routes`](http://localhost:3000/rails/info/routes)
 
 Para acelerar o processo de __insurgência__, diminua o valor da variável de ambiente `INSURGENCY_TIME` em `socket.io/server/.env`
+
+##
+
+:bulb: _último apaga a luz_
+  - `bin/down`
