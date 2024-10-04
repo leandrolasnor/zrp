@@ -1,6 +1,6 @@
-# Simulador de batalhas
+## Simulador de batalhas
 
-##### :link: [Enunciado](https://zrp.github.io/challenges/dev/)
+##### :rotating_light: Leia o [Enunciado](https://zrp.github.io/challenges/dev/) do problema
 
 
 `Docker` `Git` `Visual Studio Code`
@@ -26,6 +26,14 @@
 
 4. Abra o terminal integrado e rode `foreman start`
 ##
-Acesse o [`frontend`](http://localhost:3001) e a [`documentação`](http://localhost:3000/api-docs) :link:
+Acesse o [`app`](http://localhost:3001)
+
+Acesse o serviço do [`Rabbitmq`](http://localhost:15672)
+
+Acesse o serviço do [`Resque`](http://localhost:3000/jobs)
+
+Acesse a [`documentação`](http://localhost:3000/api-docs)
+
+Acesse as rotas da API [`routes`](http://localhost:3000/rails/info/routes)
 
 Para acelerar o processo de __insurgência__, diminua o valor da variável de ambiente `INSURGENCY_TIME` em `socket.io/server/.env`
