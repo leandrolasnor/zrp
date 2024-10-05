@@ -7,10 +7,10 @@ config()
 const io = new Server({ /* options */ });
 const occurrence = () => {
   return {
-    "location": [{
+    "location": {
       "lat": Math.random() * (90 + 90) - 90,
       "lng": Math.random() * (180 + 180) - 180
-    }],
+    },
     "dangerLevel": _.sample(['God', 'Dragon', 'Tiger', 'Wolf']),
     "monsterName": random()
   }

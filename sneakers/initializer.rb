@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'sneakers'
+require 'redis'
+require 'json'
+
 opts = {
   amqp: ENV.fetch('AMQP_SERVER'),
   username: 'guest',

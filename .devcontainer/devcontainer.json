@@ -32,7 +32,8 @@
         "karunamurti.rspec-snippets",
         "miguelsolorio.symbols",
         "drcika.apc-extension",
-        "connorshea.vscode-ruby-test-adapter"
+        "connorshea.vscode-ruby-test-adapter",
+        "zxh404.vscode-proto3"
 			]
 		}
 	},

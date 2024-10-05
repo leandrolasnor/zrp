@@ -16,10 +16,10 @@ class CreateThreat::Monad
         threat.create do
           _1.name = params[:monsterName] rescue nil
           _1.rank = params[:dangerLevel].downcase rescue nil
-          _1.lat = params[:location].first[:lat] rescue nil
-          _1.lng = params[:location].first[:lng] rescue nil
-          _1.status = threat.statuses['problem'] unless (params[:location].first[:lng] rescue nil) &&
-                                                       (params[:location].first[:lat] rescue nil) &&
+          _1.lat = params[:location][:lat] rescue nil
+          _1.lng = params[:location][:lng] rescue nil
+          _1.status = threat.statuses['problem'] unless (params[:location][:lng] rescue nil) &&
+                                                       (params[:location][:lat] rescue nil) &&
                                                        params[:monsterName] &&
                                                        params[:dangerLevel]
 
