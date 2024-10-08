@@ -32,8 +32,6 @@ gem 'connection_pool'
 
 gem 'kaminari'
 
-gem 'sneakers'
-
 gem 'bunny'
 
 gem 'geocoder'
@@ -49,6 +47,8 @@ gem 'pg'
 gem "paranoia", "~> 2.2"
 
 gem 'meilisearch-rails'
+
+gem 'gruf'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
@@ -82,6 +82,8 @@ group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
   gem 'faker', github: 'faker-ruby/faker'
+  gem 'grpc-tools'
+  gem 'gruf-rspec'
   gem 'rspec'
   gem 'rspec-rails'
   gem 'rswag'

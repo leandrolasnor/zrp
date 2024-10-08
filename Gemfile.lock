@@ -174,6 +174,27 @@ GEM
     geocoder (1.8.2)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    google-protobuf (3.25.5-x86_64-linux)
+    googleapis-common-protos-types (1.16.0)
+      google-protobuf (>= 3.18, < 5.a)
+    grpc (1.66.0-x86_64-linux)
+      google-protobuf (>= 3.25, < 5.0)
+      googleapis-common-protos-types (~> 1.0)
+    grpc-tools (1.66.0)
+    gruf (2.20.1)
+      activesupport (> 4)
+      concurrent-ruby (> 1)
+      grpc (~> 1.10)
+      grpc-tools (~> 1.10)
+      json (>= 2.3)
+      slop (>= 4.6)
+      zeitwerk (>= 2)
+    gruf-rspec (1.0.1)
+      gruf (~> 2.5, >= 2.5.1)
+      rake (>= 12.3)
+      rspec-core (>= 3.8)
+      rspec-expectations (>= 3.8)
+      zeitwerk (>= 2)
     hashdiff (1.1.0)
     http-accept (1.7.0)
     http-cookie (1.0.5)
@@ -394,12 +415,9 @@ GEM
     ruby2_keywords (0.0.5)
     rufus-scheduler (3.9.1)
       fugit (~> 1.1, >= 1.1.6)
-    serverengine (2.1.1)
-      sigdump (~> 0.2.2)
     set (1.1.0)
     shoulda-matchers (6.2.0)
       activesupport (>= 5.2.0)
-    sigdump (0.2.5)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -411,12 +429,7 @@ GEM
       rack (~> 2.2, >= 2.2.4)
       rack-protection (= 3.2.0)
       tilt (~> 2.0)
-    sneakers (2.12.0)
-      bunny (~> 2.14)
-      concurrent-ruby (~> 1.0)
-      rake (~> 12.3)
-      serverengine (~> 2.1.0)
-      thor
+    slop (4.10.1)
     sorted_set (1.0.3)
       rbtree
       set (~> 1.0)
@@ -463,6 +476,9 @@ DEPENDENCIES
   figaro
   foreman
   geocoder
+  grpc-tools
+  gruf
+  gruf-rspec
   kaminari
   meilisearch-rails
   paranoia (~> 2.2)
@@ -484,7 +500,6 @@ DEPENDENCIES
   rubocop-rspec
   shoulda-matchers
   simplecov
-  sneakers
   spring
   sqlite3 (~> 1.4)
   sse-client
