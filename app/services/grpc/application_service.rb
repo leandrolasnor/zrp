@@ -9,7 +9,7 @@ class Grpc::ApplicationService
   param :request, type: Instance(Gruf::Controllers::Request), reader: :private
 
   def self.call(request:)
-    new(request).()
+    new(request).call
   end
 
   private

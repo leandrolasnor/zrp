@@ -5,7 +5,7 @@ import HeroForm from './hero_form.js'
 import SearchIcon from '@rsuite/icons/Search'
 import PlusIcon from '@rsuite/icons/Plus'
 
-const Searcher = props => {
+const Searcher = () => {
   const { search: { query } } = useSelector(state => state.heroes)
   const searchRef = useRef(null)
   const dispatch = useDispatch()

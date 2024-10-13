@@ -7,11 +7,11 @@ class Grpc::CreateThreat::Listeners::DeallocateResource::Job
   option :monad, type: Interface(:call), default: -> { DeallocateResource::Monad.new }, reader: :private
   option :widget_heroes_working_listener,
          type: Interface(:on_resource_allocated),
-         default: -> { Ws::CreateThreat::Listeners::Dashboard::Widgets::HeroesWorking::Listener.new },
+         default: -> { Grpc::CreateThreat::Listeners::Dashboard::Widgets::HeroesWorking::Listener.new },
          reader: :private
   option :widget_threats_disabled_listener,
          type: Interface(:on_resource_deallocated),
-         default: -> { Ws::CreateThreat::Listeners::Dashboard::Widgets::ThreatsDisabled::Listener.new },
+         default: -> { Grpc::CreateThreat::Listeners::Dashboard::Widgets::ThreatsDisabled::Listener.new },
          reader: :private
 
   def call(threat_id)

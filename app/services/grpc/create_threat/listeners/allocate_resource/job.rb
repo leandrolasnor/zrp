@@ -7,25 +7,25 @@ class Grpc::CreateThreat::Listeners::AllocateResource::Job
   option :transaction, type: Interface(:call), default: -> { AllocateResource::Transaction.new }, reader: :private
   option :allocate_resource_listener,
          type: Instance(Object),
-         default: -> { Ws::CreateThreat::Listeners::AllocateResource::Listener.new }, reader: :private
+         default: -> { Grpc::CreateThreat::Listeners::AllocateResource::Listener.new }, reader: :private
   option :deallocate_resource_listener,
          type: Instance(Object),
-         default: -> { Ws::CreateThreat::Listeners::DeallocateResource::Listener.new }, reader: :private
+         default: -> { Grpc::CreateThreat::Listeners::DeallocateResource::Listener.new }, reader: :private
   option :widget_heroes_working_listener,
          type: Instance(Object),
-         default: -> { Ws::CreateThreat::Listeners::Dashboard::Widgets::HeroesWorking::Listener.new }, reader: :private
+         default: -> { Grpc::CreateThreat::Listeners::Dashboard::Widgets::HeroesWorking::Listener.new }, reader: :private
   option :widget_battles_lineup_listener,
          type: Instance(Object),
-         default: -> { Ws::CreateThreat::Listeners::Dashboard::Widgets::BattlesLineup::Listener.new }, reader: :private
+         default: -> { Grpc::CreateThreat::Listeners::Dashboard::Widgets::BattlesLineup::Listener.new }, reader: :private
   option :widget_average_score_listener,
          type: Instance(Object),
-         default: -> { Ws::CreateThreat::Listeners::Dashboard::Widgets::AverageScore::Listener.new }, reader: :private
+         default: -> { Grpc::CreateThreat::Listeners::Dashboard::Widgets::AverageScore::Listener.new }, reader: :private
   option :widget_average_time_to_match_listener,
          type: Instance(Object),
-         default: -> { Ws::CreateThreat::Listeners::Dashboard::Widgets::AverageTimeToMatch::Listener.new }, reader: :private
+         default: -> { Grpc::CreateThreat::Listeners::Dashboard::Widgets::AverageTimeToMatch::Listener.new }, reader: :private
   option :widget_super_hero_listener,
          type: Instance(Object),
-         default: -> { Ws::CreateThreat::Listeners::Dashboard::Widgets::SuperHero::Listener.new }, reader: :private
+         default: -> { Grpc::CreateThreat::Listeners::Dashboard::Widgets::SuperHero::Listener.new }, reader: :private
 
   def call(threat_id)
     transaction.operations[:allocate].subscribe(allocate_resource_listener)
