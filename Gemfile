@@ -50,6 +50,10 @@ gem 'meilisearch-rails'
 
 gem 'gruf'
 
+gem 'sneakers'
+
+gem 'dotenv'
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
@@ -100,6 +104,7 @@ group :development do
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
+  gem 'rubocop-rspec_rails', require: false
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   gem "spring"
 end

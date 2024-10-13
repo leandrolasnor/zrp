@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package rpc;
+
+service Alert {
+  rpc Handle (Occurrence) returns (Threat);
+}
+
+message Occurrence {
+  string monsterName = 1;
+  string dangerLevel = 2;
+  Location location = 3;
+}
+
+message Location {
+  float lat = 1;
+  float lng = 2;
+}
+
+message Threat {
+  string name = 1;
+  string rank = 2;
+  string status = 3;
+  float lat = 4;
+  float lng = 5;
+}
+

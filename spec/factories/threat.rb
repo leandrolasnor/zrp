@@ -9,7 +9,7 @@ FactoryBot.define do
     lng { Faker::Address.longitude }
     payload do
       {
-        location: [{ lat: lat, lng: lng }],
+        location: { lat: lat, lng: lng },
         dangerLevel: rank,
         monsterName: name,
         monster: {
