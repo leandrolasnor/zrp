@@ -7,7 +7,6 @@ RSpec.describe Grpc::CreateThreat::Listeners::AllocateResource::Job do
 
   context 'on Failure' do
     context 'on matches step' do
-      let(:matches) { double }
       let(:error_message) { I18n.t(:insufficient_resources) }
 
       before do
@@ -57,22 +56,22 @@ RSpec.describe Grpc::CreateThreat::Listeners::AllocateResource::Job do
     before do
       allow(Resque).
         to receive(:enqueue_at).
-        with(duck_type(:to_time), Ws::CreateThreat::Listeners::DeallocateResource::Job, threat.id)
+        with(duck_type(:to_time), Grpc::CreateThreat::Listeners::DeallocateResource::Job, threat.id)
       allow(Resque).
         to receive(:enqueue_at).
-        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::HeroesWorking::Job)
+        with(duck_type(:to_time), Grpc::CreateThreat::Listeners::Dashboard::Widgets::HeroesWorking::Job)
       allow(Resque).
         to receive(:enqueue_at).
-        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::BattlesLineup::Job)
+        with(duck_type(:to_time), Grpc::CreateThreat::Listeners::Dashboard::Widgets::BattlesLineup::Job)
       allow(Resque).
         to receive(:enqueue_at).
-        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::AverageScore::Job)
+        with(duck_type(:to_time), Grpc::CreateThreat::Listeners::Dashboard::Widgets::AverageScore::Job)
       allow(Resque).
         to receive(:enqueue_at).
-        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::AverageTimeToMatch::Job)
+        with(duck_type(:to_time), Grpc::CreateThreat::Listeners::Dashboard::Widgets::AverageTimeToMatch::Job)
       allow(Resque).
         to receive(:enqueue_at).
-        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::SuperHero::Job)
+        with(duck_type(:to_time), Grpc::CreateThreat::Listeners::Dashboard::Widgets::SuperHero::Job)
       heroes
       call
     end
@@ -80,22 +79,22 @@ RSpec.describe Grpc::CreateThreat::Listeners::AllocateResource::Job do
     it 'must be able to create a threat and allocate heroes' do
       expect(Resque).
         to have_received(:enqueue_at).
-        with(duck_type(:to_time), Ws::CreateThreat::Listeners::DeallocateResource::Job, threat.id)
+        with(duck_type(:to_time), Grpc::CreateThreat::Listeners::DeallocateResource::Job, threat.id)
       expect(Resque).
         to have_received(:enqueue_at).
-        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::HeroesWorking::Job)
+        with(duck_type(:to_time), Grpc::CreateThreat::Listeners::Dashboard::Widgets::HeroesWorking::Job)
       expect(Resque).
         to have_received(:enqueue_at).
-        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::BattlesLineup::Job)
+        with(duck_type(:to_time), Grpc::CreateThreat::Listeners::Dashboard::Widgets::BattlesLineup::Job)
       expect(Resque).
         to have_received(:enqueue_at).
-        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::AverageScore::Job)
+        with(duck_type(:to_time), Grpc::CreateThreat::Listeners::Dashboard::Widgets::AverageScore::Job)
       expect(Resque).
         to have_received(:enqueue_at).
-        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::AverageTimeToMatch::Job)
+        with(duck_type(:to_time), Grpc::CreateThreat::Listeners::Dashboard::Widgets::AverageTimeToMatch::Job)
       expect(Resque).
         to have_received(:enqueue_at).
-        with(duck_type(:to_time), Ws::CreateThreat::Listeners::Dashboard::Widgets::SuperHero::Job)
+        with(duck_type(:to_time), Grpc::CreateThreat::Listeners::Dashboard::Widgets::SuperHero::Job)
     end
   end
 end

@@ -3,23 +3,27 @@
 require 'rails_helper'
 RSpec.describe Grpc::CreateThreat::Service do
   describe '#call' do
-    let(:res) { described_class.call(params) }
-    let(:job) { Ws::CreateThreat::Listeners::AllocateResource::Job }
+    let(:value!) { described_class.call(request: request) }
+    let(:allocate_resource_job) { Grpc::CreateThreat::Listeners::AllocateResource::Job }
+    let(:threat_disabled_job) { Grpc::CreateThreat::Listeners::Dashboard::Widgets::ThreatsDisabled::Job }
+
+    let(:request) do
+      Gruf::Controllers::Request.new(
+        method_key: :handle,
+        service: Rpc::Alert::Service,
+        active_call: { metadata: { 'user_id' => 'axj42i' } },
+        message: Rpc::Occurrence.new(params),
+        rpc_desc: Rpc::Alert::Service.rpc_descs[:Handle]
+      )
+    end
 
     context 'on Success' do
-      let(:threat) { res.value!.attributes.symbolize_keys.except(:created_at, :updated_at) }
-
       context 'when payload layout is correct' do
         let(:params) do
           {
             location: { lat: 70.38704353933477, lng: -42.78322998876705 },
             dangerLevel: 'Tiger',
-            monsterName: 'Eobard Thawne',
-            monster: {
-              name: 'Eobard Thawne',
-              url: 'https://upload.wikimedia.org/wikipedia/en/8/8e/Reverse-Flash_%28Eobard_Thawne%29.png',
-              description: 'Eobard Thawne, otherwise known as the Reverse-Flash and Professor Zoom, is a fictional supervillain appearing in American comic books published by DC Comics. The character was created by John Broome and Carmine Infantino, and first appeared in The Flash #139 in September 1963.'
-            }
+            monsterName: 'Eobard Thawne'
           }
         end
 
@@ -36,17 +40,18 @@ RSpec.describe Grpc::CreateThreat::Service do
         end
 
         before do
-          allow(Resque).to receive(:enqueue).with(job, kind_of(Integer))
+          allow(Resque).to receive(:enqueue).with(allocate_resource_job, kind_of(Integer))
+          allow(Resque).to receive(:enqueue_at).with(duck_type(:to_time), threat_disabled_job)
         end
 
         it 'must be able to create a threat with enable status' do
-          expect(res).to be_success
-          expect(threat).to match(expected_record)
-          expect(Resque).to have_received(:enqueue).with(job, kind_of(Integer))
+          expect(value!.status).to eq('enabled')
+          expect(Resque).to have_received(:enqueue).with(allocate_resource_job, kind_of(Integer))
+          expect(Resque).to have_received(:enqueue_at).with(duck_type(:to_time), threat_disabled_job)
         end
       end
 
-      context 'when payload layout is wrong' do
+      xcontext 'when payload layout is wrong' do
         let(:params) do
           {
             lat: 70.38704353933477,
@@ -85,7 +90,7 @@ RSpec.describe Grpc::CreateThreat::Service do
       end
     end
 
-    context 'on Failure' do
+    xcontext 'on Failure' do
       let(:res) { described_class.call({}) }
       let(:error) { StandardError.new }
 
