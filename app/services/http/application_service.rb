@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Http::ApplicationService
+  private_class_method :new
   include Dry.Types()
   extend Dry::Initializer
 

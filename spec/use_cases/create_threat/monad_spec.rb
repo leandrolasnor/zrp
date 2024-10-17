@@ -19,12 +19,10 @@ RSpec.describe CreateThreat::Monad do
         {
           monsterName: 'Monster Name',
           dangerLevel: 'tiger',
-          location: [
-            {
-              lng: 123.123,
-              lat: -90.89
-            }
-          ]
+          location: {
+            lng: 123.123,
+            lat: -90.89
+          }
         }
       end
 

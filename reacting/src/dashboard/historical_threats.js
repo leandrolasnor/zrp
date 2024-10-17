@@ -109,12 +109,12 @@ const renderRowExpanded = rowData => {
 };
 
 const HistoricalThreats = () => {
-  const { historical_threats } = useSelector(state => state.metrics)
+  const { historical_threats, threats_disabled: { count } } = useSelector(state => state.metrics)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (historical_threats.length === 0) dispatch(historical({ page: 1, per_page: 50 }))
-  }, [historical_threats, dispatch])
+    dispatch(historical({ page: 1, per_page: 50 }))
+  }, [count, dispatch])
 
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
 
