@@ -158,9 +158,7 @@ Style/CaseLikeIf:
   Enabled: false
 
 Style/ClassAndModuleChildren:
-  EnforcedStyle: compact
-  Exclude:
-    - 'config/application.rb'
+  Enabled: false
 
 Style/Documentation:
   Enabled: false
