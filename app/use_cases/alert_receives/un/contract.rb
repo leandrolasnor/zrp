@@ -4,7 +4,7 @@ module AlertReceives::UN
   class Contract < ApplicationContract
     params do
       required(:monsterName).filled(:string)
-      required(:dangerLevel).filled(:string).value(included_in?: Model::Threat.ranks.keys)
+      required(:dangerLevel).filled(:string).value(included_in?: Model::Threat.ranks.keys.map(&:camelcase))
       required(:location).schema do
         required(:lat).filled(:float)
         required(:lng).filled(:float)
@@ -20,7 +20,7 @@ module AlertReceives::UN
     end
 
     rule :dangerLevel do
-      values[:rank] = values.delete :dangerLevel
+      values[:rank] = values.delete(:dangerLevel).downcase
     end
 
     rule location: [:lat, :lng] do

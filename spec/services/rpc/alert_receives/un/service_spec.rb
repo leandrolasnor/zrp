@@ -19,12 +19,12 @@ RSpec.describe Rpc::AlertReceives::UN::Service do
     end
 
     context 'on Success' do
-      context 'when threat is create without errors' do
+      context 'when threat is persisted' do
         let(:params) do
           {
             location: {
-              lat: 70.3870,
-              lng: -42.7832
+              lat: 70.3877,
+              lng: -42.78323345726754
             },
             dangerLevel: 'tiger',
             monsterName: 'Eobard Thawne'

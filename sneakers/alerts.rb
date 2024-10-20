@@ -7,12 +7,12 @@ $redis = Redis.new(host: "redis", port: 6379, db: 1) # rubocop:disable Style/Glo
 class Processor
   include Sneakers::Worker
 
-  from_queue :alerts
+  from_queue :un
 
   def work(message)
     parsed = JSON.parse(message)
     occurrence = ::Rpc::Occurrence.new(parsed)
-    ack! if client.(:Handle, occurrence).message.is_a?(::Rpc::Threat)
+    ack! if client.(:UN, occurrence).message.is_a?(::Rpc::Threat)
   rescue StandardError => error
     puts error.message
     puts error.backtrace
@@ -23,7 +23,7 @@ class Processor
   def client
     @client ||=
       ::Gruf::Client.new(
-        service: ::Rpc::Alert,
+        service: ::Rpc::UN,
         options: {
           hostname: ENV.fetch('GRUF_SERVER', nil),
           password: ENV.fetch('GRUF_AUTH_TOKEN', nil)

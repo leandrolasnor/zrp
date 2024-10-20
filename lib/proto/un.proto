@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package rpc;
 
-service Alert {
-  rpc Handle (Occurrence) returns (Threat);
+service UN {
+  rpc Alert (Occurrence) returns (Threat);
 }
 
 message Occurrence {
