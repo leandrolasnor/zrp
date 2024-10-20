@@ -12,7 +12,7 @@ class Processor
   def work(message)
     parsed = JSON.parse(message)
     occurrence = ::Rpc::Occurrence.new(parsed)
-    ack! if client.(:UN, occurrence).message.is_a?(::Rpc::Threat)
+    ack! if client.(:Alert, occurrence).message.is_a?(::Rpc::Threat)
   rescue StandardError => error
     puts error.message
     puts error.backtrace
