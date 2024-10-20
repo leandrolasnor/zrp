@@ -6,6 +6,7 @@ development:
   REDIS_PORT: "6379"
   REDIS_URL: "redis://redis:6379/0"
   RAILS_MAX_THREADS: "4"
+  GRUF_CONTROLLERS_PATH: 'app/gruf'
 
 test:
   MEILISEARCH_ACCESS_KEY: "key"
@@ -15,3 +16,4 @@ test:
   REDIS_PORT: "6379"
   REDIS_URL: "redis://redis:6379/0"
   RAILS_MAX_THREADS: "4"
+  GRUF_CONTROLLERS_PATH: 'app/gruf'

@@ -4,7 +4,7 @@ import { config } from 'dotenv'
 
 config()
 
-const queue = "threats";
+const queue = "un";
 
 const send_event = async (data) => {
   let connection;

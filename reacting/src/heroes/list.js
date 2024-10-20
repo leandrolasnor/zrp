@@ -11,7 +11,7 @@ const _ = require('lodash')
 const { Column, HeaderCell, Cell } = Table
 const rowKey = 'id'
 
-const List = props => {
+const List = () => {
   const dispatch = useDispatch()
   const { search: { hits } } = useSelector(state => state.heroes)
   const { super_hero } = useSelector(state => state.metrics)
