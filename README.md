@@ -5,7 +5,7 @@
 
 `Docker` `Git` `Visual Studio Code`
 
-`Rails` `Resque` `Sneakers` `grpc`
+`Rails` `Resque` `Sneakers` `gRPC`
 
 `React` `MeiliSearch` `Socket.io`
 
