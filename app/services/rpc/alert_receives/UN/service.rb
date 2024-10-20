@@ -15,17 +15,19 @@ module Rpc::AlertReceives::UN
 
     def call
       listeners.each { transaction.operations[:notify].subscribe _1 }
-      res = transaction.(params)
-      debugger
-      raise res.exception if res.failure?
+      transaction.call(params) do
+        _1.failure :validate do |f|
+          raise StandardError.new(f.errors.to_h)
+        end
 
-      ::Rpc::Threat.new(
-        name: res.value!.name,
-        rank: res.value!.rank,
-        status: res.value!.status,
-        lat: res.value!.lat.to_s,
-        lng: res.value!.lng.to_s
-      )
+        _1.failure :create do |f|
+          raise StandardError.new(f.errors.to_h)
+        end
+
+        _1.success do |r|
+          ::Rpc::Threat.new(name: r.name, rank: r.rank, status: r.status, lat: r.lat.to_f, lng: r.lng.to_f)
+        end
+      end
     end
   end
 end

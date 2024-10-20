@@ -41,7 +41,7 @@ RSpec.describe Rpc::AlertReceives::UN::Listeners::AllocateResource::Job do
       hero1 = build(:hero, :allocate_resource)
       hero2 = build(:hero, :allocate_resource)
 
-      hero1.rank = CreateThreat::Model::Threat.ranks[threat.rank]
+      hero1.rank = AlertReceives::UN::Model::Threat.ranks[threat.rank]
       hero1.lat = threat.lat
       hero1.lng = threat.lng
       hero2.lat = threat.lng

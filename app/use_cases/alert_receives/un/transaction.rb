@@ -4,8 +4,8 @@ module AlertReceives::UN
   class Transaction
     include Dry::Transaction(container: Container)
 
-    try   :validate, with: 'steps.validate'
-    map   :create,    with: 'steps.create'
-    tee   :notify,    with: 'steps.notify'
+    step :validate, with: 'steps.validate'
+    map :create, with: 'steps.create'
+    tee :notify, with: 'steps.notify'
   end
 end

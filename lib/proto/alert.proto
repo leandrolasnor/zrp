@@ -13,15 +13,15 @@ message Occurrence {
 }
 
 message Location {
-  string lat = 1;
-  string lng = 2;
+  double lat = 1;
+  double lng = 2;
 }
 
 message Threat {
   string name = 1;
   string rank = 2;
   string status = 3;
-  string lat = 4;
-  string lng = 5;
+  double lat = 4;
+  double lng = 5;
 }
 

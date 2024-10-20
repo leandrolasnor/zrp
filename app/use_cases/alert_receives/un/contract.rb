@@ -6,8 +6,8 @@ module AlertReceives::UN
       required(:monsterName).filled(:string)
       required(:dangerLevel).filled(:string).value(included_in?: Model::Threat.ranks.keys)
       required(:location).schema do
-        required(:lat).filled(:string)
-        required(:lng).filled(:string)
+        required(:lat).filled(:float)
+        required(:lng).filled(:float)
       end
     end
 

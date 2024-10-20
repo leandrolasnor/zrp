@@ -23,8 +23,8 @@ RSpec.describe Rpc::AlertReceives::UN::Service do
         let(:params) do
           {
             location: {
-              lat: '70.38704353933477',
-              lng: '-42.78322998876705'
+              lat: 70.3870,
+              lng: -42.7832
             },
             dangerLevel: 'tiger',
             monsterName: 'Eobard Thawne'
@@ -38,6 +38,8 @@ RSpec.describe Rpc::AlertReceives::UN::Service do
 
         it 'must be able to return a Rpc::Threat instance' do
           expect(subject).to be_a(Rpc::Threat)
+          expect(subject.lat).to eq(params.dig(:location, :lat))
+          expect(subject.lng).to eq(params.dig(:location, :lng))
           expect(Resque).to have_received(:enqueue).with(allocate_resource_job, kind_of(Integer))
           expect(Resque).to have_received(:enqueue_at).with(duck_type(:to_time), threat_disabled_job)
         end
@@ -48,8 +50,8 @@ RSpec.describe Rpc::AlertReceives::UN::Service do
       let(:params) do
         {
           location: {
-            lat: '70.38704353933477',
-            lng: '-42.78322998876705'
+            lat: 70.3870,
+            lng: -42.7832
           },
           dangerLevel: 'TiGeR',
           monsterName: 'Eobard Thawne'
