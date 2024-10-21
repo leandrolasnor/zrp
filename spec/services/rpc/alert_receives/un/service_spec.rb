@@ -11,10 +11,10 @@ RSpec.describe Rpc::AlertReceives::UN::Service do
     let(:request) do
       Gruf::Controllers::Request.new(
         method_key: :handle,
-        service: Rpc::Alert::Service,
+        service: Rpc::UN::Service,
         active_call: { metadata: { 'user_id' => 'axj42i' } },
         message: Rpc::Occurrence.new(params),
-        rpc_desc: Rpc::Alert::Service.rpc_descs[:Handle]
+        rpc_desc: Rpc::UN::Service.rpc_descs[:Handle]
       )
     end
 
@@ -26,7 +26,7 @@ RSpec.describe Rpc::AlertReceives::UN::Service do
               lat: 70.3877,
               lng: -42.78323345726754
             },
-            dangerLevel: 'tiger',
+            dangerLevel: 'Tiger',
             monsterName: 'Eobard Thawne'
           }
         end

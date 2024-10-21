@@ -25,7 +25,7 @@ RSpec.describe AlertReceives::UN::Transaction do
       let(:params) do
         {
           monsterName: 'Monster Name',
-          dangerLevel: 'tiger',
+          dangerLevel: 'Tiger',
           location: {
             lng: 123.123,
             lat: -90.89
@@ -41,7 +41,7 @@ RSpec.describe AlertReceives::UN::Transaction do
           status: 'enabled',
           lat: -0.9089e2,
           lng: 0.123123e3,
-          payload: "{\"monsterName\":\"Monster Name\",\"dangerLevel\":\"tiger\",\"location\":{\"lat\":-90.89,\"lng\":123.123}}",
+          payload: "{\"monsterName\":\"Monster Name\",\"dangerLevel\":\"Tiger\",\"location\":{\"lat\":-90.89,\"lng\":123.123}}",
           created_at: be_a(Time),
           updated_at: be_a(Time)
         }
