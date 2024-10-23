@@ -1,18 +1,41 @@
 const INITIAL_STATE = {
   ranks: [],
+  statuses: [],
   search: {
     hits: [],
     query: '',
-    totalHits: 0
+    totalHits: 0,
+    filter: []
   }
 }
 
 var reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case 'SET_FILTER':
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          filter: action.payload
+        }
+      }
+    case 'CLEAR_FILTER':
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          filter: []
+        }
+      }
     case 'RANKS_FETCHED':
       return {
         ...state,
         ranks: action.payload
+      }
+    case 'STATUSES_FETCHED':
+      return {
+        ...state,
+        statuses: action.payload
       }
     case 'HERO_UPDATED':
       return {
@@ -41,7 +64,7 @@ var reducer = (state = INITIAL_STATE, action) => {
     case 'HEROES_FETCHED':
       return {
         ...state,
-        search: action.payload
+        search: { ...state.search, ...action.payload }
       }
     case 'QUERY_CHANGED':
       return {

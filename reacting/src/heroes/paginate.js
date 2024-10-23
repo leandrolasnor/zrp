@@ -5,15 +5,15 @@ import { search } from './actions.js'
 
 const Paginate = () => {
   const dispatch = useDispatch()
-  const { search: { query, totalHits, page, hitsPerPage } }  = useSelector(state => state.heroes)
+  const { search: { query, totalHits, page, hitsPerPage, filter } }  = useSelector(state => state.heroes)
   const layout = ['total', '-', 'limit', '|', 'pager', 'skip']
   const limitOptions = [30, 50, 100]
-  const handleChangePerPage = per_page => dispatch(search(query, { per_page: per_page, page: 1 }))
-  const handleChangePage = page => dispatch(search(query, { per_page: hitsPerPage || limitOptions[0], page: page }))
+  const handleChangePerPage = per_page => dispatch(search(query, { per_page: per_page, page: 1 }, filter))
+  const handleChangePage = page => dispatch(search(query, { per_page: hitsPerPage || limitOptions[0], page: page }, filter))
 
   useEffect(() => {
-    dispatch(search(query, { page: 1, per_page: hitsPerPage || limitOptions[0] }))
-  },[query])
+    dispatch(search(query, { page: 1, per_page: hitsPerPage || limitOptions[0] }, filter))
+  },[query, filter])
 
   return (
     <Row className='mt-3'>

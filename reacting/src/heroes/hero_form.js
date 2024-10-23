@@ -74,8 +74,8 @@ const HeroForm = props => {
         <Modal.Body>
           <TextField autoFocus name='name' label="Name" />
           <TextField name='rank' label="Rank" accepter={InputPicker} data={selectData} />
-          <TextField name='lat' label="Lat" />
-          <TextField name='lng' label="Lng" />
+          <TextField name='lat' label="Latitude" />
+          <TextField name='lng' label="Longitude" />
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={close} appearance="subtle">Cancel</Button>

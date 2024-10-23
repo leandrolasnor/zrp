@@ -2,11 +2,15 @@ import axios from 'axios'
 import handle_errors from '../handle_errors'
 import { toastr } from 'react-redux-toastr'
 
+const qs = require('qs');
 const _ = require('lodash')
 
-export const search = (query, pagination) => {
+export const search = (query, pagination, filter) => {
   return dispatch => {
-    axios.get('/v1/heroes/search', { params: { ...pagination, query: query } }).then(resp => {
+    axios.get('/v1/heroes/search', {
+      params: { ...pagination, filter: filter, query: query },
+      paramsSerializer: params => qs.stringify(params, { arrayFormat: 'brackets' }),
+    }).then(resp => {
       dispatch({ type: "HEROES_FETCHED", payload: resp.data })
     }).catch(e => handle_errors(e))
   }
@@ -44,6 +48,14 @@ export const get_ranks = () => {
   return dispatch => {
     axios.get('/v1/heroes/ranks').then(resp => {
       dispatch({ type: 'RANKS_FETCHED', payload: resp.data })
+    }).catch(e => handle_errors(e))
+  }
+}
+
+export const get_statuses = () => {
+  return dispatch => {
+    axios.get('/v1/heroes/statuses').then(resp => {
+      dispatch({ type: 'STATUSES_FETCHED', payload: resp.data })
     }).catch(e => handle_errors(e))
   }
 }

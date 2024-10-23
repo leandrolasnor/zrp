@@ -35,6 +35,10 @@ class HeroesController < BaseController
     render json: CreateHero::Model::Hero.ranks, status: :ok
   end
 
+  def statuses
+    render json: CreateHero::Model::Hero.statuses.keys, status: :ok
+  end
+
   private
 
   def create_params
@@ -46,7 +50,11 @@ class HeroesController < BaseController
   end
 
   def search_params
-    params.permit(:query, :page, :per_page, :sort)
+    params.permit(:query, :page, :per_page, :sort, filter: [])
+      .with_defaults(
+        filter: [],
+        query: ''
+      )
   end
 
   def edit_params

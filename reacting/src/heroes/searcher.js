@@ -32,10 +32,10 @@ const Searcher = () => {
   useEffect(() => { searchRef.current.value = query })
   return (
     <Row className='mt-3'>
-      <Col xs={22}>
-        <CustomInputGroupWidthButton size="md" placeholder="Search" />
+      <Col md={22}>
+        <CustomInputGroupWidthButton placeholder="Search" />
       </Col>
-      <Col xs={2}>
+      <Col md={2}>
         <IconButton onClick={() => setOpenCreateHeroForm(true)} icon={<PlusIcon />}>Hero</IconButton>
       </Col>
       <HeroForm size='xs' open={openCreateHeroForm} textButton='Save' title='New Hero' handleClose={() => setOpenCreateHeroForm(false)} />

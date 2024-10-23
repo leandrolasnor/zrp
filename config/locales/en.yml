@@ -33,3 +33,6 @@ en:
   hello: "Hello world"
   insufficient_resources: 'Insufficient resources'
   hero_working: "%{hero} is working"
+  dry_validation:
+    errors:
+      filter_invalid: "Filter invalid"

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       get :list, on: :collection
       get :search, on: :collection
       get :ranks, on: :collection
+      get :statuses, on: :collection
     end
 
     resources :threats, only: [] do
