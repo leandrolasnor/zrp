@@ -73,7 +73,7 @@ const HeroForm = props => {
         </Modal.Header>
         <Modal.Body>
           <TextField autoFocus name='name' label="Name" />
-          <TextField name='rank' label="Rank" accepter={InputPicker} data={selectData} />
+          <TextField name='rank' label="Rank" accepter={InputPicker} data={selectData.reverse()} />
           <TextField name='lat' label="Latitude" />
           <TextField name='lng' label="Longitude" />
         </Modal.Body>

@@ -44,8 +44,8 @@ RSpec.describe Rpc::AlertReceives::UN::Listeners::AllocateResource::Job do
       hero1.rank = AlertReceives::UN::Model::Threat.ranks[threat.rank]
       hero1.lat = threat.lat
       hero1.lng = threat.lng
-      hero2.lat = threat.lng
-      hero2.lng = threat.lat
+      hero2.lat = threat.lat
+      hero2.lng = threat.lng
 
       hero1.save
       hero2.save
@@ -54,6 +54,10 @@ RSpec.describe Rpc::AlertReceives::UN::Listeners::AllocateResource::Job do
     end
 
     before do
+      allow(Resque).
+        to receive(:size).
+        with(anything).
+        and_return(0)
       allow(Resque).
         to receive(:enqueue_at).
         with(duck_type(:to_time), Rpc::AlertReceives::UN::Listeners::DeallocateResource::Job, threat.id)

@@ -11,6 +11,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   #   inflect.irregular "person", "people"
   inflect.irregular "hero", "heroes"
   inflect.acronym "UN"
+  inflect.acronym "CRUD"
   #   inflect.uncountable %w( fish sheep )
 end
 

@@ -7,7 +7,8 @@ RSpec.describe SearchHeroes::Monad do
       query: query,
       page: page,
       per_page: per_page,
-      sort: sort
+      sort: sort,
+      filter: filter
     )
   end
 
@@ -16,12 +17,14 @@ RSpec.describe SearchHeroes::Monad do
     let(:page) { 1 }
     let(:per_page) { 2 }
     let(:sort) { 'name:asc' }
+    let(:filter) { [] }
 
     before do
       allow(SearchHeroes::Model::Hero)
         .to receive(:ms_raw_search)
         .with(
           query,
+          filter: [],
           page: page,
           hits_per_page: per_page,
           sort: [sort]
@@ -34,6 +37,7 @@ RSpec.describe SearchHeroes::Monad do
         to have_received(:ms_raw_search).
         with(
           query,
+          filter: [],
           page: page,
           hits_per_page: per_page,
           sort: [sort]

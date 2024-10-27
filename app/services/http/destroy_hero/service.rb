@@ -2,7 +2,9 @@
 
 class Http::DestroyHero::Service < Http::ApplicationService
   option :serializer, type: Interface(:serializer_for), default: -> { Http::DestroyHero::Serializer }, reader: :private
-  option :transaction, type: Interface(:call), default: -> { DestroyHero::Transaction.new }, reader: :private
+  option :transaction, type: Interface(:call), reader: :private, default: -> do
+    CRUD::Delete::Transaction.include(Dry::Transaction(container: CRUD::Delete::Hero::Container)).new
+  end
   option :listener_destroy,
          type: Interface(:on_step_succeeded),
          default: -> { Http::DestroyHero::Listeners::Destroy },
@@ -15,14 +17,14 @@ class Http::DestroyHero::Service < Http::ApplicationService
   Contract = Http::DestroyHero::Contract.new
 
   def call
-    transaction.subscribe(destroy: listener_destroy)
-    transaction.subscribe(destroy: widget_heroes_working_listener)
+    transaction.subscribe(delete: listener_destroy)
+    transaction.subscribe(delete: widget_heroes_working_listener)
     transaction.call(params) do
       _1.failure :find do |f|
         [:not_found, f.message]
       end
 
-      _1.failure :destroy do |f|
+      _1.failure :delete do |f|
         [:unprocessable_entity, f.message]
       end
 

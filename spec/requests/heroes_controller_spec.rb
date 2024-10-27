@@ -20,30 +20,6 @@ RSpec.describe HeroesController do
     end
   end
 
-  path '/v1/heroes/list' do
-    get('list heroes') do
-      tags 'Heroes'
-      parameter name: :page, in: :query, type: :integer, description: 'pagination', example: '1'
-      parameter name: :per_page, in: :query, type: :integer, description: 'pagination', example: '3'
-      response(200, 'successful') do
-        schema type: :array, items: {
-          type: :object,
-          properties: {
-            id: { type: :integer },
-            name: { type: :string },
-            rank: { type: :string },
-            lat: { type: :string },
-            lng: { type: :string }
-          }
-        }
-        let(:heroes) { create_list(:hero, 6) }
-        let(:page) { 2 }
-        let(:per_page) { heroes.count - 3 }
-        run_test!
-      end
-    end
-  end
-
   path '/v1/heroes' do
     post('create hero') do
       tags 'Heroes'

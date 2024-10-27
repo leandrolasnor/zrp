@@ -15,6 +15,7 @@ class Http::ApplicationService
 
     new(args.to_h).call
   rescue StandardError => error
+    debugger if Rails.env.test?
     Rails.logger.error(error)
     [:internal_server_error]
   end

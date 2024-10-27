@@ -9,15 +9,8 @@ class Dashboard::Widgets::AverageTimeToMatch::Monad
   option :duration, type: Instance(Proc), default: -> { proc { ActiveSupport::Duration.build(_1).parts } }
   option :numerator,
          type: Instance(Proc),
-         default: -> {
-                    proc {
-                      product_time = _1['hits'].reduce(1) do |acc, battle|
-                        battle['time_to_match'].positive? ? acc * battle['time_to_match'] : acc
-                      end
-                      product_time**(1.to_f / _1['totalHits'])
-                    }
-                  }, reader: :private
-  option :denominator, type: Instance(Proc), default: -> { proc { 1 } }, reader: :private
+         default: -> { proc { _1['hits'].reduce(0) { |acc, battle| acc + battle['time_to_match'] } } }, reader: :private
+  option :denominator, type: Instance(Proc), default: -> { proc { _1["totalHits"] } }, reader: :private
 
   def call
     Try do

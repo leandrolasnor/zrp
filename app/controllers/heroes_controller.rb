@@ -32,11 +32,11 @@ class HeroesController < BaseController
   end
 
   def ranks
-    render json: CreateHero::Model::Hero.ranks, status: :ok
+    render json: CRUD::Create::Hero::Model::Hero.ranks, status: :ok
   end
 
   def statuses
-    render json: CreateHero::Model::Hero.statuses.keys, status: :ok
+    render json: CRUD::Create::Hero::Model::Hero.statuses.keys, status: :ok
   end
 
   private

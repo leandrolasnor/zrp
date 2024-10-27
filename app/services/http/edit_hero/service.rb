@@ -2,7 +2,9 @@
 
 class Http::EditHero::Service < Http::ApplicationService
   option :serializer, type: Interface(:serializer_for), default: -> { Http::EditHero::Serializer }, reader: :private
-  option :transaction, type: Interface(:call), default: -> { EditHero::Transaction.new }, reader: :private
+  option :transaction, type: Interface(:call), reader: :private, default: -> do
+    CRUD::Update::Transaction.include(Dry::Transaction(container: CRUD::Update::Hero::Container)).new
+  end
 
   def call
     transaction.call(params) do

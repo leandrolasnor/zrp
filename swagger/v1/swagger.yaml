@@ -38,27 +38,6 @@ paths:
       responses:
         '200':
           description: successful
-  "/v1/heroes/list":
-    get:
-      summary: list heroes
-      tags:
-      - Heroes
-      parameters:
-      - name: page
-        in: query
-        description: pagination
-        example: '1'
-        schema:
-          type: integer
-      - name: per_page
-        in: query
-        description: pagination
-        example: '3'
-        schema:
-          type: integer
-      responses:
-        '200':
-          description: successful
   "/v1/heroes":
     post:
       summary: create hero

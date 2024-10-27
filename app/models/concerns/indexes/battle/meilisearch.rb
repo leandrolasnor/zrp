@@ -28,6 +28,7 @@ module Indexes::Battle::Meilisearch
       searchable_attributes [:score, :hero, :threat]
       sortable_attributes [:score, :threat]
       filterable_attributes [:finished_at]
+      pagination max_total_hits: 5000
     end
   end
 end
