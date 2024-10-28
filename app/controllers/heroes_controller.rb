@@ -16,11 +16,6 @@ class HeroesController < BaseController
     render json: content, status: status, serializer: serializer
   end
 
-  def list
-    status, content, serializer = Http::ListHeroes::Service.(list_params)
-    render json: content, status: status, each_serializer: serializer
-  end
-
   def search
     status, content = Http::SearchHeroes::Service.(search_params)
     render json: content, status: status
