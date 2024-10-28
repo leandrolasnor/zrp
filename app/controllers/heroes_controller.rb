@@ -27,7 +27,7 @@ class HeroesController < BaseController
   end
 
   def ranks
-    render json: CRUD::Create::Hero::Model::Hero.ranks, status: :ok
+    render json: CRUD::Create::Hero::Model::Hero.ranks.keys, status: :ok
   end
 
   def statuses

@@ -17,7 +17,7 @@ const TextField = forwardRef((props, ref) => {
 
 const model = Schema.Model({
   name: Schema.Types.StringType().isRequired('This field is required.'),
-  rank: Schema.Types.NumberType().isRequired('This field is required.'),
+  rank: Schema.Types.StringType().isRequired('This field is required.'),
   lat: Schema.Types.StringType().isRequired('This field is required.'),
   lng: Schema.Types.StringType().isRequired('This field is required.')
 })
@@ -30,7 +30,7 @@ const HeroForm = props => {
   const INITIAL_VALUES = () => {
     const values = {
       name: _.get(data, 'name', ''),
-      rank: ranks[_.get(data, 'rank', '')],
+      rank: _.get(data, 'rank', ''),
       lat: _.get(data, 'lat', ''),
       lng: _.get(data, 'lng', '')
     }
@@ -51,9 +51,9 @@ const HeroForm = props => {
     b: 'violet',
     c: 'red'
   }
-  const selectData = Object.entries(ranks).map(([k, v]) => ({
-    label: <Tag size='sm' color={colors[k]}>{k}</Tag>,
-    value: v
+  const selectData = ranks.map((rank) => ({
+    label: <Tag size='sm' color={colors[rank]}>{rank}</Tag>,
+    value: rank
   }))
 
   useEffect(() => { if (ranks?.length === 0) dispatch(get_ranks()) }, [ranks, dispatch])
