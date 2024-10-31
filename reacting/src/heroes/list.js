@@ -13,10 +13,22 @@ const rowKey = 'id'
 
 const List = () => {
   const dispatch = useDispatch()
-  const { search: { hits } } = useSelector(state => state.heroes)
+  const { search: { hits, query, filter } } = useSelector(state => state.heroes)
   const { super_hero } = useSelector(state => state.metrics)
   const [openUpdateHeroForm, setOpenUpdateHeroForm] = useState(false)
   const [dataHeroForm, setDataHeroForm] = useState({})
+  const [sortColumn, setSortColumn] = useState();
+  const [sortType, setSortType] = useState();
+
+  useEffect(() => { setOpenUpdateHeroForm(Object.keys(dataHeroForm).length > 0) }, [dataHeroForm])
+  useEffect(() => { setSortColumn(''); setSortType(''); }, [query, filter])
+
+  const handleSortColumn = (sortColumn, sortType) => {
+    setSortColumn(sortColumn);
+    setSortType(sortType);
+    dispatch({ type: 'SET_SORT', payload: { sortColumn: sortColumn, sortType: sortType } })
+  };
+
   const statusColors = {
     enabled: 'green',
     working: 'red',
@@ -34,9 +46,6 @@ const List = () => {
       <Cell {...props}>
         <Row>
           <Col>
-            <Badge color={statusColors[rowData.status]} content={rowData.status} />
-          </Col>
-          <Col>
             {_.get(super_hero, 'name', '') === rowData.name ? <Badge color='orange' content={<Icon as={FaTrophy} />}>{rowData[dataKey]}</Badge> : rowData[dataKey]}
           </Col>
         </Row>
@@ -44,15 +53,14 @@ const List = () => {
     );
   }
 
-  useEffect(() => {
-    setOpenUpdateHeroForm(Object.keys(dataHeroForm).length > 0)
-  }, [dataHeroForm])
-
   return (
     <Row>
       <Col xs={24} className="mt-3">
         <div style={{ position: 'relative' }}>
           <Table
+            onSortColumn={handleSortColumn}
+            sortColumn={sortColumn}
+            sortType={sortType || 'desc'}
             shouldUpdateScroll={false}
             autoHeight={true}
             data={hits}
@@ -77,13 +85,19 @@ const List = () => {
                 }
               </Cell>
             </Column>
-            <Column align='center'>
+            <Column align='center' sortable>
               <HeaderCell>RANK</HeaderCell>
-              <Cell>
+              <Cell dataKey='rank'>
                 {row => <Tag color={rankColors[row.rank]}>{row.rank}</Tag>}
               </Cell>
             </Column>
-            <Column width={250} align='center'>
+            <Column align='center' sortable>
+              <HeaderCell>STATUS</HeaderCell>
+              <Cell dataKey='status'>
+                {row => <Col><Badge color={statusColors[row.status]} content={row.status} /></Col>}
+              </Cell>
+            </Column>
+            <Column width={250} align='center' sortable>
               <HeaderCell>NAME</HeaderCell>
               <NameCell dataKey='name' />
             </Column>

@@ -5,10 +5,10 @@ import { toastr } from 'react-redux-toastr'
 const qs = require('qs');
 const _ = require('lodash')
 
-export const search = (query, pagination, filter) => {
+export const search = (query, pagination, filter, sort) => {
   return dispatch => {
     axios.get('/v1/heroes/search', {
-      params: { ...pagination, filter: filter, query: query },
+      params: { ...pagination, filter: filter, query: query, sort: sort },
       paramsSerializer: params => qs.stringify(params, { arrayFormat: 'brackets' }),
     }).then(resp => {
       dispatch({ type: "HEROES_FETCHED", payload: resp.data })

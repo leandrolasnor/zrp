@@ -23,14 +23,8 @@ const Filter = () => {
     c: 'red'
   }
 
-  const ranksData = Object.entries(ranks).map(([k, v]) => ({
-    label: <Tag size='sm' color={colors[k]}>{k}</Tag>,
-    value: k
-  }))
-  const statusesData = Object.entries(statuses).map(([k, v]) => ({
-    label: <Tag size='sm'>{v}</Tag>,
-    value: v
-  }))
+  const ranksData = ranks.map((r) => ({ label: <Tag size='sm' color={colors[r]}>{r}</Tag>, value: r }))
+  const statusesData = statuses.map((s) => ({ label: <Tag size='sm'>{s}</Tag>, value: s }))
 
   const applyFilter = () => {
     let filter = []

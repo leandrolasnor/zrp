@@ -6,7 +6,7 @@ class Http::SearchHeroes::Contract < ApplicationContract
     required(:filter).array(:str?)
     required(:page).filled(:integer)
     required(:per_page).filled(:integer)
-    optional(:sort).filled(:string).value(included_in?: ['name:asc', 'name:desc'])
+    optional(:sort).array(:str?)
   end
 
   rule(:filter).each do

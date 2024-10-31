@@ -45,7 +45,7 @@ class HeroesController < BaseController
   end
 
   def search_params
-    params.permit(:query, :page, :per_page, :sort, filter: [])
+    params.permit(:query, :page, :per_page, sort: [], filter: [])
       .with_defaults(
         filter: [],
         query: ''

@@ -5,12 +5,21 @@ const INITIAL_STATE = {
     hits: [],
     query: '',
     totalHits: 0,
-    filter: []
+    filter: [],
+    sort: ['name:asc']
   }
 }
 
 var reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case 'SET_SORT':
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          sort: [`${action.payload.sortColumn}:${action.payload.sortType}`]
+        }
+      }
     case 'SET_FILTER':
       return {
         ...state,
