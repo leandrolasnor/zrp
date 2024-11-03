@@ -36,7 +36,6 @@ services:
     command: sh
     ports:
     - 3000:3000
-    - 3001:3001
     - 28080:28080
     depends_on:
     - redis
