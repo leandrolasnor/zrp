@@ -14,6 +14,7 @@ const Searcher = () => {
     if (event.key === 'Escape') {
       event.preventDefault()
       searchRef.current.value = ''
+      dispatch({ type: 'QUERY_CHANGED', payload: searchRef.current.value })
     } else if (event.key === 'Enter') {
       event.preventDefault()
       dispatch({ type: 'QUERY_CHANGED', payload: searchRef.current.value })
