@@ -15,11 +15,6 @@ WORKDIR $APP_HOME
 RUN gem install bundler --version '2.4.19'
 COPY . $APP_HOME
 
-RUN bundle
-RUN yarn --cwd ./reacting install
-RUN yarn --cwd ./socket.io/server install
-RUN yarn --cwd ./socket.io/client install
-
 RUN dos2unix ./.devcontainer/boot.sh
 RUN chmod +x ./.devcontainer/boot.sh
 RUN dos2unix ./.devcontainer/start.sh
