@@ -55,20 +55,6 @@ services:
         limits:
           memory: 2GB
 
-  sequent_db:
-    image: bitnami/postgresql:latest
-    container_name: zrp.sequent.postgresql
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: user
-      POSTGRES_DB: zrp
-    ports:
-    - 5432
-    deploy:
-      resources:
-        limits:
-          memory: 2GB
-
   meilisearch:
     image: getmeili/meilisearch:latest
     container_name: zrp.meilisearch
