@@ -26,7 +26,7 @@
 
 4. Abra o terminal integrado e rode `foreman start`
 ##
-Acesse o [`app`](http://localhost:3001)
+Acesse o [`app`](http://localhost:5600)
 
 Acesse o serviço do [`Rabbitmq`](http://localhost:15672)
 
