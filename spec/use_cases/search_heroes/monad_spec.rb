@@ -27,7 +27,7 @@ RSpec.describe SearchHeroes::Monad do
           filter: [],
           page: page,
           hits_per_page: per_page,
-          sort: [sort]
+          sort: sort
         )
       call
     end
@@ -40,7 +40,7 @@ RSpec.describe SearchHeroes::Monad do
           filter: [],
           page: page,
           hits_per_page: per_page,
-          sort: [sort]
+          sort: sort
         )
     end
   end

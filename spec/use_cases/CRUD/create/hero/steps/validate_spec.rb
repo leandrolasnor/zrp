@@ -9,7 +9,7 @@ RSpec.describe CRUD::Create::Hero::Steps::Validate do
       let(:params) do
         {
           name: 'Hero',
-          rank: 0,
+          rank: 'c',
           lat: 123.90,
           lng: -89.345
         }
@@ -24,7 +24,7 @@ RSpec.describe CRUD::Create::Hero::Steps::Validate do
       let(:params) do
         {
           name: 1,
-          rank: -1,
+          rank: 'p',
           lat: 'hero',
           lng: 'rank'
         }
@@ -32,7 +32,7 @@ RSpec.describe CRUD::Create::Hero::Steps::Validate do
       let(:expected_errors) do
         {
           name: ['must be a string'],
-          rank: ['must be one of: 0, 1, 2, 3'],
+          rank: ['must be one of: c, b, a, s'],
           lat: ['must be a float'],
           lng: ['must be a float']
         }

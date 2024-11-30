@@ -9,12 +9,20 @@ RSpec.describe HeroesController do
       parameter name: :query, in: :query, type: :string, description: 'query', example: "Silva"
       parameter name: :page, in: :query, type: :integer, description: 'pagination', example: "1"
       parameter name: :per_page, in: :query, type: :integer, description: 'pagination', example: "3"
-      parameter name: :sort, in: :query, type: :string, description: 'sort', required: false, example: "name:desc"
+      parameter name: :'filter[]', in: :query, type: :array, collectionFormat: :multi, description: 'filter', required: false, items: {
+        type: :string,
+        example: ["rank = 's'", "status = 'working'"]
+      }
+      parameter name: :'sort[]', in: :query, type: :array, collectionFormat: :multi, description: 'sort', required: false, items: {
+        type: :string,
+        example: 'name:desc'
+      }
       response(200, 'successful') do
         let(:query) { 'query' }
         let(:page) { 2 }
         let(:per_page) { 3 }
-        let(:sort) { 'name:desc' }
+        let('sort[]') { ['name:desc'] }
+        let('filter[]') { ["rank = 'a'"] }
         run_test!
       end
     end
@@ -28,7 +36,7 @@ RSpec.describe HeroesController do
         type: :object,
         properties: {
           name: { type: :string, example: 'Forrest Gump' },
-          rank: { type: :integer, example: '2' },
+          rank: { type: :string, example: 'a' },
           lat: { type: :number, example: -45.8987657787876755 },
           lng: { type: :number, example: 66.898790547877123545 }
         },
@@ -45,7 +53,7 @@ RSpec.describe HeroesController do
         let(:params) do
           {
             name: 'Heroizinho',
-            rank: 0,
+            rank: 'c',
             lat: -47.3602244101421,
             lng: 42.35626747005944
           }
@@ -115,7 +123,7 @@ RSpec.describe HeroesController do
         properties: {
           id: { type: :integer, example: '1' },
           name: { type: :string, example: 'Silva' },
-          rank: { type: :integer, example: '0' },
+          rank: { type: :string, example: 'b' },
           lat: { type: :numeric, example: -22.86210918520104 },
           lng: { type: :numeric, example: -27.26000247930017 }
         },
@@ -133,7 +141,7 @@ RSpec.describe HeroesController do
           {
             id: hero.id,
             name: 'Ramon Valdez',
-            rank: 3,
+            rank: 's',
             lat: -22.86210918520104,
             lng: -27.26000247930017
           }

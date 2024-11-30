@@ -28,13 +28,28 @@ paths:
         example: '3'
         schema:
           type: integer
-      - name: sort
+      - name: filter[]
         in: query
+        collectionFormat: multi
+        description: filter
+        required: false
+        items:
+          type: string
+          example:
+          - rank = 's'
+          - status = 'working'
+        schema:
+          type: array
+      - name: sort[]
+        in: query
+        collectionFormat: multi
         description: sort
         required: false
-        example: name:desc
-        schema:
+        items:
           type: string
+          example: name:desc
+        schema:
+          type: array
       responses:
         '200':
           description: successful
@@ -57,8 +72,8 @@ paths:
                   type: string
                   example: Forrest Gump
                 rank:
-                  type: integer
-                  example: '2'
+                  type: string
+                  example: a
                 lat:
                   type: number
                   example: -45.89876577878768
@@ -154,8 +169,8 @@ paths:
                   type: string
                   example: Silva
                 rank:
-                  type: integer
-                  example: '0'
+                  type: string
+                  example: b
                 lat:
                   type: numeric
                   example: -22.86210918520104

@@ -10,7 +10,7 @@ RSpec.describe CRUD::Update::Hero::Steps::Validate do
         {
           id: 0,
           name: 'Hero',
-          rank: 0,
+          rank: 'c',
           lat: 123.90,
           lng: -89.345
         }
@@ -26,7 +26,7 @@ RSpec.describe CRUD::Update::Hero::Steps::Validate do
         {
           id: 'uuid',
           name: 1,
-          rank: -1,
+          rank: 't',
           lat: 'hero',
           lng: 'rank'
         }
@@ -35,7 +35,7 @@ RSpec.describe CRUD::Update::Hero::Steps::Validate do
         {
           id: ['must be an integer'],
           name: ['must be a string'],
-          rank: ['must be one of: 0, 1, 2, 3'],
+          rank: ['must be one of: c, b, a, s'],
           lat: ['must be a float'],
           lng: ['must be a float']
         }
