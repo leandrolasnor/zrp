@@ -7,6 +7,7 @@ RSpec.describe Rpc::AlertReceives::UN::Service do
 
     let(:allocate_resource_job) { Rpc::AlertReceives::UN::Listeners::AllocateResource::Job }
     let(:threat_disabled_job) { Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::ThreatsDisabled::Job }
+    let(:threat_distribution_job) { Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::ThreatsDistribution::Job }
 
     let(:request) do
       Gruf::Controllers::Request.new(
@@ -34,6 +35,7 @@ RSpec.describe Rpc::AlertReceives::UN::Service do
         before do
           allow(Resque).to receive(:enqueue).with(allocate_resource_job, kind_of(Integer))
           allow(Resque).to receive(:enqueue_at).with(duck_type(:to_time), threat_disabled_job)
+          allow(Resque).to receive(:enqueue_at).with(duck_type(:to_time), threat_distribution_job)
           allow(Resque).to receive(:size).with(anything).and_return(0)
         end
 
@@ -43,6 +45,7 @@ RSpec.describe Rpc::AlertReceives::UN::Service do
           expect(subject.lng).to eq(params.dig(:location, :lng))
           expect(Resque).to have_received(:enqueue).with(allocate_resource_job, kind_of(Integer))
           expect(Resque).to have_received(:enqueue_at).with(duck_type(:to_time), threat_disabled_job)
+          expect(Resque).to have_received(:enqueue_at).with(duck_type(:to_time), threat_distribution_job)
         end
       end
     end
