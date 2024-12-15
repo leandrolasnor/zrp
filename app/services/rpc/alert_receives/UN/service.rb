@@ -9,7 +9,8 @@ module Rpc::AlertReceives::UN
            default: -> {
              [
                Listeners::AllocateResource::Listener.new,
-               Listeners::Dashboard::Widgets::ThreatsDisabled::Listener.new
+               Listeners::Dashboard::Widgets::ThreatsDisabled::Listener.new,
+               Listeners::Dashboard::Widgets::ThreatsDistribution::Listener.new
              ]
            }
 

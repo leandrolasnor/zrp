@@ -1,9 +1,10 @@
 import { Tooltip, Whisper, Progress, Panel, Row, Col } from 'rsuite'
 import { useSelector } from 'react-redux'
+import ThreatsDistribution from './threats_distribution'
 
 const _ = require('lodash')
 
-const ThreatsDisabled = props => {
+const ThreatsDisabled = () => {
   const { threats_disabled } = useSelector(state => state.metrics)
 
   return (
@@ -34,11 +35,7 @@ const ThreatsDisabled = props => {
         </Col>
       </Row>
       <Panel header={`${_.get(threats_disabled, 'count', 0) } Disabled`}>
-        <p>
-          <small>
-            Percentage of disabled threats
-          </small>
-        </p>
+        <ThreatsDistribution />
       </Panel>
     </Panel>
   )

@@ -5,6 +5,8 @@ const INITIAL_STATE = {
   average_time_to_match: { hours: 0, minutes: 0, seconds: 0 },
   heroes_working: { global: 0, s: 0, a: 0, b: 0, c: 0, count: 0 },
   threats_disabled: { global: 0, god: 0, dragon: 0, tiger: 0, wolf: 0, count: 0 },
+  heroes_distribution: null,
+  threats_distribution: null,
   battles_lineup: [
     ['One Hero', 0],
     ['Two Heroes', 0]
@@ -52,6 +54,16 @@ var reducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         super_hero: action.payload
+      }
+    case "WIDGET_THREATS_DISTRIBUTION_FETCHED":
+      return {
+        ...state,
+        threats_distribution: action.payload
+      }
+    case "WIDGET_HEROES_DISTRIBUTION_FETCHED":
+      return {
+        ...state,
+        heroes_distribution: action.payload
       }
     default:
       return state

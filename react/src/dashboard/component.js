@@ -38,7 +38,7 @@ const Dashboard = () => {
           <BattlesCharts />
         </Col>
       </Row>
-      <Row className='mt-4'>
+      <Row>
         <HistoricalThreats />
       </Row>
     </Grid>

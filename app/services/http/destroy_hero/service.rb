@@ -5,9 +5,9 @@ class Http::DestroyHero::Service < Http::ApplicationService
   option :transaction, type: Interface(:call), reader: :private, default: -> do
     CRUD::Delete::Transaction.include(Dry::Transaction(container: CRUD::Delete::Hero::Container)).new
   end
-  option :listener_destroy,
+  option :widget_heroes_distribution_listener,
          type: Interface(:on_step_succeeded),
-         default: -> { Http::DestroyHero::Listeners::Destroy },
+         default: -> { Http::DestroyHero::Listeners::Dashboard::Widgets::HeroesDistribution::Listener },
          reader: :private
   option :widget_heroes_working_listener,
          type: Interface(:on_step_succeeded),
@@ -17,7 +17,7 @@ class Http::DestroyHero::Service < Http::ApplicationService
   Contract = Http::DestroyHero::Contract.new
 
   def call
-    transaction.subscribe(delete: listener_destroy)
+    transaction.subscribe(delete: widget_heroes_distribution_listener)
     transaction.subscribe(delete: widget_heroes_working_listener)
     transaction.call(params) do
       _1.failure :find do |f|

@@ -17,7 +17,9 @@ class Dashboard::Monad
                       Dashboard::Widgets::AverageTimeToMatch::Monad,
                       Dashboard::Widgets::HeroesWorking::Monad,
                       Dashboard::Widgets::ThreatsDisabled::Monad,
-                      Dashboard::Widgets::BattlesLineup::Monad
+                      Dashboard::Widgets::BattlesLineup::Monad,
+                      Dashboard::Widgets::ThreatsDistribution::Monad,
+                      Dashboard::Widgets::HeroesDistribution::Monad
                     ]
                   },
          private: :reader

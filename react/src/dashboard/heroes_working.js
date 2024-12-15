@@ -1,5 +1,6 @@
 import { Row, Col, Panel, Tooltip, Whisper, Progress } from 'rsuite'
 import { useSelector } from 'react-redux'
+import HeroesDistribution from './heroes_distribution'
 
 const _ = require('lodash')
 
@@ -34,11 +35,7 @@ const HeroesWorking = props => {
         </Col>
       </Row>
       <Panel header={`${_.get(heroes_working, 'count', 0)} Working`}>
-        <p>
-          <small>
-            Percentage of busy heroes
-          </small>
-        </p>
+        <HeroesDistribution />
       </Panel>
     </Panel>
   )
