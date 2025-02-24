@@ -2,7 +2,7 @@ FROM ruby:3.2.2-alpine3.18
 RUN apk update && apk add \
     build-base tzdata git sqlite sqlite-dev zsh bash wget \
     nano curl font-meslo-nerd shadow zsh-vcs redis dos2unix yarn \
-    postgresql-dev postgresql-client libc6-compat gcompat
+    postgresql-dev postgresql-client libc6-compat gcompat tmux
 RUN wget -O - https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2 | tar -xj && \
     cd jemalloc-5.2.1 && \
     ./configure && \

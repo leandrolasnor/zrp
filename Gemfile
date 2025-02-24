@@ -32,15 +32,11 @@ gem 'connection_pool'
 
 gem 'kaminari'
 
-gem 'bunny'
-
 gem 'geocoder'
 
 gem 'resque', require: 'resque/server'
 
 gem 'resque-scheduler'
-
-gem 'foreman'
 
 gem 'pg'
 
@@ -85,7 +81,7 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
-  gem 'faker', github: 'faker-ruby/faker'
+  gem 'faker'
   gem 'grpc-tools'
   gem 'gruf-rspec'
   gem 'rspec'
@@ -101,11 +97,12 @@ end
 
 group :development do
   gem 'rubocop', require: false
+  gem 'rubocop-inflector', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
-  gem 'rubocop-inflector', require: false
   gem 'rubocop-rspec', require: false
   gem 'rubocop-rspec_rails', require: false
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
+  gem 'overmind'
   gem "spring"
 end
