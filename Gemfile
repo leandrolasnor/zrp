@@ -52,6 +52,8 @@ gem 'dotenv'
 
 gem 'overmind'
 
+gem 'concurrent-ruby', '1.3.4', require: 'concurrent'
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
