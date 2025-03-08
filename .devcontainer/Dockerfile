@@ -4,12 +4,12 @@ ARG DOCKER_BUILDKIT=1
 
 FROM ruby:$RUBY_VERSION-alpine$ALPINE_VERSION AS base
 WORKDIR /workspaces/zrp
-ENV BUNDLE_DEPLOYMENT false
-ENV BUNDLE_PATH /usr/local/bundle
-ENV BUNDLE_DISABLE_LOCAL_REVISION_CHECK true
-ENV BUNDLE_DISABLE_LOCAL_BRANCH_CHECK true
-RUN bundle config --global jobs $(nproc)
 RUN gem install bundler --version '2.4.19'
+# ENV BUNDLE_DEPLOYMENT false
+# ENV BUNDLE_PATH /usr/local/bundle
+# ENV BUNDLE_DISABLE_LOCAL_REVISION_CHECK true
+# ENV BUNDLE_DISABLE_LOCAL_BRANCH_CHECK true
+RUN bundle config --global jobs $(nproc)
 RUN apk update && apk add \
     build-base tzdata bash postgresql-client postgresql-dev \
     nano curl font-meslo-nerd shadow zsh-vcs redis yarn \
@@ -37,9 +37,9 @@ COPY socket.io/client/package.json socket.io/client/yarn.lock ./socket.io/client
 COPY .devcontainer/.p10k.zsh /root/.p10k.zsh
 
 FROM build AS devcontainer
-ENV RAILS_ENV development
-ENV NODE_ENV development
-ENV BUNDLE_WITHOUT production
+# ENV RAILS_ENV development
+# ENV NODE_ENV development
+# ENV BUNDLE_WITHOUT production
 RUN yarn --cwd ./react install
 RUN yarn --cwd ./socket.io/server install
 RUN yarn --cwd ./socket.io/client install

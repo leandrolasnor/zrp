@@ -48,6 +48,10 @@ gem 'gruf'
 
 gem 'sneakers'
 
+gem 'dotenv'
+
+gem 'overmind'
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
@@ -71,8 +75,6 @@ gem "bootsnap", require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem "rack-cors"
-
-gem 'overmind'
 
 group :development, :test do
   gem 'bullet'
