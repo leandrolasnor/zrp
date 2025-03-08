@@ -13,8 +13,12 @@
 ##
 ### pelo prompt :zap:
 
-1. Faça o clone do repositório e dentro da raiz do projeto rode `bin/build`
-2. Acesse o shell do container `zrp.api` e rode `overmind start`
+1. Faça o clone do repositório e dentro da raiz do projeto rode
+
+    `bin/build`
+2. Acesse o shell do container `zrp.api` e rode
+
+    `bundle exec overmind start`
 ##
 ### pelo vscode :rocket:
 
@@ -24,7 +28,9 @@
     - `https://github.com/leandrolasnor/zrp`
 3. :hourglass_flowing_sand: Aguarde o ambiente ser construído
 
-4. Abra o terminal integrado e rode `overmind start`
+4. Abra o terminal integrado e rode
+
+    `bundle exec overmind start`
 ##
 Acesse o [`app`](http://localhost:5600)
 
