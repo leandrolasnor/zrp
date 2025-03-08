@@ -11,7 +11,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 300m
+          memory: 512m
 
   redis:
     image: redis:alpine
@@ -23,13 +23,13 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50m
+          memory: 1GB
 
   api:
     image: leandrolasnor/ruby:zrp
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
       target: devcontainer
       args:
         RUBY_VERSION: ${RUBY_VERSION}
@@ -43,6 +43,15 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY}
+      MEILI_URL: ${MEILI_URL}
+      AMQP_SERVER: ${AMQP_SERVER}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_URL: redis://${REDIS_HOST}:${REDIS_PORT}/0
+      RAILS_MAX_THREADS: ${RAILS_MAX_THREADS}
+      GRUF_CONTROLLERS_PATH: ${GRUF_CONTROLLERS_PATH}
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
     ports:
     - 3000:3000
     - 28080:28080
@@ -76,4 +85,4 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512m
+          memory: 1GB
