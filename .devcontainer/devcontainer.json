@@ -11,11 +11,6 @@
   "postStartCommand": ".devcontainer/start.sh",
 	"customizations": {
 		"vscode": {
-      "settings": {
-        "files.exclude": {
-          "**/node_modules": false
-        }
-      },
 			"extensions": [
 				"Shopify.ruby-lsp",
         "eamodio.gitlens",
