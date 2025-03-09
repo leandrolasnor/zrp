@@ -1,16 +1,16 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.2.2"
+ruby "3.4.2"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.0.8"
+gem "rails"
 
 # Use sqlite3 as the database for Active Record
-gem "sqlite3", "~> 1.4"
+gem "sqlite3"
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", "~> 5.0"
+gem "puma"
 
 gem 'active_model_serializers'
 
@@ -40,7 +40,7 @@ gem 'resque-scheduler'
 
 gem 'pg'
 
-gem "paranoia", "~> 2.2"
+gem "paranoia"
 
 gem 'meilisearch-rails'
 
@@ -49,6 +49,8 @@ gem 'gruf'
 gem 'sneakers'
 
 gem 'dotenv'
+
+gem 'overmind'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
@@ -74,8 +76,6 @@ gem "bootsnap", require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem "rack-cors"
 
-gem "figaro"
-
 group :development, :test do
   gem 'bullet'
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -93,6 +93,7 @@ group :development, :test do
   gem 'sse-client'
   gem 'timecop'
   gem 'webmock'
+  gem 'ostruct'
 end
 
 group :development do
@@ -103,6 +104,5 @@ group :development do
   gem 'rubocop-rspec', require: false
   gem 'rubocop-rspec_rails', require: false
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  gem 'overmind'
   gem "spring"
 end
