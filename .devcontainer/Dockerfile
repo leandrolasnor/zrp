@@ -41,8 +41,8 @@ FROM build AS devcontainer
 ENV RAILS_ENV development
 ENV NODE_ENV development
 ENV BUNDLE_WITHOUT production
-RUN yarn --cwd ./react install
-RUN yarn --cwd ./socket.io/server install
-RUN yarn --cwd ./socket.io/client install
+RUN cd react && yarn
+RUN cd socket.io/server && yarn
+RUN cd socket.io/client && yarn
 RUN bundle
 COPY . .
