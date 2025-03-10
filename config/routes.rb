@@ -22,5 +22,5 @@ Rails.application.routes.draw do
   end
 
   root to: proc { [200, {}, ['success']] }
-  match '*path', via: :all, to: proc { [404, {}, nil] }
+  match '*path', to: proc { [404, {}, []] }, via: :all
 end
