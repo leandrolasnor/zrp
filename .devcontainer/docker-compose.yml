@@ -33,7 +33,6 @@ services:
       target: devcontainer
       args:
         RUBY_VERSION: ${RUBY_VERSION}
-        ALPINE_VERSION: ${ALPINE_VERSION}
     container_name: zrp.api
     stdin_open: true
     tty: true
