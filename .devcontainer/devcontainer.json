@@ -7,8 +7,8 @@
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "runServices": ["db", "rabbitmq", "redis", "meilisearch"],
 	"forwardPorts": [3000, 28080],
-	"postCreateCommand": ".devcontainer/boot.sh",
-  "postStartCommand": ".devcontainer/start.sh",
+	"postCreateCommand": ".devcontainer/boot",
+  "postStartCommand": ".devcontainer/start",
 	"customizations": {
 		"vscode": {
 			"extensions": [
