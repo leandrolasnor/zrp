@@ -7,7 +7,7 @@ require 'sneakers'
 require 'redis'
 require 'json'
 require 'gruf'
-require './lib/proto/app/proto/un_services_pb'
+require './lib/rpc/UN/service'
 
 opts = {
   amqp: ENV.fetch('AMQP_SERVER', nil),

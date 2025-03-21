@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     end
   end
 
-  root to: proc { [200, {}, ['success']] }
+  get :up, to: "rails/health#show", as: :rails_health_check
+  root to: "rails/health#show"
   match '*path', to: proc { [404, {}, []] }, via: :all
 end

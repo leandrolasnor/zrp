@@ -2,7 +2,7 @@
 # Source: un.proto for package 'rpc'
 
 require 'grpc'
-require './lib/proto/app/proto/un_pb'
+require './lib/rpc'
 
 module Rpc
   module UN

@@ -6,7 +6,7 @@ require 'gruf'
 # lib/ and load them manually here.
 # proto_dir = File.join(Rails.root, 'lib', 'proto', 'app', 'proto')
 # $LOAD_PATH.unshift(proto_dir)
-require './lib/proto/app/proto/un_services_pb'
+require './lib/rpc/UN/service'
 
 Gruf.configure do |c|
   c.server_binding_url = '0.0.0.0:50051'

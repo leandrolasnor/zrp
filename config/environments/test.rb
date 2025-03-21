@@ -12,6 +12,9 @@ Rails.application.configure do
     Bullet.raise         = true # raise an error if n+1 query occurs
   end
 
+  # While tests run files are not watched, reloading is not necessary.
+  config.enable_reloading = false
+
   config.action_controller.action_on_unpermitted_parameters = :raise
 
   # Settings specified here will take precedence over those in config/application.rb.
@@ -24,19 +27,16 @@ Rails.application.configure do
   # system, or in some way before deploying your code.
   config.eager_load = ENV["CI"].present?
 
-  # Configure public file server for tests with Cache-Control for performance.
-  config.public_file_server.enabled = true
-  config.public_file_server.headers = {
-    "Cache-Control" => "public, max-age=#{1.hour.to_i}"
-  }
+  # Configure public file server for tests with cache-control for performance.
+  config.public_file_server.headers = { "cache-control" => "public, max-age=3600" }
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
   config.cache_store = :null_store
 
-  # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
+  # Render exception templates for rescuable exceptions and raise for other exceptions.
+  config.action_dispatch.show_exceptions = :rescuable
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
@@ -69,4 +69,7 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+
+  # Raise error when a before_action's only/except options reference missing actions.
+  config.action_controller.raise_on_missing_callback_actions = true
 end
