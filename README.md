@@ -18,7 +18,7 @@
     `bin/build`
 2. Acesse o shell do container `zrp.api` e rode
 
-    `overmind start`
+    `run`
 ##
 ### pelo vscode :rocket:
 
@@ -30,7 +30,7 @@
 
 4. Abra o terminal integrado e rode
 
-    `overmind start`
+    `run`
 ##
 Acesse o [`app`](http://localhost:5600)
 
