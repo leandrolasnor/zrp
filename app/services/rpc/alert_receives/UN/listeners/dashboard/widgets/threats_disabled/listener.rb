@@ -3,17 +3,11 @@
 module Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::ThreatsDisabled
   class Listener
     def on_resource_deallocated(_)
-      Resque.enqueue_at(3.seconds.from_now, Job) if queue_empty?
+      Resque.enqueue(Job)
     end
 
     def on_threat_created(_)
-      Resque.enqueue_at(3.seconds.from_now, Job) if queue_empty?
-    end
-
-    private
-
-    def queue_empty?
-      Resque.size(:widget_threats_disabled).zero?
+      Resque.enqueue(Job)
     end
   end
 end

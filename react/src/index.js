@@ -29,7 +29,7 @@ const store =
   process.env.NODE_ENV === 'development'
     ? applyMiddleware(multi, thunk, promise)(configureStore)({ reducer: reducers }, devTools)
     : applyMiddleware(multi, thunk, promise)(configureStore)({ reducer: reducers })
-
+console.log(process.env.REACT_APP_REDIS_URL)
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>

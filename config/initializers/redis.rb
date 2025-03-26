@@ -1,4 +1,12 @@
 REDIS = ConnectionPool.new(size: 4) do
+  Redis.new(
+    host: ENV.fetch('REDIS_HOST', 'localhost'),
+    port: ENV.fetch('REDIS_PORT', '6379'),
+    db: 0
+  )
+end
+
+REDIS_JOBS = ConnectionPool.new(size: 4) do
   Redis::Namespace.new(
     'background-jobs',
     redis: Redis.new(
@@ -9,6 +17,6 @@ REDIS = ConnectionPool.new(size: 4) do
   )
 end
 
-REDIS.with do
+REDIS_JOBS.with do
   Resque.redis = _1
 end

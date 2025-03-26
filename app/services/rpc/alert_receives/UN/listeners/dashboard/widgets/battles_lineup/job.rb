@@ -22,8 +22,11 @@ module Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::BattlesLineup
     end
 
     @queue = :widget_battles_lineup
-    def self.perform
-      new.call
-    end
+    def self.perform = new.call
+    include Resque::Plugins::UniqueByArity.new(
+      unique_at_runtime: true,
+      unique_in_queue: true,
+      lock_after_execution_period: 30 # 30 seconds
+    )
   end
 end

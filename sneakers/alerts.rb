@@ -2,23 +2,28 @@
 
 require_relative 'config'
 
-$redis = Redis.new(host: "redis", port: 6379, db: 1) # rubocop:disable Style/GlobalVars
-
 class Processor
   include Sneakers::Worker
 
   from_queue :un
 
   def work(message)
+    return requeue! if requeue?
+
     parsed = JSON.parse(message)
     occurrence = ::Rpc::Occurrence.new(parsed)
     ack! if client.(:Alert, occurrence).message.is_a?(::Rpc::Threat)
   rescue StandardError => error
     puts error.message
     puts error.backtrace
+    requeue!
   end
 
   private
+
+  def requeue?
+    REDIS.with { _1.get('SNEAKERS_REQUEUE') == 'true' }
+  end
 
   def client
     @client ||=

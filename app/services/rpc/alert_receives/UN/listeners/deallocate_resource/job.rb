@@ -30,14 +30,6 @@ module Rpc::AlertReceives::UN
     end
 
     @queue = :allocated
-    def self.perform(threat_id)
-      new.call(threat_id)
-    end
-
-    private
-
-    def queue_empty?
-      Resque.size(:widget_heroes_working).zero?
-    end
+    def self.perform(...) = new.call(...)
   end
 end

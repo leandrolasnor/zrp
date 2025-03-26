@@ -200,6 +200,15 @@ paths:
       responses:
         '200':
           description: successful
+  "/v1/threats/set_insurgency":
+    post:
+      summary: set insurgency time
+      tags:
+      - Threats
+      parameters: []
+      responses:
+        '200':
+          description: successful
   "/v1/threats/historical":
     get:
       summary: threat history

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -39,6 +41,8 @@ gem 'geocoder'
 gem 'resque', require: 'resque/server'
 
 gem 'resque-scheduler'
+
+gem 'resque-unique_by_arity'
 
 gem 'pg'
 

@@ -1,15 +1,12 @@
-## Simulador de batalhas
-
-##### :rotating_light: Leia o [Enunciado](https://zrp.github.io/challenges/dev/) do problema
-
-
+![plot](./zrp-diagram.png)
+## Simulador de batalhas [`Enunciado`](https://zrp.github.io/challenges/dev/)
 `Docker` `Git` `Visual Studio Code`
 
-`Rails` `Resque` `Sneakers` `gRPC`
+[`Rails`](http://localhost:3000/rails/info/routes) [`Resque`](http://localhost:3000/jobs) `Sneakers` `gRPC`
 
-`React` `MeiliSearch` `Socket.io`
+[`React`](http://localhost:5600) [`MeiliSearch`](http://localhost:7700) `Socket.io`
 
-`Redis` `RabbitMQ` `PostgreSQL`
+`Redis` [`Rabbitmq`](http://localhost:15672) `PostgreSQL` [`Swagger`](http://localhost:3000/api-docs)
 ##
 ### pelo prompt :zap:
 
@@ -31,19 +28,3 @@
 4. Abra o terminal integrado e rode
 
     `run`
-##
-Acesse o [`app`](http://localhost:5600)
-
-Acesse o serviço do [`Rabbitmq`](http://localhost:15672)
-
-Acesse o serviço do [`Resque`](http://localhost:3000/jobs)
-
-Acesse a [`documentação`](http://localhost:3000/api-docs)
-
-Acesse as rotas da API [`routes`](http://localhost:3000/rails/info/routes)
-
-Para acelerar o processo de __insurgência__, diminua o valor da variável de ambiente `INSURGENCY_TIME` em `socket.io/server/.env`
-
-##
-
-`bin/down` :checkered_flag:

@@ -22,8 +22,11 @@ module Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::ThreatsDistributio
     end
 
     @queue = :widget_threats_distribution
-    def self.perform
-      new.call
-    end
+    def self.perform = new.call
+    include Resque::Plugins::UniqueByArity.new(
+      lock_after_execution_period: 5, # 5 seconds
+      unique_at_runtime: true,
+      unique_in_queue: true
+    )
   end
 end
