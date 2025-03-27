@@ -26,7 +26,7 @@ module Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::BattlesLineup
     include Resque::Plugins::UniqueByArity.new(
       unique_at_runtime: true,
       unique_in_queue: true,
-      lock_after_execution_period: 30 # 30 seconds
+      lock_after_execution_period: 5 # seconds
     )
   end
 end

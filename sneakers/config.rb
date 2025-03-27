@@ -10,7 +10,7 @@ opts = {
   password: 'guest',
   exchange: 'sneakers',
   exchange_type: :direct,
-  ack: false,
+  ack: true,
   workers: 1
 }
 

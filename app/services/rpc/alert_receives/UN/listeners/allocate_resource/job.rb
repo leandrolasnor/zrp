@@ -66,7 +66,8 @@ module Rpc::AlertReceives::UN
     def self.perform(threat_id) = new.call(threat_id)
     include Resque::Plugins::UniqueByArity.new(
       arity_for_uniqueness: 1,
-      lock_after_execution_period: 60 # seconds
+      unique_in_queue: true,
+      unique_at_runtime: true
     )
   end
 end
