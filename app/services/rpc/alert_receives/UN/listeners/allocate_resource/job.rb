@@ -29,13 +29,13 @@ module Rpc::AlertReceives::UN
            default: -> { Listeners::Dashboard::Widgets::SuperHero::Listener.new }, reader: :private
 
     def call(threat_id)
-      transaction.operations[:allocate].subscribe(allocate_resource_listener)
-      transaction.operations[:allocate].subscribe(deallocate_resource_listener)
-      transaction.operations[:allocate].subscribe(widget_heroes_working_listener)
-      transaction.operations[:allocate].subscribe(widget_battles_lineup_listener)
-      transaction.operations[:allocate].subscribe(widget_average_score_listener)
-      transaction.operations[:allocate].subscribe(widget_average_time_to_match_listener)
-      transaction.operations[:allocate].subscribe(widget_super_hero_listener)
+      transaction.operations[:notify].subscribe(allocate_resource_listener)
+      transaction.operations[:notify].subscribe(deallocate_resource_listener)
+      transaction.operations[:notify].subscribe(widget_heroes_working_listener)
+      transaction.operations[:notify].subscribe(widget_battles_lineup_listener)
+      transaction.operations[:notify].subscribe(widget_average_score_listener)
+      transaction.operations[:notify].subscribe(widget_average_time_to_match_listener)
+      transaction.operations[:notify].subscribe(widget_super_hero_listener)
 
       ApplicationRecord.connection_pool.with_connection do
         transaction.call(threat_id) do
@@ -66,8 +66,9 @@ module Rpc::AlertReceives::UN
     def self.perform(threat_id) = new.call(threat_id)
     include Resque::Plugins::UniqueByArity.new(
       arity_for_uniqueness: 1,
+      unique_at_runtime: true,
       unique_in_queue: true,
-      unique_at_runtime: true
+      lock_after_execution_period: 3 # seconds
     )
   end
 end

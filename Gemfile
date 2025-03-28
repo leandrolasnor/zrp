@@ -58,6 +58,8 @@ gem 'dotenv'
 
 gem 'overmind'
 
+gem 'aasm'
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
@@ -94,6 +96,7 @@ gem "thruster", require: false
 gem "rack-cors"
 
 group :development, :test do
+  gem 'benchmark'
   gem 'bullet'
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false

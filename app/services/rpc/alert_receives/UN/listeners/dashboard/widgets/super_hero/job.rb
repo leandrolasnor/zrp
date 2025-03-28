@@ -22,7 +22,7 @@ module Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::SuperHero
     @queue = :widget_super_hero
     def self.perform = new.call
     include Resque::Plugins::UniqueByArity.new(
-      lock_after_execution_period: 60 * 2, # 2 minutes
+      lock_after_execution_period: 60 * 1, # minutes
       unique_at_runtime: true,
       unique_in_queue: true
     )

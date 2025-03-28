@@ -13,13 +13,10 @@ class DeallocateResource::Monad
   def call(id)
     Try do
       ApplicationRecord.transaction do
-        record = threat.find(id).lock!
+        record = threat.lock.find(id)
         record.touch
         record.disabled!
-        record.heroes.each do
-          _1.lock!
-          _1.enabled!
-        end
+        record.heroes.lock.each(&:enabled!)
         publish('resource.deallocated', threat: record)
         record
       end

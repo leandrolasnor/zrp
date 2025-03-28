@@ -7,4 +7,5 @@ class AllocateResource::Container
   register 'steps.matches', -> { AllocateResource::Steps::Matches.new }
   register 'steps.sort', -> { AllocateResource::Steps::Sort.new }
   register 'steps.allocate', -> { AllocateResource::Steps::Allocate.new }
+  register 'steps.notify', -> { AllocateResource::Steps::Notify.new }
 end

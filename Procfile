@@ -1,5 +1,6 @@
 rails: rails s -p 3000 -b 0.0.0.0 -P tmp/pids/rails.pid
-resque: COUNT=4 QUEUE=* rake resque:workers
+resque_allocation: COUNT=2 QUEUE=allocated,matches rake resque:workers
+resque_notify: COUNT=$(nproc) QUEUE=*,!allocated,!matches rake resque:workers
 scheduler: rake resque:scheduler
 cable: puma -p 28080 cable/config.ru
 gruf: gruf

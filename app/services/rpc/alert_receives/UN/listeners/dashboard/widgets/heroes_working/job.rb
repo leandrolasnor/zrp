@@ -28,7 +28,7 @@ module Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::HeroesWorking
     @queue = :widget_heroes_working
     def self.perform = new.call
     include Resque::Plugins::UniqueByArity.new(
-      lock_after_execution_period: 5, # seconds
+      lock_after_execution_period: 1, # seconds
       unique_at_runtime: true,
       unique_in_queue: true
     )

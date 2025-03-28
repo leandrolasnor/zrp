@@ -12,14 +12,14 @@ class Dashboard::Monad
          type: Array,
          default: -> {
                     [
-                      Dashboard::Widgets::SuperHero::Monad,
-                      Dashboard::Widgets::AverageScore::Monad,
-                      Dashboard::Widgets::AverageTimeToMatch::Monad,
-                      Dashboard::Widgets::HeroesWorking::Monad,
-                      Dashboard::Widgets::ThreatsDisabled::Monad,
-                      Dashboard::Widgets::BattlesLineup::Monad,
-                      Dashboard::Widgets::ThreatsDistribution::Monad,
-                      Dashboard::Widgets::HeroesDistribution::Monad
+                      Dashboard::Widgets::SuperHero::Monad.new,
+                      Dashboard::Widgets::AverageScore::Monad.new,
+                      Dashboard::Widgets::AverageTimeToMatch::Monad.new,
+                      Dashboard::Widgets::HeroesWorking::Monad.new,
+                      Dashboard::Widgets::ThreatsDisabled::Monad.new,
+                      Dashboard::Widgets::BattlesLineup::Monad.new,
+                      Dashboard::Widgets::ThreatsDistribution::Monad.new,
+                      Dashboard::Widgets::HeroesDistribution::Monad.new
                     ]
                   },
          private: :reader
@@ -27,8 +27,8 @@ class Dashboard::Monad
   def call
     Try do
       result = metrics.map do
-        name = _1.name.split('::').third.underscore.to_sym
-        res = _1.new.()
+        name = _1.class.name.split('::').third.underscore.to_sym
+        res = _1.()
         payload = res.success? ? [name, res.value!] : [name, nil]
         publish('metrics.fetched', payload: [payload].to_h) if payload.second.present?
         payload
