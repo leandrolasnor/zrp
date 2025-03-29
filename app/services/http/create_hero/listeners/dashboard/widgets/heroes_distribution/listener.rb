@@ -4,7 +4,5 @@ module Http::CreateHero::Listeners::Dashboard::Widgets::HeroesDistribution::List
   module_function
 
   Job = Http::CreateHero::Listeners::Dashboard::Widgets::HeroesDistribution::Job
-  def on_step_succeeded(_)
-    Resque.enqueue(Job)
-  end
+  def on_step_succeeded(_) = Resque.enqueue(Job)
 end

@@ -39,25 +39,27 @@ module Rpc::AlertReceives::UN
 
       ApplicationRecord.connection_pool.with_connection do
         transaction.call(threat_id) do
-          _1.failure :find do |f|
+          it.failure :find do |f|
             Rails.logger.error(f)
           end
 
-          _1.failure :matches do |f|
+          it.failure :matches do |f|
+            Rails.logger.error(f.message)
+            time = scarce?(f) ? Resque.size(:matches) * 5 : 5
+            Resque.enqueue_at(time.seconds.from_now, self.class, threat_id)
+            REDIS.with { it.set('SNEAKERS_REQUEUE', scarce?(f)) }
+          end
+
+          it.failure :allocate do |f|
             Rails.logger.error(f.message)
             Resque.enqueue_at(5.seconds.from_now, self.class, threat_id)
           end
 
-          _1.failure :allocate do |f|
-            Rails.logger.error(f.message)
-            Resque.enqueue_at(5.seconds.from_now, self.class, threat_id)
-          end
-
-          _1.failure do |f|
+          it.failure do |f|
             Rails.logger.error(f.message)
           end
 
-          _1.success {}
+          it.success {}
         end
       end
     end
@@ -69,5 +71,11 @@ module Rpc::AlertReceives::UN
       unique_at_runtime: true,
       unique_in_queue: true
     )
+
+    private
+
+    def scarce?(f)
+      I18n.t(:insufficient_resources) == f.message
+    end
   end
 end

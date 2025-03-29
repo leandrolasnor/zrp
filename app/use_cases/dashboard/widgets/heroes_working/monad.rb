@@ -15,7 +15,7 @@ class Dashboard::Widgets::HeroesWorking::Monad
       heroes = model.ms_raw_search('', page: 0, facets: [:rank], filter: ['status != disabled'])
       heroes_working = model.ms_raw_search('', page: 0, facets: [:rank], filter: ['status = working'])
 
-      heroes_working = {
+      metrics = {
         global: (heroes_working["totalHits"].to_f / heroes["totalHits"] * 100).round(0),
         s: (heroes_working["facetDistribution"]["rank"]["s"].to_f / heroes["facetDistribution"]["rank"]["s"] * 100).round(0),
         a: (heroes_working["facetDistribution"]["rank"]["a"].to_f / heroes["facetDistribution"]["rank"]["a"] * 100).round(0),
@@ -24,9 +24,9 @@ class Dashboard::Widgets::HeroesWorking::Monad
         count: heroes_working["totalHits"]
       }
 
-      publish('heroes.working', heroes_working_metrics: heroes_working)
+      publish('heroes.working', heroes_working_metrics: metrics)
 
-      heroes_working
+      metrics
     end
   end
 end
