@@ -8,7 +8,7 @@ module Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::HeroesWorking
     option :monad, type: Interface(:call), default: -> {
       Dashboard::Widgets::HeroesWorking::Monad.new
     }, reader: :private
-    option :heroes_working_listener, type: Instance(Object), default: -> {
+    option :heroes_working_listener, type: Interface(:on_heroes_working), default: -> {
       Rpc::AlertReceives::UN::Listeners::Sneakers::Requeue::Listener.new
     }, reader: :private
     option :event, type: Dry::Types['string'], default: -> { 'WIDGET_HEROES_WORKING_FETCHED' }, reader: :private
@@ -19,7 +19,7 @@ module Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::HeroesWorking
            reader: :private
 
     def call
-      monad.subscribe heroes_working_listener
+      monad.subscribe(heroes_working_listener)
       res = monad.()
       broadcast.(res.value!) if res.success?
       Rails.logger.error(res.exception) if res.failure?
@@ -28,7 +28,6 @@ module Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::HeroesWorking
     @queue = :widget_heroes_working
     def self.perform = new.call
     include Resque::Plugins::UniqueByArity.new(
-      lock_after_execution_period: 1, # seconds
       unique_at_runtime: true,
       unique_in_queue: true
     )

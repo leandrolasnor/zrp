@@ -45,12 +45,12 @@ module Rpc::AlertReceives::UN
 
           _1.failure :matches do |f|
             Rails.logger.error(f.message)
-            Resque.enqueue(self.class, threat_id)
+            Resque.enqueue_at(5.seconds.from_now, self.class, threat_id)
           end
 
           _1.failure :allocate do |f|
             Rails.logger.error(f.message)
-            Resque.enqueue(self.class, threat_id)
+            Resque.enqueue_at(5.seconds.from_now, self.class, threat_id)
           end
 
           _1.failure do |f|
@@ -67,8 +67,7 @@ module Rpc::AlertReceives::UN
     include Resque::Plugins::UniqueByArity.new(
       arity_for_uniqueness: 1,
       unique_at_runtime: true,
-      unique_in_queue: true,
-      lock_after_execution_period: 3 # seconds
+      unique_in_queue: true
     )
   end
 end

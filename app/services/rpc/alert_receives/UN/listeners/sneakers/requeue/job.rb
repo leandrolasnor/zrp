@@ -13,7 +13,7 @@ module Rpc::AlertReceives::UN::Listeners::Sneakers::Requeue
     @queue = :sneakers_requeue
     def self.perform(params) = new.call(params.deep_symbolize_keys)
     include Resque::Plugins::UniqueByArity.new(
-      lock_after_execution_period: 5, # seconds
+      arity_for_uniqueness: 1,
       unique_at_runtime: true,
       unique_in_queue: true
     )
