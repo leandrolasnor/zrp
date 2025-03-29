@@ -17,7 +17,7 @@ class Dashboard::Widgets::HeroesDistribution::Monad
       )
 
       count = ranks.map do
-        [_1, search['facetDistribution']['rank'][_1]]
+        [it, search['facetDistribution']['rank'][it]]
       end
 
       count.to_h.symbolize_keys

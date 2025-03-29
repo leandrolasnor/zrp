@@ -8,8 +8,8 @@ class Dashboard::Widgets::AverageScore::Monad
   option :model, type: Interface(:ms_raw_search), default: -> { Dashboard::Model::Battle }, reader: :private
   option :numerator,
          type: Instance(Proc),
-         default: -> { proc { _1['hits'].reduce(0) { |acc, battle| acc + battle['score'] } } }, reader: :private
-  option :denominator, type: Instance(Proc), default: -> { proc { _1["totalHits"] } }, reader: :private
+         default: -> { proc { it['hits'].reduce(0) { |acc, battle| acc + battle['score'] } } }, reader: :private
+  option :denominator, type: Instance(Proc), default: -> { proc { it["totalHits"] } }, reader: :private
 
   def call
     Try do

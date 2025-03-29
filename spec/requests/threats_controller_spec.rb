@@ -87,7 +87,7 @@ RSpec.describe ThreatsController do
 
         before do
           battle
-          submit_request(_1.metadata)
+          submit_request(it.metadata)
         end
 
         run_test!

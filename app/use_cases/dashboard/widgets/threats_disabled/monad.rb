@@ -28,13 +28,14 @@ class Dashboard::Widgets::ThreatsDisabled::Monad
         ]
       )
 
+      count = threats_disabled["totalHits"]
       global = (threats_disabled["totalHits"].to_f / threats["totalHits"] * 100).round(0) rescue 0
-      god = (threats_disabled["facetDistribution"]["rank"]["god"].to_f / threats["facetDistribution"]["rank"]["god"] * 100).round(0) rescue 0
-      dragon = (threats_disabled["facetDistribution"]["rank"]["dragon"].to_f / threats["facetDistribution"]["rank"]["dragon"] * 100).round(0) rescue 0
-      tiger = (threats_disabled["facetDistribution"]["rank"]["tiger"].to_f / threats["facetDistribution"]["rank"]["tiger"] * 100).round(0) rescue 0
-      wolf = (threats_disabled["facetDistribution"]["rank"]["wolf"].to_f / threats["facetDistribution"]["rank"]["wolf"] * 100).round(0) rescue 0
+      metrics = { global: global, count: count }
+      threats_disabled["facetDistribution"]["rank"].each do |k, v|
+        metrics[k] = (v.to_f / threats["facetDistribution"]["rank"][k] * 100).round(0) rescue 0
+      end
 
-      { global: global, god: god, dragon: dragon, tiger: tiger, wolf: wolf, count: threats_disabled["totalHits"] }
+      metrics
     end
   end
 end

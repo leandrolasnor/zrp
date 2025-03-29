@@ -7,7 +7,7 @@ class ThreatsController < BaseController
   end
 
   def set_insurgency
-    REDIS.with { _1.set('INSURGENCY_TIME', set_insurgency_params[:insurgency].to_i * 1000) }
+    REDIS.with { it.set('INSURGENCY_TIME', set_insurgency_params[:insurgency].to_i * 1000) }
     head :ok
   end
 

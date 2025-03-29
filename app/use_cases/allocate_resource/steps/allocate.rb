@@ -36,7 +36,7 @@ class AllocateResource::Steps::Allocate
     elsif tranks[threat.rank] == hranks[second.hero.rank]
       commit(second)
     elsif tranks[threat.rank] > hranks[first.hero.rank] && tranks[threat.rank] > hranks[second.hero.rank]
-      [first, second].each { commit(_1) }
+      [first, second].each { commit(it) }
     end
 
     threat.reload

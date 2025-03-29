@@ -8,8 +8,6 @@ module CRUD::Create::Hero
 
     option :contract, type: Interface(:call), default: -> { Contract.new }, reader: :private
 
-    def call(params)
-      contract.call(params).to_monad
-    end
+    def call(params) = contract.call(params).to_monad
   end
 end

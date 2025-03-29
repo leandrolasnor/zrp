@@ -48,7 +48,5 @@ class AllocateResource::DomainService::Calculator::Battle
 
   private
 
-  def calculate_score
-    @calculate_score ||= ((n + d) / 2).to_i
-  end
+  def calculate_score = @calculate_score ||= ((n + d) / 2).to_i
 end

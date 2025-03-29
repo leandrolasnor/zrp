@@ -6,11 +6,11 @@ class Dashboard::Widgets::AverageTimeToMatch::Monad
   extend Dry::Initializer
 
   option :model, type: Interface(:ms_raw_search), default: -> { Dashboard::Model::Battle }, reader: :private
-  option :duration, type: Instance(Proc), default: -> { proc { ActiveSupport::Duration.build(_1).parts } }
+  option :duration, type: Instance(Proc), default: -> { proc { ActiveSupport::Duration.build(it).parts } }
   option :numerator,
          type: Instance(Proc),
-         default: -> { proc { _1['hits'].reduce(0) { |acc, battle| acc + battle['time_to_match'] } } }, reader: :private
-  option :denominator, type: Instance(Proc), default: -> { proc { _1["totalHits"] } }, reader: :private
+         default: -> { proc { it['hits'].reduce(0) { |acc, battle| acc + battle['time_to_match'] } } }, reader: :private
+  option :denominator, type: Instance(Proc), default: -> { proc { it["totalHits"] } }, reader: :private
 
   def call
     Try do

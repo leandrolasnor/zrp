@@ -20,20 +20,20 @@ class Http::DestroyHero::Service < Http::ApplicationService
     transaction.subscribe(delete: widget_heroes_distribution_listener)
     transaction.subscribe(delete: widget_heroes_working_listener)
     transaction.call(params) do
-      _1.failure :find do |f|
+      it.failure :find do |f|
         [:not_found, f.message]
       end
 
-      _1.failure :delete do |f|
+      it.failure :delete do |f|
         [:unprocessable_entity, f.message]
       end
 
-      _1.failure do |f|
+      it.failure do |f|
         Rails.logger.error(f)
         [:internal_server_error]
       end
 
-      _1.success do |destroyed|
+      it.success do |destroyed|
         [:ok, destroyed, serializer]
       end
     end

@@ -8,8 +8,6 @@ module CRUD::Read::Hero
 
     option :hero, type: Interface(:find), default: -> { Model::Hero }, reader: :private
 
-    def call(id)
-      Try(ActiveRecord::RecordNotFound) { hero.find(id) }
-    end
+    def call(id) = Try(ActiveRecord::RecordNotFound) { hero.find(id) }
   end
 end

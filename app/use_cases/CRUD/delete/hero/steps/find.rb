@@ -8,8 +8,6 @@ module CRUD::Delete::Hero
 
     option :hero, type: Interface(:find), default: -> { Model::Hero }, reader: :private
 
-    def call(params)
-      hero.lock.find(params[:id])
-    end
+    def call(params) = hero.lock.find(params[:id])
   end
 end

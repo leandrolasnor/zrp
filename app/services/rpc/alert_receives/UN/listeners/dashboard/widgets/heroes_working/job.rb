@@ -15,7 +15,7 @@ module Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::HeroesWorking
     option :identifier, type: Dry::Types['string'], default: -> { 'token' }, reader: :private
     option :broadcast,
            type: Instance(Proc),
-           default: -> { proc { ActionCable.server.broadcast(identifier, { type: event, payload: _1 }) } },
+           default: -> { proc { ActionCable.server.broadcast(identifier, { type: event, payload: it }) } },
            reader: :private
 
     def call
@@ -26,10 +26,7 @@ module Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::HeroesWorking
     end
 
     @queue = :widget_heroes_working
-    def self.perform = new.call
-    include Resque::Plugins::UniqueByArity.new(
-      unique_at_runtime: true,
-      unique_in_queue: true
-    )
+    def self.perform = new.()
+    include Resque::Plugins::UniqueByArity.new(unique_at_runtime: true, unique_in_queue: true)
   end
 end

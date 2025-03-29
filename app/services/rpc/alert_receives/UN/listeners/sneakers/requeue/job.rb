@@ -2,16 +2,10 @@
 
 module Rpc::AlertReceives::UN::Listeners::Sneakers::Requeue
   class Job
-    def call(metrics)
-      REDIS.with do
-        heroes_working_percent = metrics[:global].to_i
-        heroes_working_percent_limit = ENV.fetch('HWP_LIMIT', 80).to_i
-        _1.set('SNEAKERS_REQUEUE', heroes_working_percent >= heroes_working_percent_limit)
-      end
-    end
+    def call(busy) = REDIS.with { it.set('SNEAKERS_REQUEUE', busy >= ENV.fetch('HWP_LIMIT', 80).to_i) }
 
     @queue = :sneakers_requeue
-    def self.perform(params) = new.call(params.deep_symbolize_keys)
+    def self.perform(metrics) = new.call(metrics['global'].to_i)
     include Resque::Plugins::UniqueByArity.new(
       arity_for_uniqueness: 1,
       unique_at_runtime: true,

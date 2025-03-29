@@ -11,7 +11,5 @@ class AllocateResource::Model::Battle < ApplicationRecord
 
   private
 
-  def calculator
-    @calculator ||= AllocateResource::DomainService::Calculator::Battle.new(self)
-  end
+  def calculator = @calculator ||= AllocateResource::DomainService::Calculator::Battle.new(self)
 end

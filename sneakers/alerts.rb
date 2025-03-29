@@ -21,9 +21,7 @@ class Processor
 
   private
 
-  def requeue?
-    REDIS.with { _1.get('SNEAKERS_REQUEUE') == 'true' }
-  end
+  def requeue? = REDIS.with { it.get('SNEAKERS_REQUEUE') == 'true' }
 
   def client
     @client ||=

@@ -27,8 +27,8 @@ class Dashboard::Monad
   def call
     Try do
       result = metrics.map do
-        name = _1.class.name.split('::').third.underscore.to_sym
-        res = _1.()
+        name = it.class.name.split('::').third.underscore.to_sym
+        res = it.()
         payload = res.success? ? [name, res.value!] : [name, nil]
         publish('metrics.fetched', payload: [payload].to_h) if payload.second.present?
         payload

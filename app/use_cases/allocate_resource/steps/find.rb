@@ -7,7 +7,5 @@ class AllocateResource::Steps::Find
 
   option :threat, type: Interface(:find), default: -> { AllocateResource::Model::Threat }, reader: :private
 
-  def call(id)
-    threat.enabled.find(id)
-  end
+  def call(id) = threat.enabled.find(id)
 end

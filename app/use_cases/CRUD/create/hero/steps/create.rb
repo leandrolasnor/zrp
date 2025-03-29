@@ -13,10 +13,10 @@ module CRUD::Create::Hero
 
     def call(params)
       created = hero.create do
-        _1.name = params[:name]
-        _1.rank = params[:rank]
-        _1.lat = params[:lat]
-        _1.lng = params[:lng]
+        it.name = params[:name]
+        it.rank = params[:rank]
+        it.lat = params[:lat]
+        it.lng = params[:lng]
       end
       publish('hero.created', hero: created)
       created
