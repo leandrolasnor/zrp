@@ -4,11 +4,5 @@ module Http::EditHero::Listeners::Dashboard::Widgets::HeroesDistribution::Listen
   module_function
 
   Job = Http::EditHero::Listeners::Dashboard::Widgets::HeroesDistribution::Job
-  def on_step_succeeded(_)
-    Resque.enqueue_at(3.seconds.from_now, Job) if queue_empty?
-  end
-
-  def queue_empty?
-    Resque.size(:widget_heroes_distribution).zero?
-  end
+  def on_step_succeeded(_) = Resque.enqueue(Job)
 end

@@ -1,4 +1,5 @@
-import { Navbar, Nav } from 'rsuite'
+import { Navbar, Nav, Slider } from 'rsuite'
+import InsurgencySlider from './insurgency_slider'
 
 const NavBar = () => {
   return (
@@ -7,6 +8,11 @@ const NavBar = () => {
       <Nav>
         <Nav.Item href='/#'>Dashboard</Nav.Item>
         <Nav.Item href='#heroes'>Heroes</Nav.Item>
+      </Nav>
+      <Nav pullRight>
+        <Nav.Item>
+          <InsurgencySlider />
+        </Nav.Item>
       </Nav>
     </Navbar>
   )

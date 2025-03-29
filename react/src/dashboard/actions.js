@@ -16,3 +16,11 @@ export const get_metrics = () => {
     eventSource.onerror = (e) => eventSource.close()
   }
 }
+
+export const set_insurgency = value => {
+  return dispatch => {
+    axios.post('/v1/threats/set_insurgency', { insurgency: value }).then(resp => {
+      dispatch({ type: "SET_INSURGENCY", payload: resp.data })
+    }).catch(e => handle_errors(e))
+  }
+}

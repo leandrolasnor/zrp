@@ -2,8 +2,17 @@ import { Server } from "socket.io"
 import { random } from 'supervillains'
 import _ from 'lodash'
 import { config } from 'dotenv'
-
+import { createClient } from 'redis'
 config()
+
+const redis = createClient({ url: process.env.REDIS_URL })
+redis.on('error', err => console.log('Redis Client Error', err))
+await redis.connect()
+const insurgency_time = async () => await redis.get('INSURGENCY_TIME')
+insurgency_time().then(async t => {
+  if (Number(t) == 0) await redis.set('INSURGENCY_TIME', process.env.INSURGENCY_TIME)
+})
+
 const io = new Server({ /* options */ });
 const occurrence = () => {
   return {
@@ -16,15 +25,14 @@ const occurrence = () => {
   }
 }
 
-const emitOccurrence = socket => {
+const emitOccurrence = async socket => {
   let payload = occurrence()
   console.log(payload)
-  socket.timeout(process.env.INSURGENCY_TIME).emit("occurrence", payload, (err) => {
-    if (err) {
-      // no ack from the server, let's retry
-      emitOccurrence(socket);
-    }
-  });
+  insurgency_time().then(t => {
+    socket.timeout(t).emit("occurrence", payload, (err) => {
+      if (err) emitOccurrence(socket)
+    })
+  })
 }
 
 io.on("connection", (socket) => {

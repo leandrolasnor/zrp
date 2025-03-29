@@ -2,12 +2,7 @@
 
 require 'dotenv'
 Dotenv.load('./sneakers/.env')
-require 'debug'
-require 'sneakers'
-require 'redis'
-require 'json'
-require 'gruf'
-require './lib/rpc/UN/service'
+require './config/environment'
 
 opts = {
   amqp: ENV.fetch('AMQP_SERVER', nil),
@@ -15,7 +10,7 @@ opts = {
   password: 'guest',
   exchange: 'sneakers',
   exchange_type: :direct,
-  ack: false,
+  ack: true,
   workers: 1
 }
 

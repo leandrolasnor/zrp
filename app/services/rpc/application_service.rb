@@ -7,7 +7,5 @@ class Rpc::ApplicationService
 
   param :params, type: Strict::Hash, reader: :private
 
-  def self.call(params)
-    new(params).call
-  end
+  def self.call(...) = new(...).call
 end

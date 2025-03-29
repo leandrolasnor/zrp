@@ -20,8 +20,10 @@ module Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::AverageScore
     end
 
     @queue = :widget_average_score
-    def self.perform
-      new.call
-    end
+    def self.perform = new.call
+    include Resque::Plugins::UniqueByArity.new(
+      unique_at_runtime: true,
+      unique_in_queue: true
+    )
   end
 end

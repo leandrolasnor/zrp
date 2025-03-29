@@ -3,6 +3,17 @@
 require 'swagger_helper'
 
 RSpec.describe ThreatsController do
+  path('/v1/threats/set_insurgency') do
+    post('set insurgency time') do
+      tags 'Threats'
+      parameter name: :insurgency, in: :body, type: :integer, description: 'insurgency time'
+      response(200, 'successful') do
+        schema type: :string, nullable: true, example: nil
+        let(:insurgency) { 20 }
+        run_test!
+      end
+    end
+  end
   path '/v1/threats/historical' do
     get('threat history') do
       tags 'Threats'

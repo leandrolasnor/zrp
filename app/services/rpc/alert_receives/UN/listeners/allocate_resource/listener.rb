@@ -7,7 +7,8 @@ module Rpc::AlertReceives::UN::Listeners::AllocateResource
     end
 
     def on_resource_not_allocated(e)
-      Resque.enqueue(Job, e[:threat].id)
+      time = Resque.size(:matches) * 5
+      Resque.enqueue_at(time.seconds.from_now, Job, e[:threat].id)
     end
   end
 end
