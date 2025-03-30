@@ -18,10 +18,10 @@ class AllocateResource::Steps::Allocate
   def commit(battle)
     ApplicationRecord.transaction do
       battle.hero.with_lock do
-        battle.hero.touch
-        battle.hero.working!
-        battle.threat.with_lock { battle.threat.working! } if battle.threat.enabled?
-        battle.save!
+        battle.threat.with_lock do
+          [battle.hero, battle.threat].each(&:working!)
+          battle.save!
+        end
       end
     end
   end
