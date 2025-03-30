@@ -114,7 +114,6 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
   gem 'shoulda-matchers'
-  gem 'simplecov', require: false
   gem 'sse-client'
   gem 'timecop'
   gem 'webmock'
@@ -129,4 +128,9 @@ group :development do
   gem 'rubocop-rspec_rails', require: false
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   gem "spring"
+end
+
+group :test do
+  gem 'simplecov', require: false
+  gem 'simplecov-tailwindcss', require: false
 end

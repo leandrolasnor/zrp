@@ -1,5 +1,7 @@
+# Simulador de batalhas
 ![plot](./zrp-diagram.png)
-## Simulador de batalhas [`Enunciado`](https://zrp.github.io/challenges/dev/)
+## [Leia o enunciado](https://zrp.github.io/challenges/dev/)
+
 `Docker` `Git` `Visual Studio Code`
 
 [`Rails`](http://localhost:3000/rails/info/routes) [`Resque`](http://localhost:3000/jobs) `Sneakers` `gRPC`

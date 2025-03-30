@@ -8,17 +8,21 @@ RSpec.describe Rpc::AlertReceives::UN::Listeners::AllocateResource::Job do
   context 'on Failure' do
     context 'on matches step' do
       let(:error_message) { I18n.t(:insufficient_resources) }
+      let(:redis_instance) { double }
 
       before do
         allow(AllocateResource::Model::Hero).to receive(:allocatable).with(5).and_return([])
         allow(Rails.logger).to receive(:error).with(error_message)
         allow(Resque).to receive(:enqueue_at).with(duck_type(:to_time), described_class, threat.id)
+        allow(REDIS).to receive(:with).and_yield(redis_instance)
+        allow(redis_instance).to receive(:set).with('SNEAKERS_REQUEUE', true)
         call
       end
 
       it 'must be able to write error on logger' do
         expect(Rails.logger).to have_received(:error).with(error_message)
         expect(Resque).to have_received(:enqueue_at).with(duck_type(:to_time), described_class, threat.id)
+        expect(redis_instance).to have_received(:set).with('SNEAKERS_REQUEUE', true)
       end
     end
 
@@ -54,51 +58,39 @@ RSpec.describe Rpc::AlertReceives::UN::Listeners::AllocateResource::Job do
     end
 
     before do
-      allow(Resque).
-        to receive(:size).
-        with(anything).
-        and_return(0)
+      allow(Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::HeroesWorking::Job).to receive(:perform)
+      allow(Resque).to receive(:enqueue).with(Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::BattlesLineup::Job)
+      allow(Resque).to receive(:enqueue).with(Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::AverageScore::Job)
       allow(Resque).
         to receive(:enqueue_at).
         with(duck_type(:to_time), Rpc::AlertReceives::UN::Listeners::DeallocateResource::Job, threat.id)
       allow(Resque).
-        to receive(:enqueue_at).
-        with(duck_type(:to_time), Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::HeroesWorking::Job)
+        to receive(:enqueue).
+        with(Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::AverageTimeToMatch::Job)
       allow(Resque).
-        to receive(:enqueue_at).
-        with(duck_type(:to_time), Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::BattlesLineup::Job)
-      allow(Resque).
-        to receive(:enqueue_at).
-        with(duck_type(:to_time), Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::AverageScore::Job)
-      allow(Resque).
-        to receive(:enqueue_at).
-        with(duck_type(:to_time), Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::AverageTimeToMatch::Job)
-      allow(Resque).
-        to receive(:enqueue_at).
-        with(duck_type(:to_time), Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::SuperHero::Job)
+        to receive(:enqueue).
+        with(Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::SuperHero::Job)
       heroes
       call
     end
 
     it 'must be able to create a threat and allocate heroes' do
+      expect(Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::HeroesWorking::Job).to have_received(:perform)
+      expect(Resque).
+        to have_received(:enqueue).
+        with(Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::AverageScore::Job)
       expect(Resque).
         to have_received(:enqueue_at).
         with(duck_type(:to_time), Rpc::AlertReceives::UN::Listeners::DeallocateResource::Job, threat.id)
       expect(Resque).
-        to have_received(:enqueue_at).
-        with(duck_type(:to_time), Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::HeroesWorking::Job)
+        to have_received(:enqueue).
+        with(Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::BattlesLineup::Job)
       expect(Resque).
-        to have_received(:enqueue_at).
-        with(duck_type(:to_time), Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::BattlesLineup::Job)
+        to have_received(:enqueue).
+        with(Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::AverageTimeToMatch::Job)
       expect(Resque).
-        to have_received(:enqueue_at).
-        with(duck_type(:to_time), Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::AverageScore::Job)
-      expect(Resque).
-        to have_received(:enqueue_at).
-        with(duck_type(:to_time), Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::AverageTimeToMatch::Job)
-      expect(Resque).
-        to have_received(:enqueue_at).
-        with(duck_type(:to_time), Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::SuperHero::Job)
+        to have_received(:enqueue).
+        with(Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::SuperHero::Job)
     end
   end
 end

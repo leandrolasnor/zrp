@@ -34,8 +34,8 @@ RSpec.describe Rpc::AlertReceives::UN::Service do
 
         before do
           allow(Resque).to receive(:enqueue).with(allocate_resource_job, kind_of(Integer))
-          allow(Resque).to receive(:enqueue_at).with(duck_type(:to_time), threat_disabled_job)
-          allow(Resque).to receive(:enqueue_at).with(duck_type(:to_time), threat_distribution_job)
+          allow(threat_disabled_job).to receive(:perform)
+          allow(Resque).to receive(:enqueue).with(threat_distribution_job)
           allow(Resque).to receive(:size).with(anything).and_return(0)
         end
 
@@ -44,8 +44,8 @@ RSpec.describe Rpc::AlertReceives::UN::Service do
           expect(subject.lat).to eq(params.dig(:location, :lat))
           expect(subject.lng).to eq(params.dig(:location, :lng))
           expect(Resque).to have_received(:enqueue).with(allocate_resource_job, kind_of(Integer))
-          expect(Resque).to have_received(:enqueue_at).with(duck_type(:to_time), threat_disabled_job)
-          expect(Resque).to have_received(:enqueue_at).with(duck_type(:to_time), threat_distribution_job)
+          expect(threat_disabled_job).to have_received(:perform)
+          expect(Resque).to have_received(:enqueue).with(threat_distribution_job)
         end
       end
     end
