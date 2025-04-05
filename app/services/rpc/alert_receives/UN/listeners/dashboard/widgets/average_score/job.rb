@@ -10,7 +10,7 @@ module Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::AverageScore
     option :identifier, type: Dry::Types['string'], default: -> { 'token' }, reader: :private
     option :broadcast,
            type: Instance(Proc),
-           default: -> { proc { ActionCable.server.broadcast(identifier, { type: event, payload: _1 }) } },
+           default: -> { proc { ActionCable.server.broadcast(identifier, { type: event, payload: it }) } },
            reader: :private
 
     def call
