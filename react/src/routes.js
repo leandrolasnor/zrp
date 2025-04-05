@@ -4,16 +4,16 @@ import Dashboard from './dashboard/component'
 import Heroes from './heroes/component'
 
 const routes = [
-  { key: 1, exact: true, index: true,  path: '/', element: <Dashboard/> },
-  { key: 2, exact: true,  path: '/heroes', element: <Heroes/> }
+  { key: 1, exact: true, path: '/', element: <Dashboard /> },
+  { key: 2, exact: true, path: '/heroes', element: <Heroes /> }
 ];
 
 
 const Routes = () => (
   <HashRouter>
     <Switch>
-      {routes.map(todo => (
-        <Route {...todo} />
+      {routes.map(route => (
+        <Route key={route.key} exact={route.exact} path={route.path} element={route.element} />
       ))}
     </Switch>
   </HashRouter>
