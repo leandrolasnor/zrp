@@ -4,6 +4,6 @@ scheduler: rake resque:scheduler
 cable: puma -p 28080 cable/config.ru
 gruf: gruf
 sneakers: sneakers work Processor --require ./sneakers/processor.rb
-react: yarn --cwd ./react start
-socket-io-server: yarn --cwd ./socket.io/server start
-socket-io-client: yarn --cwd ./socket.io/client start
+react: yarn workspace react start
+socket-io-server: yarn workspace socket.io/server start
+socket-io-client: yarn workspace socket.io/client start
