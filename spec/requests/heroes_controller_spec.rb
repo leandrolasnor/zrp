@@ -172,6 +172,13 @@ RSpec.describe HeroesController do
         schema type: :string
         run_test!
       end
+
+      response(404, 'when hero not found') do
+        let(:id) { 0 }
+        let(:params) { { id: id } }
+        schema type: :string
+        run_test!
+      end
     end
   end
 end

@@ -2,16 +2,15 @@
 
 module Rpc::AlertReceives::UN
   class Listeners::DeallocateResource::Job
-    include Dry.Types()
     extend Dry::Initializer
 
-    option :monad, type: Interface(:call), default: -> { DeallocateResource::Monad.new }, reader: :private
+    option :monad, type: Types::Interface(:call), default: -> { DeallocateResource::Monad.new }, reader: :private
     option :widget_heroes_working_listener,
-           type: Interface(:on_resource_allocated),
+           type: Types::Interface(:on_resource_allocated),
            default: -> { Listeners::Dashboard::Widgets::HeroesWorking::Listener.new },
            reader: :private
     option :widget_threats_disabled_listener,
-           type: Interface(:on_resource_deallocated),
+           type: Types::Interface(:on_resource_deallocated),
            default: -> { Listeners::Dashboard::Widgets::ThreatsDisabled::Listener.new },
            reader: :private
 

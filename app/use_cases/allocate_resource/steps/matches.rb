@@ -2,14 +2,13 @@
 
 class AllocateResource::Steps::Matches
   include Dry::Monads[:result]
-  include Dry.Types()
   extend  Dry::Initializer
 
-  option :battle, type: Interface(:find), default: -> { AllocateResource::Model::Battle }, reader: :private
+  option :battle, type: Types::Interface(:find), default: -> { AllocateResource::Model::Battle }, reader: :private
   option :heroes,
-         type: Interface(:allocatable),
+         type: Types::Interface(:allocatable),
          default: -> { AllocateResource::Model::Hero }, reader: :private
-  option :limit, type: Integer, default: -> { 5 }, reader: :private
+  option :limit, type: Types::Integer, default: -> { 5 }, reader: :private
 
   def call(threat)
     matches = heroes.allocatable(limit).map do |hero|

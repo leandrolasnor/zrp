@@ -2,10 +2,9 @@
 
 class SearchHeroes::Monad
   include Dry::Monads[:try]
-  include Dry.Types()
   extend  Dry::Initializer
 
-  option :hero, type: Interface(:ms_raw_search), default: -> { SearchHeroes::Model::Hero }, reader: :private
+  option :hero, type: Types::Interface(:ms_raw_search), default: -> { SearchHeroes::Model::Hero }, reader: :private
 
   def call(query:, filter:, page:, per_page:, sort: ['name:asc'], **_)
     Try[MeiliSearch::ApiError] do

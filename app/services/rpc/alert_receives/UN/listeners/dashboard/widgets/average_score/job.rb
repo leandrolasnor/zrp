@@ -2,14 +2,15 @@
 
 module Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::AverageScore
   class Job
-    include Dry.Types()
     extend Dry::Initializer
 
-    option :monad, type: Interface(:call), default: -> { Dashboard::Widgets::AverageScore::Monad.new }, reader: :private
+    option :monad, type: Types::Interface(:call), default: -> {
+      Dashboard::Widgets::AverageScore::Monad.new
+    }, reader: :private
     option :event, type: Dry::Types['string'], default: -> { 'WIDGET_AVERAGE_SCORE_FETCHED' }, reader: :private
     option :identifier, type: Dry::Types['string'], default: -> { 'token' }, reader: :private
     option :broadcast,
-           type: Instance(Proc),
+           type: Types::Instance(Proc),
            default: -> { proc { ActionCable.server.broadcast(identifier, { type: event, payload: it }) } },
            reader: :private
 

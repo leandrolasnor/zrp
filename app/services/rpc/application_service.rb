@@ -2,10 +2,9 @@
 
 class Rpc::ApplicationService
   private_class_method :new
-  include Dry.Types()
   extend Dry::Initializer
 
-  param :params, type: Strict::Hash, reader: :private
+  param :params, type: Types::Strict::Hash, reader: :private
 
   def self.call(...) = new(...).call
 end

@@ -18,7 +18,7 @@ const Dashboard = () => {
 
   return (
     <Grid fluid>
-      <Row className='mt-4'>
+      <Row className='mt-3'>
         <Col>
           <TagGroup>
             <AverageScore />
@@ -27,7 +27,7 @@ const Dashboard = () => {
           </TagGroup>
         </Col>
       </Row>
-      <Row>
+      <Row className='mt-3'>
         <Col sm={8}>
           <HeroesWorking />
         </Col>
@@ -38,7 +38,7 @@ const Dashboard = () => {
           <BattlesCharts />
         </Col>
       </Row>
-      <Row>
+      <Row className='mt-1'>
         <HistoricalThreats />
       </Row>
     </Grid>

@@ -2,12 +2,12 @@
 
 class Http::ThreatsHistory::Service < Http::ApplicationService
   option :serializer,
-         type: Interface(:serializer_for),
+         type: Types::Interface(:serializer_for),
          default: -> { Http::ThreatsHistory::Serializer },
          reader: :private
 
   option :monad,
-         type: Interface(:call),
+         type: Types::Interface(:call),
          default: -> { ThreatsHistory::Monad.new },
          reader: :private
 

@@ -3,12 +3,11 @@
 class DeallocateResource::Monad
   include Dry::Monads[:try]
   include Dry::Events::Publisher[:resource_deallocated]
-  include Dry.Types()
   extend Dry::Initializer
 
   register_event 'resource.deallocated'
 
-  option :threat, type: Interface(:find), default: -> { DeallocateResource::Model::Threat }, reader: :private
+  option :threat, type: Types::Interface(:find), default: -> { DeallocateResource::Model::Threat }, reader: :private
 
   def call(id)
     Try do

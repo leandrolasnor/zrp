@@ -2,9 +2,11 @@
 
 module Rpc::AlertReceives::UN
   class Service < Rpc::ApplicationService
-    option :transaction, type: Interface(:call), default: -> { AlertReceives::UN::Transaction.new }, reader: :private
+    option :transaction, type: Types::Interface(:call), default: -> {
+      AlertReceives::UN::Transaction.new
+    }, reader: :private
     option :listeners,
-           type: Array,
+           type: Types::Array,
            reader: :private,
            default: -> {
              [

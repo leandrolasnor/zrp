@@ -2,14 +2,13 @@
 
 class Dashboard::Widgets::AverageScore::Monad
   include Dry::Monads[:try]
-  include Dry.Types()
   extend Dry::Initializer
 
-  option :model, type: Interface(:ms_raw_search), default: -> { Dashboard::Model::Battle }, reader: :private
+  option :model, type: Types::Interface(:ms_raw_search), default: -> { Dashboard::Model::Battle }, reader: :private
   option :numerator,
-         type: Instance(Proc),
+         type: Types::Instance(Proc),
          default: -> { proc { it['hits'].reduce(0) { |acc, battle| acc + battle['score'] } } }, reader: :private
-  option :denominator, type: Instance(Proc), default: -> { proc { it["totalHits"] } }, reader: :private
+  option :denominator, type: Types::Instance(Proc), default: -> { proc { it["totalHits"] } }, reader: :private
 
   def call
     Try do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Http::SearchHeroes::Service < Http::ApplicationService
-  option :monad, type: Interface(:call), default: -> { SearchHeroes::Monad.new }, reader: :private
+  option :monad, type: Types::Interface(:call), default: -> { SearchHeroes::Monad.new }, reader: :private
 
   Contract = Http::SearchHeroes::Contract.new
 

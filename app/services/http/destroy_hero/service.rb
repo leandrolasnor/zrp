@@ -1,30 +1,35 @@
 # frozen_string_literal: true
 
 class Http::DestroyHero::Service < Http::ApplicationService
-  option :serializer, type: Interface(:serializer_for), default: -> { Http::DestroyHero::Serializer }, reader: :private
-  option :transaction, type: Interface(:call), reader: :private, default: -> do
-    CRUD::Delete::Transaction.include(Dry::Transaction(container: CRUD::Delete::Hero::Container)).new
+  option :serializer, type: Types::Interface(:serializer_for), default: -> { Http::DestroyHero::Serializer }, reader: :private
+  option :container, default: -> { Dry::Transaction(container: Delete::Hero::Container) }, reader: :private
+  option :transaction, type: Types::Interface(:call), reader: :private, default: -> do
+    Delete::Transaction.include(container).new
   end
   option :widget_heroes_distribution_listener,
-         type: Interface(:on_step_succeeded),
+         type: Types::Interface(:on_step_succeeded),
          default: -> { Http::DestroyHero::Listeners::Dashboard::Widgets::HeroesDistribution::Listener },
          reader: :private
   option :widget_heroes_working_listener,
-         type: Interface(:on_step_succeeded),
+         type: Types::Interface(:on_step_succeeded),
          default: -> { Http::DestroyHero::Listeners::Dashboard::Widgets::HeroesWorking::Listener },
          reader: :private
 
   Contract = Http::DestroyHero::Contract.new
 
   def call
-    transaction.subscribe(delete: widget_heroes_distribution_listener)
-    transaction.subscribe(delete: widget_heroes_working_listener)
+    transaction.subscribe(remove_from_index: widget_heroes_distribution_listener)
+    transaction.subscribe(remove_from_index: widget_heroes_working_listener)
     transaction.call(params) do
       it.failure :find do |f|
         [:not_found, f.message]
       end
 
-      it.failure :delete do |f|
+      it.failure :destroy do |f|
+        [:unprocessable_entity, f.message]
+      end
+
+      it.failure :remove_from_index do |f|
         [:unprocessable_entity, f.message]
       end
 

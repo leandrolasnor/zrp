@@ -2,10 +2,9 @@
 
 class Dashboard::Widgets::BattlesLineup::Monad
   include Dry::Monads[:try]
-  include Dry.Types()
   extend Dry::Initializer
 
-  option :model, type: Interface(:ms_raw_search), default: -> { Dashboard::Model::Threat }, reader: :private
+  option :model, type: Types::Interface(:ms_raw_search), default: -> { Dashboard::Model::Threat }, reader: :private
 
   def call
     Try do

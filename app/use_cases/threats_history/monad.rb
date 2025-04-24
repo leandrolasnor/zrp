@@ -2,10 +2,10 @@
 
 class ThreatsHistory::Monad
   include Dry::Monads[:try]
-  include Dry.Types()
+
   extend  Dry::Initializer
 
-  option :threat, type: Interface(:page), default: -> { ThreatsHistory::Model::Threat }, reader: :private
+  option :threat, type: Types::Interface(:page), default: -> { ThreatsHistory::Model::Threat }, reader: :private
 
   def call(page: 1, per_page: 25)
     Try do

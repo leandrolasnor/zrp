@@ -2,16 +2,15 @@
 
 class AllocateResource::Steps::Allocate
   include Dry::Monads[:result]
-  include Dry.Types()
   extend  Dry::Initializer
 
   option :tranks,
-         type: Instance(ActiveSupport::HashWithIndifferentAccess),
+         type: Types::Instance(ActiveSupport::HashWithIndifferentAccess),
          default: -> { AllocateResource::Model::Threat.ranks },
          reader: :private
 
   option :hranks,
-         type: Instance(ActiveSupport::HashWithIndifferentAccess),
+         type: Types::Instance(ActiveSupport::HashWithIndifferentAccess),
          default: -> { AllocateResource::Model::Hero.ranks },
          reader: :private
 

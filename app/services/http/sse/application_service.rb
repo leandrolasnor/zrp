@@ -3,11 +3,10 @@
 class Http::Sse::ApplicationService
   private_class_method :new
   include ActionController::Live
-  include Dry.Types()
   extend Dry::Initializer
 
-  param :params, type: Hash, reader: :private
-  option :sse, type: Interface(:write), reader: :private
+  param :params, type: Types::Hash, reader: :private
+  option :sse, type: Types::Interface(:write), reader: :private
 
   def self.call(response:, **args)
     response.headers['Content-Type'] = 'text/event-stream'

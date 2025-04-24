@@ -10,7 +10,7 @@ const HeroesWorking = props => {
   return (
     <Panel bodyFill>
       <Row>
-        <Col className='mt-3 ms-4' sm={8}>
+        <Col className='ms-4' sm={8}>
           <Progress.Circle percent={_.get(heroes_working, 'global', 0)} strokeColor="#ffdb58" />
         </Col>
         <Col className='mt-5' sm={3}>

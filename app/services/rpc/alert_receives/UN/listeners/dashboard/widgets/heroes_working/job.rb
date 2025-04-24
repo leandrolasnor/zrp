@@ -2,19 +2,18 @@
 
 module Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::HeroesWorking
   class Job
-    include Dry.Types()
     extend Dry::Initializer
 
-    option :monad, type: Interface(:call), default: -> {
+    option :monad, type: Types::Interface(:call), default: -> {
       Dashboard::Widgets::HeroesWorking::Monad.new
     }, reader: :private
-    option :heroes_working_listener, type: Interface(:on_heroes_working), default: -> {
+    option :heroes_working_listener, type: Types::Interface(:on_heroes_working), default: -> {
       Rpc::AlertReceives::UN::Listeners::Sneakers::Requeue::Listener.new
     }, reader: :private
     option :event, type: Dry::Types['string'], default: -> { 'WIDGET_HEROES_WORKING_FETCHED' }, reader: :private
     option :identifier, type: Dry::Types['string'], default: -> { 'token' }, reader: :private
     option :broadcast,
-           type: Instance(Proc),
+           type: Types::Instance(Proc),
            default: -> { proc { ActionCable.server.broadcast(identifier, { type: event, payload: it }) } },
            reader: :private
 

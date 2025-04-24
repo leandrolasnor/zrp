@@ -3,13 +3,12 @@
 class Dashboard::Monad
   include Dry::Events::Publisher[:metrics_fetched]
   include Dry::Monads[:try]
-  include Dry.Types()
   extend Dry::Initializer
 
   register_event('metrics.fetched')
 
   option :metrics,
-         type: Array,
+         type: Types::Array,
          default: -> {
                     [
                       Dashboard::Widgets::SuperHero::Monad.new,

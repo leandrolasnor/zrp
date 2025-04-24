@@ -2,10 +2,9 @@
 
 class Http::ApplicationService
   private_class_method :new
-  include Dry.Types()
   extend Dry::Initializer
 
-  param :params, type: Hash, reader: :private
+  param :params, type: Types::Hash, reader: :private
 
   def self.call(args)
     if defined?(self::Contract)

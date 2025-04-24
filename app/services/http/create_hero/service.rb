@@ -2,22 +2,25 @@
 
 module Http::CreateHero
   class Service < Http::ApplicationService
-    option :serializer, type: Interface(:serializer_for), default: -> { Serializer }, reader: :private
-    option :transaction, type: Interface(:call), reader: :private, default: -> do
-      CRUD::Create::Transaction.include(Dry::Transaction(container: CRUD::Create::Hero::Container)).new
-    end
+    option :serializer, type: Types::Interface(:serializer_for), default: -> { Serializer }, reader: :private
+    option :container, reader: :private, default: -> {
+      Dry::Transaction(container: Create::Hero::Container)
+    }
+    option :transaction, type: Types::Interface(:call), reader: :private, default: -> {
+      Create::Transaction.include(container).new
+    }
     option :widget_heroes_working_listener,
-           type: Interface(:on_step_succeeded),
+           type: Types::Interface(:on_step_succeeded),
            default: -> { Listeners::Dashboard::Widgets::HeroesWorking::Listener },
            reader: :private
     option :widget_heroes_distribution_listener,
-           type: Interface(:on_step_succeeded),
+           type: Types::Interface(:on_step_succeeded),
            default: -> { Listeners::Dashboard::Widgets::HeroesDistribution::Listener },
            reader: :private
 
     def call
-      transaction.subscribe(create: widget_heroes_working_listener)
-      transaction.subscribe(create: widget_heroes_distribution_listener)
+      transaction.subscribe(persist: widget_heroes_working_listener)
+      transaction.subscribe(persist: widget_heroes_distribution_listener)
       transaction.call(params) do
         it.failure :validate do |f|
           [:unprocessable_entity, f.errors.to_h]

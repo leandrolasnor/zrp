@@ -21,7 +21,7 @@ FactoryBot.define do
     end
 
     trait :create_hero do
-      initialize_with { CRUD::Create::Hero::Model::Hero.new(attributes) }
+      initialize_with { Create::Hero::Models::Hero.new(attributes) }
     end
 
     trait :threats_history do
@@ -29,7 +29,7 @@ FactoryBot.define do
     end
 
     trait :delete_hero do
-      initialize_with { CRUD::Delete::Hero::Model::Hero.new(attributes) }
+      initialize_with { Delete::Hero::Models::Hero.new(attributes) }
     end
   end
 end
