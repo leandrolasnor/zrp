@@ -70,13 +70,12 @@ module Rpc::AlertReceives::UN
     include Resque::Plugins::UniqueByArity.new(
       arity_for_uniqueness: 1,
       unique_at_runtime: true,
-      unique_in_queue: true
+      unique_in_queue: true,
+      lock_after_execution_period: 0 # seconds
     )
 
     private
 
-    def scarce?(f)
-      I18n.t(:insufficient_resources) == f.message
-    end
+    def scarce?(f) = I18n.t(:insufficient_resources) == f.message
   end
 end

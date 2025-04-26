@@ -21,7 +21,7 @@ module Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::ThreatsDisabled
     end
 
     @queue = :widget_threats_disabled
-    def self.perform = new.call
+    def self.perform(...) = new(...).call
     include Resque::Plugins::UniqueByArity.new(
       unique_at_runtime: true,
       unique_in_queue: true

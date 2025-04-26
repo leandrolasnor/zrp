@@ -20,7 +20,7 @@ class Http::CreateHero::Listeners::Dashboard::Widgets::HeroesDistribution::Job
   end
 
   @queue = :widget_heroes_distribution
-  def self.perform = new.call
+  def self.perform(...) = new(...).call
   include Resque::Plugins::UniqueByArity.new(
     unique_at_runtime: true,
     unique_in_queue: true

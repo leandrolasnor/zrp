@@ -9,8 +9,6 @@ class AllocateResource::Model::Battle < ApplicationRecord
   belongs_to :hero
   belongs_to :threat
 
-  def initializer = hero.touch
-
   private
 
   def calculator = @calculator ||= AllocateResource::DomainService::Calculator::Battle.new(self)
