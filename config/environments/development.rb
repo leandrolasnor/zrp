@@ -74,6 +74,9 @@ Rails.application.configure do
   config.time_zone = "Brasilia"
   config.active_record.default_timezone = :local
 
+  # Replace the default in-process and non-durable queuing backend for Active Job.
+  config.active_job.queue_adapter = :solid_queue
+
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 

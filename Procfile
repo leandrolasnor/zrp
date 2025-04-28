@@ -1,6 +1,7 @@
 rails: rails s -p 3000 -b 0.0.0.0 -P tmp/pids/rails.pid
 resque: COUNT=$(nproc) QUEUE=* rake resque:workers
 scheduler: rake resque:scheduler
+solid_queue: rails solid_queue:start
 cable: puma -p 28080 cable/config.ru
 gruf: gruf
 sneakers: sneakers work Processor --require ./sneakers/processor.rb

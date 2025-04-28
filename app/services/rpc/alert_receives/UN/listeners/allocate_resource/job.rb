@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Rpc::AlertReceives::UN
-  class Listeners::AllocateResource::Job
+module Rpc::AlertReceives::UN::Listeners
+  class AllocateResource::Job < ApplicationJob
     extend Dry::Initializer
 
     option :transaction, type: Types::Interface(:call), default: -> {
@@ -9,27 +9,28 @@ module Rpc::AlertReceives::UN
     }, reader: :private
     option :allocate_resource_listener,
            type: Types::Instance(Object),
-           default: -> { Listeners::AllocateResource::Listener.new }, reader: :private
+           default: -> { AllocateResource::Listener.new }, reader: :private
     option :deallocate_resource_listener,
            type: Types::Instance(Object),
-           default: -> { Listeners::DeallocateResource::Listener.new }, reader: :private
+           default: -> { DeallocateResource::Listener.new }, reader: :private
     option :widget_heroes_working_listener,
            type: Types::Instance(Object),
-           default: -> { Listeners::Dashboard::Widgets::HeroesWorking::Listener.new }, reader: :private
+           default: -> { Dashboard::Widgets::HeroesWorking::Listener.new }, reader: :private
     option :widget_battles_lineup_listener,
            type: Types::Instance(Object),
-           default: -> { Listeners::Dashboard::Widgets::BattlesLineup::Listener.new }, reader: :private
+           default: -> { Dashboard::Widgets::BattlesLineup::Listener.new }, reader: :private
     option :widget_average_score_listener,
            type: Types::Instance(Object),
-           default: -> { Listeners::Dashboard::Widgets::AverageScore::Listener.new }, reader: :private
+           default: -> { Dashboard::Widgets::AverageScore::Listener.new }, reader: :private
     option :widget_average_time_to_match_listener,
            type: Types::Instance(Object),
-           default: -> { Listeners::Dashboard::Widgets::AverageTimeToMatch::Listener.new }, reader: :private
+           default: -> { Dashboard::Widgets::AverageTimeToMatch::Listener.new }, reader: :private
     option :widget_super_hero_listener,
            type: Types::Instance(Object),
-           default: -> { Listeners::Dashboard::Widgets::SuperHero::Listener.new }, reader: :private
+           default: -> { Dashboard::Widgets::SuperHero::Listener.new }, reader: :private
 
-    def call(threat_id)
+    queue_as :critical
+    def perform(threat_id)
       transaction.operations[:notify].subscribe(allocate_resource_listener)
       transaction.operations[:notify].subscribe(deallocate_resource_listener)
       transaction.operations[:notify].subscribe(widget_heroes_working_listener)
@@ -46,14 +47,13 @@ module Rpc::AlertReceives::UN
 
           it.failure :matches do |f|
             Rails.logger.error(f.message)
-            time = scarce?(f) ? Resque.size(:matches) * 5 : 5
-            Resque.enqueue_at(time.seconds.from_now, self.class, threat_id)
+            self.class.set(wait: 1.minute).perform_later(threat_id)
             REDIS.with { it.set('SNEAKERS_REQUEUE', scarce?(f)) }
           end
 
           it.failure :allocate do |f|
             Rails.logger.error(f.message)
-            Resque.enqueue_at(5.seconds.from_now, self.class, threat_id)
+            self.class.set(wait: 5.seconds).perform_later(threat_id)
           end
 
           it.failure do |f|
@@ -64,15 +64,6 @@ module Rpc::AlertReceives::UN
         end
       end
     end
-
-    @queue = :matches
-    def self.perform(threat_id) = new.call(threat_id)
-    include Resque::Plugins::UniqueByArity.new(
-      arity_for_uniqueness: 1,
-      unique_at_runtime: true,
-      unique_in_queue: true,
-      lock_after_execution_period: 0 # seconds
-    )
 
     private
 

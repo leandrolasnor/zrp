@@ -42,7 +42,7 @@ gem 'resque', require: 'resque/server'
 
 gem 'resque-scheduler'
 
-gem 'resque-unique_by_arity'
+gem 'resque-unique_by_arity', github: 'resque/resque-unique_by_arity', branch: :main
 
 gem 'pg'
 

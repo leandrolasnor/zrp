@@ -1,0 +1,29 @@
+default: &default
+  dispatchers:
+    - polling_interval: 1
+      batch_size: 500
+  workers:
+    - queues: critical
+      threads: 3
+      processes: 1
+      polling_interval: 0.1
+    - queues: default
+      threads: 2
+      processes: 2
+      polling_interval: 0.5
+    - queues: low
+      threads: 1
+      processes: 1
+      polling_interval: 1
+
+development:
+  <<: *default
+  database: <%= ENV["DB_NAME"] %>
+
+test:
+  <<: *default
+  database: db/test.sqlite3
+
+production:
+  <<: *default
+  database: db/production.sqlite3
