@@ -9,18 +9,10 @@ module Http::CreateHero
     option :transaction, type: Types::Interface(:call), reader: :private, default: -> {
       Create::Transaction.include(container).new
     }
-    option :widget_heroes_working_listener,
-           type: Types::Interface(:on_step_succeeded),
-           default: -> { Listeners::Dashboard::Widgets::HeroesWorking::Listener },
-           reader: :private
-    option :widget_heroes_distribution_listener,
-           type: Types::Interface(:on_step_succeeded),
-           default: -> { Listeners::Dashboard::Widgets::HeroesDistribution::Listener },
-           reader: :private
+    option :listener, type: Types::Interface(:on_step_succeeded), default: -> { Listener }, reader: :private
 
     def call
-      transaction.subscribe(persist: widget_heroes_working_listener)
-      transaction.subscribe(persist: widget_heroes_distribution_listener)
+      transaction.subscribe(persist: listener)
       transaction.call(params) do
         it.failure :validate do |f|
           [:unprocessable_entity, f.errors.to_h]

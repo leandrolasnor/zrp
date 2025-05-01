@@ -1,34 +1,24 @@
 # frozen_string_literal: true
 
-module Rpc::AlertReceives::UN
-  class Service < Rpc::ApplicationService
-    option :transaction, type: Types::Interface(:call), default: -> {
-      AlertReceives::UN::Transaction.new
-    }, reader: :private
-    option :listeners,
-           type: Types::Array,
-           reader: :private,
-           default: -> {
-             [
-               Listeners::AllocateResource::Listener.new,
-               Listeners::Dashboard::Widgets::ThreatsDisabled::Listener.new,
-               Listeners::Dashboard::Widgets::ThreatsDistribution::Listener.new
-             ]
-           }
+module Rpc
+  module AlertReceives::UN
+    class Service < Rpc::ApplicationService
+      option :transaction, type: Types::Interface(:call), default: -> {
+        ::AlertReceives::UN::Transaction.new
+      }, reader: :private
+      option :listener, type: Types::Interface(:on_threat_created), default: -> { Listener.new }, reader: :private
 
-    def call
-      listeners.each { transaction.operations[:notify].subscribe it }
-      transaction.call(params) do
-        it.failure :validate do |f|
-          raise StandardError.new(f.errors)
-        end
-
-        it.failure :create do |f|
-          raise StandardError.new(f.errors)
-        end
-
-        it.success do |r|
-          ::Rpc::Threat.new(name: r.name, rank: r.rank, status: r.status, lat: r.lat.to_f, lng: r.lng.to_f)
+      def call
+        transaction.operations[:notify].subscribe(listener)
+        transaction.call(params) do
+          it.failure { |f| raise StandardError.new(f.errors) }
+          it.success do |r|
+            ::Rpc::Threat.new(
+              status: r.status,
+              name: r.name, rank: r.rank,
+              lat: r.lat.to_f, lng: r.lng.to_f
+            )
+          end
         end
       end
     end

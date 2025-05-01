@@ -19,7 +19,6 @@ class AllocateResource::Steps::Allocate
       battle.hero.with_lock do
         battle.threat.with_lock do
           [battle.hero, battle.threat].each(&:working!)
-          battle.hero.touch
           battle.save!
         end
       end

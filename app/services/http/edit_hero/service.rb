@@ -9,13 +9,10 @@ module Http::EditHero
     option :transaction, type: Types::Interface(:call), reader: :private, default: -> do
       Update::Transaction.include(container).new
     end
-    option :widget_heroes_distribution_listener,
-           type: Types::Interface(:on_step_succeeded),
-           default: -> { Listeners::Dashboard::Widgets::HeroesDistribution::Listener },
-           reader: :private
+    option :listener, type: Types::Interface(:on_step_succeeded), default: -> { Listener }, reader: :private
 
     def call
-      transaction.subscribe(update: widget_heroes_distribution_listener)
+      transaction.subscribe(update: listener)
       transaction.call(params) do
         it.failure :validate do |f|
           [:unprocessable_entity, f.errors.to_h]
