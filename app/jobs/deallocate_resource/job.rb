@@ -1,30 +1,28 @@
 # frozen_string_literal: true
 
 module DeallocateResource
-  class Job
+  class Service
     extend Dry::Initializer
 
+    param :threat_id, type: Types::Integer, required: true, reader: :private
     option :monad, type: Types::Interface(:call), default: -> { Monad.new }, reader: :private
     option :listener, type: Types::Interface(:on_resource_deallocated), default: -> { Listener.new }, reader: :private
 
-    def call(threat_id)
+    def call
       monad.subscribe(listener)
       ApplicationRecord.connection_pool.with_connection do
         res = monad.call(threat_id)
 
         if res.failure?
           Rails.logger.error(res.exception)
-          Resque.enqueue(self.class, threat_id)
+          Job.perform_later(threat_id)
         end
       end
     end
+  end
 
-    @queue = :allocated
-    def self.perform(threat_id) = new.call(threat_id)
-    include Resque::Plugins::UniqueByArity.new(
-      arity_for_uniqueness: 1,
-      unique_in_queue: true,
-      unique_at_runtime: true
-    )
+  class Job < ApplicationJob
+    queue_as :default
+    def perform(threat_id) = Service.new(threat_id).call
   end
 end

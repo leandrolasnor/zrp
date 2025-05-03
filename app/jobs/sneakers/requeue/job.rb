@@ -1,15 +1,19 @@
 # frozen_string_literal: true
 
 module Sneakers::Requeue
-  class Job
-    def call(busy) = REDIS.with { it.set('SNEAKERS_REQUEUE', busy >= ENV.fetch('HWP_LIMIT', 80).to_i) }
+  class Service
+    extend Dry::Initializer
 
-    @queue = :sneakers_requeue
-    def self.perform(metrics) = new.call(metrics['global'].to_i)
-    include Resque::Plugins::UniqueByArity.new(
-      arity_for_uniqueness: 1,
-      unique_at_runtime: true,
-      unique_in_queue: true
-    )
+    param :metrics, type: Types::Hash, required: true, reader: :private
+    option :heroes_working_percent, default: -> { metrics['global'].to_i }, reader: :private,
+                                    type: Types::Coercible::Integer
+
+    def call = REDIS.with { it.set('SNEAKERS_REQUEUE', heroes_working_percent >= ENV.fetch('HWP_LIMIT', 80).to_i) }
+  end
+
+  class Job < ApplicationJob
+    queue_as :critical
+    unique :until_and_while_executing, lock_ttl: 5.seconds
+    def perform(metrics) = Service.new(metrics).call
   end
 end

@@ -3,9 +3,9 @@
 module Rpc::AlertReceives::UN
   class Listener
     def on_threat_created(e)
-      Resque.enqueue(AllocateResource::Job, e[:threat].id)
-      Resque.enqueue(Dashboard::Widgets::ThreatsDisabled::Job)
-      Resque.enqueue(Dashboard::Widgets::ThreatsDistribution::Job)
+      AllocateResource::Job.perform_later(e[:threat].id)
+      Dashboard::Widgets::ThreatsDisabled::Job.perform_later
+      Dashboard::Widgets::ThreatsDistribution::Job.perform_later
     end
   end
 end

@@ -1,5 +1,5 @@
 rails: rails s -p 3000 -b 0.0.0.0 -P tmp/pids/rails.pid
-resque: COUNT=$(nproc) QUEUE=* rake resque:workers
+resque: COUNT=$(nproc) QUEUE=critical,default,low_priority rake resque:workers
 scheduler: rake resque:scheduler
 cable: puma -p 28080 cable/config.ru
 gruf: gruf

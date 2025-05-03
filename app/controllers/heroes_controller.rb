@@ -37,7 +37,10 @@ class HeroesController < BaseController
   private
 
   def create_params
-    params.required(:hero).permit(:name, :rank, :lat, :lng)
+    params.required(:hero).permit(
+      :name, :rank,
+      :lat, :lng
+    )
   end
 
   def list_params
@@ -45,15 +48,20 @@ class HeroesController < BaseController
   end
 
   def search_params
-    params.permit(:query, :page, :per_page, sort: [], filter: [])
-      .with_defaults(
-        filter: [],
-        query: ''
-      )
+    params.permit(
+      :query,
+      :page, :per_page,
+      filter: [], sort: []
+    )
   end
 
   def edit_params
-    params.require(:hero).permit(:id, :name, :rank, :lat, :lng)
+    params.expect(
+      hero: [
+        :id, :name, :rank,
+        :lat, :lng
+      ]
+    )
   end
 
   def destroy_params

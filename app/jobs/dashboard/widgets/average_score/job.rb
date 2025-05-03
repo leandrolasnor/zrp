@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Dashboard::Widgets::AverageScore
-  class Job
+  class Service
     extend Dry::Initializer
 
     option :monad, type: Types::Interface(:call), default: -> { Monad.new }, reader: :private
@@ -17,12 +17,11 @@ module Dashboard::Widgets::AverageScore
       broadcast.(res.value!) if res.success?
       Rails.logger.error(res.exception) if res.failure?
     end
+  end
 
-    @queue = :widget_average_score
-    def self.perform(...) = new(...).call
-    include Resque::Plugins::UniqueByArity.new(
-      unique_at_runtime: true,
-      unique_in_queue: true
-    )
+  class Job < ApplicationJob
+    queue_as :low_priority
+    unique :until_and_while_executing, lock_ttl: 5.seconds
+    def perform = Service.new.call
   end
 end

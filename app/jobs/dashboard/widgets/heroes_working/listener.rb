@@ -2,6 +2,6 @@
 
 module Dashboard::Widgets::HeroesWorking
   class Listener
-    def on_heroes_working(e) = Resque.enqueue(Sneakers::Requeue::Job, e[:heroes_working_metrics])
+    def on_heroes_working(e) = Sneakers::Requeue::Job.perform_later(e[:heroes_working_metrics])
   end
 end

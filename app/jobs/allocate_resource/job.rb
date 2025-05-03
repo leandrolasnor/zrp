@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 module AllocateResource
-  class Job
+  class Service
     extend Dry::Initializer
 
+    param :threat_id, type: Types::Coercible::Integer, required: true, reader: :private
     option :transaction, type: Types::Interface(:call), default: -> { Transaction.new }, reader: :private
     option :listener, default: -> { Listener.new }, reader: :private,
                       type: Types::Interface(
@@ -12,7 +13,7 @@ module AllocateResource
                         :on_resource_allocated
                       )
 
-    def call(threat_id)
+    def call
       transaction.operations[:notify].subscribe(listener)
       transaction.operations[:matches].subscribe(listener)
       ApplicationRecord.connection_pool.with_connection do
@@ -22,8 +23,10 @@ module AllocateResource
         end
       end
     end
+  end
 
-    @queue = :matches
-    def self.perform(threat_id) = new.call(threat_id)
+  class Job < ApplicationJob
+    queue_as :default
+    def perform(threat_id) = Service.new(threat_id).call
   end
 end

@@ -13,7 +13,15 @@ FileUtils.chdir APP_ROOT do
   # This script is idempotent, so that you can run it at any time and get an expectable outcome.
   # Add necessary setup steps to this file.
 
+  puts "\n== REDIS FLUSHALL =="
+  system! "bundle exec rails redis:flushall"
+  print " Done"
+  puts "\n== Clear Resque =="
   system! "bundle exec rails resque:clear"
+  print " Done"
+  puts "\n== Clear Log =="
+  system! "bundle exec rails log:clear"
+  print " Done"
 
   puts "\n== Preparing database =="
   system! "bundle exec rails meilisearch:clear_indexes"

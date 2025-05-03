@@ -60,6 +60,8 @@ gem 'overmind'
 
 gem 'aasm'
 
+gem 'activejob-uniqueness'
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 

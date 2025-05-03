@@ -3,10 +3,10 @@
 module Http::ThreatsHistory
   class Service < Http::ApplicationService
     option :serializer, type: Types::Interface(:serializer_for), default: -> { Serializer }, reader: :private
-    option :monad, type: Types::Interface(:call), default: -> { ThreatsHistory::Monad.new }, reader: :private
+    option :monad, type: Types::Interface(:call), default: -> { ThreatsHistory::Monad.new(**params) }, reader: :private
 
     def call
-      res = monad.call(**params.symbolize_keys)
+      res = monad.call
 
       return [:ok, res.value!, serializer] if res.success?
 

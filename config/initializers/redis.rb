@@ -17,6 +17,4 @@ REDIS_JOBS = ConnectionPool.new(size: 4) do
   )
 end
 
-REDIS_JOBS.with do
-  Resque.redis = _1
-end
+REDIS_JOBS.with { Resque.redis = it }

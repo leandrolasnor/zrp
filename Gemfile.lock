@@ -54,6 +54,9 @@ GEM
     activejob (8.0.2)
       activesupport (= 8.0.2)
       globalid (>= 0.3.6)
+    activejob-uniqueness (0.4.0)
+      activejob (>= 4.2, < 8.1)
+      redlock (>= 2.0, < 3)
     activemodel (8.0.2)
       activesupport (= 8.0.2)
     activerecord (8.0.2)
@@ -401,6 +404,8 @@ GEM
       connection_pool
     redis-namespace (1.11.0)
       redis (>= 4)
+    redlock (2.0.6)
+      redis-client (>= 0.14.1, < 1.0.0)
     regexp_parser (2.10.0)
     reline (0.6.1)
       io-console (~> 0.5)
@@ -613,6 +618,7 @@ PLATFORMS
 DEPENDENCIES
   aasm
   active_model_serializers
+  activejob-uniqueness
   benchmark
   bootsnap
   brakeman
