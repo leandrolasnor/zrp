@@ -6,7 +6,7 @@ module Http::DestroyHero
 
     def on_step_succeeded(_)
       Dashboard::Widgets::HeroesWorking::Job.perform_later
-      Resque.enqueue(Dashboard::Widgets::HeroesDistribution::Job)
+      Dashboard::Widgets::HeroesDistribution::Job.perform_later
     end
   end
 end

@@ -6,10 +6,8 @@ module DeallocateResource
 
     param :threat_id, type: Types::Integer, required: true, reader: :private
     option :monad, type: Types::Interface(:call), default: -> { Monad.new }, reader: :private
-    option :listener, type: Types::Interface(:on_resource_deallocated), default: -> { Listener.new }, reader: :private
 
     def call
-      monad.subscribe(listener)
       ApplicationRecord.connection_pool.with_connection do
         res = monad.call(threat_id)
 

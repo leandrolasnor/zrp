@@ -21,7 +21,7 @@ module Dashboard::Widgets::BattlesLineup
 
   class Job < ApplicationJob
     queue_as :critical
-    unique :until_and_while_executing, lock_ttl: 5.seconds
+    unique :until_and_while_executing, lock_ttl: 1.second
     def perform = Service.new.call
   end
 end

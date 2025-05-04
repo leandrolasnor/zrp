@@ -3,5 +3,5 @@
 module Http::EditHero::Listener
   module_function
 
-  def on_step_succeeded(_) = Resque.enqueue(Dashboard::Widgets::HeroesDistribution::Job)
+  def on_step_succeeded(_) = Dashboard::Widgets::HeroesDistribution::Job.perform_later
 end

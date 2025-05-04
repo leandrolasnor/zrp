@@ -2,7 +2,7 @@
 
 module Http::SearchHeroes
   class Service < Http::ApplicationService
-    option :monad, type: Types::Interface(:call), default: -> { SearchHeroes::Monad.new(params) }, reader: :private
+    option :monad, type: Types::Interface(:call), default: -> { SearchHeroes::Monad.new(**params) }, reader: :private
 
     def call
       res = monad.call

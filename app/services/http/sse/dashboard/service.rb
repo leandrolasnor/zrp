@@ -4,7 +4,7 @@ class Http::Sse::Dashboard::Service < Http::Sse::ApplicationService
   option :monad, type: Types::Interface(:call), default: -> { Dashboard::Monad.new }, reader: :private
 
   def call
-    monad.subscribe('metrics.fetched') do |event|
+    AppEvents.subscribe('metrics.fetched') do |event|
       sse.write({ type: 'METRICS_FETCHED', payload: event[:payload] })
     end
     res = monad.()

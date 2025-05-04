@@ -2,9 +2,8 @@
 
 module AlertReceives::UN
   class Steps::Notify
-    include Dry::Events::Publisher[:create_threat]
-
-    register_event 'threat.created'
-    def call(record) = record.enabled? && publish('threat.created', threat: record)
+    def call(threat)
+      AppEvents.publish('threat.created', threat:) if threat.enabled?
+    end
   end
 end

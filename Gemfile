@@ -42,7 +42,7 @@ gem 'resque', require: 'resque/server'
 
 gem 'resque-scheduler'
 
-gem 'resque-unique_by_arity'
+gem 'activejob-uniqueness'
 
 gem 'pg'
 
@@ -59,8 +59,6 @@ gem 'dotenv'
 gem 'overmind'
 
 gem 'aasm'
-
-gem 'activejob-uniqueness'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"

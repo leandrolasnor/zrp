@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 REDIS = ConnectionPool.new(size: 4) do
   Redis.new(
     host: ENV.fetch('REDIS_HOST', 'localhost'),

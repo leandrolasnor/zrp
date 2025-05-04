@@ -1,5 +1,3 @@
 # frozen_string_literal: true
 
-Rails.application.console do
-  $stdout.clear_screen
-end
+Rails.application.console { $stdout.clear_screen }

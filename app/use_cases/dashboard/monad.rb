@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 class Dashboard::Monad
-  include Dry::Events::Publisher[:metrics_fetched]
   include Dry::Monads[:try]
   extend Dry::Initializer
-
-  register_event('metrics.fetched')
 
   option :metrics,
          type: Types::Array,
@@ -29,7 +26,7 @@ class Dashboard::Monad
         name = it.class.name.split('::').third.underscore.to_sym
         res = it.()
         payload = res.success? ? [name, res.value!] : [name, nil]
-        publish('metrics.fetched', payload: [payload].to_h) if payload.second.present?
+        AppEvents.publish('metrics.fetched', payload: [payload].to_h) if payload.second.present?
         payload
       end
 

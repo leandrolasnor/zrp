@@ -6,10 +6,8 @@ module Rpc
       option :transaction, type: Types::Interface(:call), default: -> {
         ::AlertReceives::UN::Transaction.new
       }, reader: :private
-      option :listener, type: Types::Interface(:on_threat_created), default: -> { Listener.new }, reader: :private
 
       def call
-        transaction.operations[:notify].subscribe(listener)
         transaction.call(params) do
           it.failure { |f| raise StandardError.new(f.errors) }
           it.success do |r|

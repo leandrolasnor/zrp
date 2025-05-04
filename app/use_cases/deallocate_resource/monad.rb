@@ -2,10 +2,7 @@
 
 class DeallocateResource::Monad
   include Dry::Monads[:try]
-  include Dry::Events::Publisher[:resource_deallocated]
   extend Dry::Initializer
-
-  register_event 'resource.deallocated'
 
   option :threat, type: Types::Interface(:find), default: -> { DeallocateResource::Model::Threat }, reader: :private
 
@@ -16,7 +13,7 @@ class DeallocateResource::Monad
         record.touch
         record.disabled!
         record.heroes.lock.each(&:enabled!)
-        publish('resource.deallocated', threat: record)
+        AppEvents.publish('resource.deallocated', threat: record)
         record
       end
     end

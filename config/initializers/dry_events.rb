@@ -1,0 +1,55 @@
+# frozen_string_literal: true
+
+Rails.configuration.to_prepare do
+  Dry::Events::Publisher.registry.clear
+end
+
+class AppEvents
+  private_class_method :new
+
+  def self.publish(...) = self.instance.publish(...)
+  def self.subscribe(...) = self.instance.subscribe(...)
+
+  def self.instance
+    @instance ||= new
+  end
+
+  include Dry::Events::Publisher[:app]
+  EVENTS = [
+    'insufficient.resources', 'resource.allocated', 'resource.not.allocated',
+    'resource.deallocated', 'threat.created', 'metrics.fetched'
+  ].freeze
+
+  EVENTS.each { register_event it }
+end
+
+AppEvents.subscribe('threat.created') do
+  AllocateResource::Job.perform_later(it[:threat].id)
+  Dashboard::Widgets::ThreatsDisabled::Job.perform_later
+  Dashboard::Widgets::ThreatsDistribution::Job.perform_later
+end
+
+AppEvents.subscribe('insufficient.resources') do
+  REDIS.with { |redis| redis.set('SNEAKERS_REQUEUE', true, ex: 60) }
+  AllocateResource::Job.set(wait: 1.minute).perform_later(it[:threat].id)
+end
+
+AppEvents.subscribe('resource.allocated') do
+  Dashboard::Widgets::HeroesWorking::Job.perform_later
+  Dashboard::Widgets::ThreatsDisabled::Job.perform_later
+end
+
+AppEvents.subscribe('resource.allocated') do
+  DeallocateResource::Job.
+    set(wait_until: it[:threat].battles.first.finished_at).
+    perform_later(it[:threat].id)
+  Dashboard::Widgets::AverageScore::Job.perform_later
+  Dashboard::Widgets::AverageTimeToMatch::Job.perform_later
+  Dashboard::Widgets::BattlesLineup::Job.perform_later
+  Dashboard::Widgets::HeroesWorking::Job.perform_later
+  Dashboard::Widgets::SuperHero::Job.perform_later
+end
+
+AppEvents.subscribe('resource.not.allocated') do
+  AllocateResource::Job.perform_later(it[:threat].id)
+end

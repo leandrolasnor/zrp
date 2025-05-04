@@ -5,7 +5,6 @@ module Dashboard::Widgets::HeroesWorking
     extend Dry::Initializer
 
     option :monad, type: Types::Interface(:call), default: -> { Monad.new }, reader: :private
-    option :listener, type: Types::Interface(:on_heroes_working), default: -> { Listener.new }, reader: :private
     option :event, type: Types::Coercible::String, default: -> { 'WIDGET_HEROES_WORKING_FETCHED' }, reader: :private
     option :identifier, type: Types::Coercible::String, default: -> { 'token' }, reader: :private
     option :broadcast,
@@ -14,7 +13,6 @@ module Dashboard::Widgets::HeroesWorking
            reader: :private
 
     def call
-      monad.subscribe(listener)
       res = monad.()
       broadcast.(res.value!) if res.success?
       Rails.logger.error(res.exception) if res.failure?
@@ -23,7 +21,7 @@ module Dashboard::Widgets::HeroesWorking
 
   class Job < ApplicationJob
     queue_as :critical
-    unique :until_and_while_executing, lock_ttl: 5.seconds
+    unique :until_and_while_executing, lock_ttl: 1.second
     def perform = Service.new.call
   end
 end

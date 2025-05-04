@@ -12,8 +12,8 @@ AllCops:
 
   UseCache: false
 
-  Exclude:
-    - config/**/*
+  # Exclude:
+  #   - config/**/*
 
 Layout/TrailingWhitespace:
   Enabled: true
