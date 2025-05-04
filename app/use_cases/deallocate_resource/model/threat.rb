@@ -3,7 +3,7 @@
 class DeallocateResource::Model::Threat < ApplicationRecord
   include Enums::Threat::Status
   include Enums::Threat::Rank
-  include MeiliSearch::Rails
+  include Meilisearch::Rails
   include Indexes::Threat::Meilisearch
 
   has_many :battles

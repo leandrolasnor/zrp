@@ -5,7 +5,7 @@ class Http::Sse::Dashboard::Service < Http::Sse::ApplicationService
 
   def call
     AppEvents.subscribe('metrics.fetched') do |event|
-      sse.write({ type: 'METRICS_FETCHED', payload: event[:payload] })
+      sse.write(type: 'METRICS_FETCHED', payload: event.payload)
     end
     res = monad.()
 

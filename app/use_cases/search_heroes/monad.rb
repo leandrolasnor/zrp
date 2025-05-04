@@ -12,7 +12,7 @@ class SearchHeroes::Monad
   option :hero, type: Types::Interface(:ms_raw_search), default: -> { SearchHeroes::Model::Hero }, reader: :private
 
   def call
-    Try[MeiliSearch::ApiError] do
+    Try[Meilisearch::ApiError] do
       hero.ms_raw_search(query, filter: filter, page: page, hits_per_page: per_page, sort: sort)
     end
   end

@@ -12,9 +12,10 @@ class Http::ApplicationService
       return [:unprocessable_entity, args.errors.to_h] if args.failure?
     end
 
-    new(args.to_h).call
+    new(args.to_h.symbolize_keys).call
   rescue StandardError => error
     debugger if Rails.env.test?
+    Rails.logger.info(args)
     Rails.logger.error(error)
     [:internal_server_error]
   end

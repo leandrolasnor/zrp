@@ -5,6 +5,6 @@ class Delete::Hero::Models::Hero < ApplicationRecord
 
   include Enums::Hero::Rank
   include Enums::Hero::Status
-  include MeiliSearch::Rails
+  include Meilisearch::Rails
   include Indexes::Hero::Meilisearch
 end

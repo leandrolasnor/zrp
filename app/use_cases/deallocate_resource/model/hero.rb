@@ -3,6 +3,6 @@
 class DeallocateResource::Model::Hero < ApplicationRecord
   include Enums::Hero::Status
   include Enums::Hero::Rank
-  include MeiliSearch::Rails
+  include Meilisearch::Rails
   include Indexes::Hero::Meilisearch
 end

@@ -16,13 +16,13 @@ class Http::Sse::ApplicationService
     if defined?(self::Contract)
       contract = self::Contract.call(args.to_h)
       if contract.failure?
-        sse.write({ type: 'CONTRACT_ERROR', payload: contract.errors.to_h })
+        sse.write(type: 'CONTRACT_ERROR', payload: contract.errors.to_h)
         sse.close
         return
       end
     end
 
-    new(args, sse: sse).call
+    new(args, sse:).call
   rescue ActionController::Live::ClientDisconnected
     sse.close
   rescue StandardError => error

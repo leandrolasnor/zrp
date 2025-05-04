@@ -6,7 +6,7 @@ module Http::ShowHero
     option :monad, type: Types::Interface(:call), default: -> { Read::Monad.new(:hero, params[:id]) }, reader: :private
 
     def call
-      res = monad.call(params[:id])
+      res = monad.call
 
       return [:ok, res.value!, serializer] if res.success?
 

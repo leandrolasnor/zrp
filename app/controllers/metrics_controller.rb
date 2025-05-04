@@ -2,6 +2,6 @@
 
 class MetricsController < BaseController
   def dashboard
-    Http::Sse::Dashboard::Service.(response: response)
+    Http::Sse::Dashboard::Service.(response:)
   end
 end
