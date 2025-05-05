@@ -5,16 +5,12 @@ Rails.configuration.to_prepare do
 end
 
 class AppEvents
-  private_class_method :new
+  include Dry::Events::Publisher[:app]
+  include Singleton
 
   def self.publish(...) = self.instance.publish(...)
   def self.subscribe(...) = self.instance.subscribe(...)
 
-  def self.instance
-    @instance ||= new
-  end
-
-  include Dry::Events::Publisher[:app]
   EVENTS = [
     'insufficient.resources', 'resource.allocated', 'resource.not.allocated',
     'resource.deallocated', 'threat.created', 'metrics.fetched'
@@ -34,7 +30,7 @@ AppEvents.subscribe('insufficient.resources') do
   AllocateResource::Job.set(wait: 1.minute).perform_later(it[:threat].id)
 end
 
-AppEvents.subscribe('resource.allocated') do
+AppEvents.subscribe('resource.deallocated') do
   Dashboard::Widgets::HeroesWorking::Job.perform_later
   Dashboard::Widgets::ThreatsDisabled::Job.perform_later
 end

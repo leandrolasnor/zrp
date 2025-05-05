@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 RSpec.describe ThreatsHistory::Monad do
-  let(:call) { subject.(page: page, per_page: per_page) }
+  let(:call) { described_class.new(page: page, per_page: per_page).call }
 
   describe '.call' do
     let(:page) { 1 }

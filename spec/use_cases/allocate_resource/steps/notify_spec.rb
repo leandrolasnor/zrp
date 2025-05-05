@@ -9,24 +9,24 @@ RSpec.describe AllocateResource::Steps::Notify do
     context 'when threat is enabled' do
       before do
         threat.enabled!
-        allow(subject).to receive(:publish).with('resource.not.allocated', threat: threat)
+        allow(AppEvents).to receive(:publish).with('resource.not.allocated', threat: threat)
         call
       end
 
       it 'must be able to notify with resource.not.allocated event' do
-        expect(subject).to have_received(:publish).with('resource.not.allocated', threat: threat)
+        expect(AppEvents).to have_received(:publish).with('resource.not.allocated', threat: threat)
       end
     end
 
     context 'when threat is working' do
       before do
         threat.working!
-        allow(subject).to receive(:publish).with('resource.allocated', threat: threat)
+        allow(AppEvents).to receive(:publish).with('resource.allocated', threat: threat)
         call
       end
 
       it 'must be able to notify with resource.allocated event' do
-        expect(subject).to have_received(:publish).with('resource.allocated', threat: threat)
+        expect(AppEvents).to have_received(:publish).with('resource.allocated', threat: threat)
       end
     end
   end

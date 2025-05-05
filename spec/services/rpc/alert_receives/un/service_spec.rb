@@ -5,10 +5,6 @@ RSpec.describe Rpc::AlertReceives::UN::Service do
   describe '#call' do
     subject { described_class.call(request.message.to_h) }
 
-    let(:allocate_resource_job) { Rpc::AlertReceives::UN::Listeners::AllocateResource::Job }
-    let(:threat_disabled_job) { Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::ThreatsDisabled::Job }
-    let(:threat_distribution_job) { Rpc::AlertReceives::UN::Listeners::Dashboard::Widgets::ThreatsDistribution::Job }
-
     let(:request) do
       Gruf::Controllers::Request.new(
         method_key: :handle,
@@ -33,19 +29,18 @@ RSpec.describe Rpc::AlertReceives::UN::Service do
         end
 
         before do
-          allow(Resque).to receive(:enqueue).with(allocate_resource_job, kind_of(Integer))
-          allow(threat_disabled_job).to receive(:perform)
-          allow(Resque).to receive(:enqueue).with(threat_distribution_job)
-          allow(Resque).to receive(:size).with(anything).and_return(0)
+          allow(AllocateResource::Job).to receive(:perform_later).with(kind_of(Integer))
+          allow(Dashboard::Widgets::ThreatsDisabled::Job).to receive(:perform_later)
+          allow(Dashboard::Widgets::ThreatsDistribution::Job).to receive(:perform_later)
         end
 
         it 'must be able to return a Rpc::Threat instance' do
           expect(subject).to be_a(Rpc::Threat)
           expect(subject.lat).to eq(params.dig(:location, :lat))
           expect(subject.lng).to eq(params.dig(:location, :lng))
-          expect(Resque).to have_received(:enqueue).with(allocate_resource_job, kind_of(Integer))
-          expect(threat_disabled_job).to have_received(:perform)
-          expect(Resque).to have_received(:enqueue).with(threat_distribution_job)
+          expect(AllocateResource::Job).to have_received(:perform_later).with(kind_of(Integer))
+          expect(Dashboard::Widgets::ThreatsDisabled::Job).to have_received(:perform_later)
+          expect(Dashboard::Widgets::ThreatsDistribution::Job).to have_received(:perform_later)
         end
       end
     end
@@ -63,14 +58,16 @@ RSpec.describe Rpc::AlertReceives::UN::Service do
       end
 
       before do
-        allow(Resque).to receive(:enqueue).with(allocate_resource_job, kind_of(Integer))
-        allow(Resque).to receive(:enqueue_at).with(duck_type(:to_time), threat_disabled_job)
+        allow(AllocateResource::Job).to receive(:perform_later).with(kind_of(Integer))
+        allow(Dashboard::Widgets::ThreatsDisabled::Job).to receive(:perform_later)
+        allow(Dashboard::Widgets::ThreatsDistribution::Job).to receive(:perform_later)
       end
 
       it 'must be able to raise a exception' do
         expect { subject }.to raise_error(StandardError)
-        expect(Resque).not_to have_received(:enqueue).with(allocate_resource_job, kind_of(Integer))
-        expect(Resque).not_to have_received(:enqueue_at).with(duck_type(:to_time), threat_disabled_job)
+        expect(AllocateResource::Job).not_to have_received(:perform_later).with(kind_of(Integer))
+        expect(Dashboard::Widgets::ThreatsDisabled::Job).not_to have_received(:perform_later)
+        expect(Dashboard::Widgets::ThreatsDistribution::Job).not_to have_received(:perform_later)
       end
     end
   end

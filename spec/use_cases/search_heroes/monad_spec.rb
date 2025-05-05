@@ -3,20 +3,20 @@
 require 'rails_helper'
 RSpec.describe SearchHeroes::Monad do
   let(:call) do
-    subject.(
+    described_class.new(
       query: query,
       page: page,
       per_page: per_page,
       sort: sort,
       filter: filter
-    )
+    ).call
   end
 
   describe '.call' do
     let(:query) { 'oi' }
     let(:page) { 1 }
     let(:per_page) { 2 }
-    let(:sort) { 'name:asc' }
+    let(:sort) { ['name:asc'] }
     let(:filter) { [] }
 
     before do
