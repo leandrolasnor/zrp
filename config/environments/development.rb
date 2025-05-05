@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
@@ -57,6 +59,12 @@ Rails.application.configure do
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
+
+  config.logger = ActiveSupport::Logger.new(
+    Rails.root.join('log', 'env', Rails.env, 'file.log'),
+    100, # número de arquivos antigos para manter (aqui, 100 backups)
+    1 * 1024 * 1024 # tamanho máximo de 1MB (1 * 1024 * 1024 bytes)
+  )
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
