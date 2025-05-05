@@ -1,5 +1,5 @@
 # Simulador de batalhas
-![plot](./zrp-diagram.png)
+![plot](./zrp-workflow.png)
 ## [Leia o enunciado](https://zrp.github.io/challenges/dev/)
 
 `Docker` `Git` `Visual Studio Code`
