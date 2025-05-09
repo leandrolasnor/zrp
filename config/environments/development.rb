@@ -61,9 +61,9 @@ Rails.application.configure do
   config.active_support.deprecation = :log
 
   config.logger = ActiveSupport::Logger.new(
-    Rails.root.join('log', 'env', Rails.env, 'file.log'),
-    100, # número de arquivos antigos para manter (aqui, 100 backups)
-    1 * 1024 * 1024 # tamanho máximo de 1MB (1 * 1024 * 1024 bytes)
+    Rails.root.join('log', Rails.env, 'file.log'),
+    5, # número de arquivos antigos para manter (aqui, 5 backups)
+    2 * 1024 * 1024 # tamanho máximo de 2MB
   )
 
   # Raise an error on page load if there are pending migrations.
