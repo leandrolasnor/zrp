@@ -3,13 +3,14 @@
 module Rpc
   module AlertReceives::UN
     class Service < Rpc::ApplicationService
-      option :transaction, type: Types::Interface(:call), default: -> {
-        ::AlertReceives::UN::Transaction.new
-      }, reader: :private
+      option :transaction,
+             type: Types::Interface(:call),
+             default: -> { ::AlertReceives::UN::Transaction.new },
+             reader: :private
 
       def call
         transaction.call(params) do
-          it.failure { |f| raise StandardError.new(f.errors) }
+          it.failure { |f| raise StandardError, f.errors }
           it.success do |r|
             ::Rpc::Threat.new(
               status: r.status,
