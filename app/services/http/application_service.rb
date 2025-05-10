@@ -12,7 +12,7 @@ class Http::ApplicationService
       return [:unprocessable_entity, args.errors] if args.failure?
     end
 
-    ApplicationRecord.transaction { new(args.to_h.symbolize_keys).call }
+    new(args.to_h.symbolize_keys).call
   rescue StandardError => error
     debugger if Rails.env.test? # rubocop:disable Lint/Debugger
     Rails.logger.info(args)
