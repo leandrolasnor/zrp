@@ -14,7 +14,9 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /log/development/*.log
+/log/development/*.log.*
 /log/test/*.log
+/log/test/*.log.*
 /tmp/*
 !/log/.keep
 !/tmp/.keep
