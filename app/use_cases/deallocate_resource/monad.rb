@@ -10,7 +10,7 @@ class DeallocateResource::Monad
     Try do
       ApplicationRecord.transaction do
         record = threat.lock.find(id)
-        record.touch
+        record.touch # rubocop:disable Rails/SkipsModelValidations
         record.disabled!
         record.heroes.lock.each(&:enabled!)
         AppEvents.publish('resource.deallocated', threat: record)
