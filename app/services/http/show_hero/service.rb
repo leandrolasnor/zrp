@@ -7,10 +7,9 @@ module Http::ShowHero
 
     def call
       res = monad.call
+      raise StandardError, res.exception if res.failure?
 
-      return [:ok, res.value!, serializer] if res.success?
-
-      [:unprocessable_entity, res.exception.message]
+      [:ok, res.value!, serializer]
     end
   end
 end

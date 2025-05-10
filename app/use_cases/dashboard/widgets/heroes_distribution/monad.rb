@@ -9,17 +9,8 @@ class Dashboard::Widgets::HeroesDistribution::Monad
 
   def call
     Try do
-      search = model.ms_raw_search(
-        '',
-        page: 0,
-        facets: [:rank]
-      )
-
-      count = ranks.map do
-        [it, search['facetDistribution']['rank'][it]]
-      end
-
-      count.to_h.symbolize_keys
+      search = model.ms_raw_search('', page: 0, facets: [:rank])
+      ranks.index_with { search['facetDistribution']['rank'][it] }.symbolize_keys
     end
   end
 end

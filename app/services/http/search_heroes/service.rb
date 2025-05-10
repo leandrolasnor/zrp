@@ -6,11 +6,9 @@ module Http::SearchHeroes
 
     def call
       res = monad.call
+      raise StandardError, res.exception if res.failure?
 
-      return [:ok, res.value!] if res.success?
-
-      Rails.logger.error(res.exception)
-      [:internal_server_error, res.exception.message]
+      [:ok, res.value!]
     end
   end
 end
