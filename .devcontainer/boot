@@ -2,5 +2,6 @@
 set -e
 yarn
 bundle
-bin/setup
+rails setup
+rails db:seed
 exec "$@"
