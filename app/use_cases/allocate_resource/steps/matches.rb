@@ -16,7 +16,7 @@ class AllocateResource::Steps::Matches
         b.threat = threat
         b.hero = hero
         b.finished_at = FINISHER[threat.rank].call
-        b.hero.touch
+        b.hero.touch # rubocop:disable Rails/SkipsModelValidations
       end
     end
     return matches if matches.count >= 2
