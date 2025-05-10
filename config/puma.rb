@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This configuration file will be evaluated by Puma. The top-level methods that
 # are invoked here are part of Puma's configuration DSL. For more information
 # about methods provided by the DSL, see https://puma.io/puma/Puma/DSL.html.
@@ -26,6 +28,15 @@
 # threads. This includes Active Record's `pool` parameter in `database.yml`.
 threads_count = ENV.fetch("RAILS_MAX_THREADS", 3)
 threads threads_count, threads_count
+
+require 'logger'
+stdout_log = Logger.new('log/puma.stdout.log', 5, 2 * 1024 * 1024)
+stderr_log = Logger.new('log/puma.stderr.log', 5, 2 * 1024 * 1024)
+stdout_redirect stdout_log.instance_variable_get(:@logdev).filename,
+                stderr_log.instance_variable_get(:@logdev).filename,
+                true
+
+# stdout_redirect 'log/puma.stdout.log', 'log/puma.stderr.log', true
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 set_default_host "0.0.0.0"

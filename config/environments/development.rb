@@ -10,6 +10,9 @@ Rails.application.configure do
     Bullet.console       = true
     Bullet.rails_logger  = true
     Bullet.add_footer    = true
+    cable_logger = ActiveSupport::Logger.new(Rails.root.join('log', 'cable', 'cable.log'), 5, 2 * 1024 * 1024)
+    cable_logger.formatter = Rails.logger.formatter
+    ActionCable.server.config.logger = cable_logger
     Rails.application.reload_routes!
   end
 
@@ -60,11 +63,7 @@ Rails.application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
-  config.logger = ActiveSupport::Logger.new(
-    Rails.root.join('log', Rails.env, 'file.log'),
-    5, # número de arquivos antigos para manter (aqui, 5 backups)
-    2 * 1024 * 1024 # tamanho máximo de 2MB
-  )
+  config.logger = ActiveSupport::Logger.new(Rails.root.join('log', "#{Rails.env}.log"), 5, 2 * 1024 * 1024)
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load

@@ -44,11 +44,7 @@ Rails.application.configure do
   # Store uploaded files on the local file system in a temporary directory.
   config.active_storage.service = :test
 
-  config.logger = ActiveSupport::Logger.new(
-    Rails.root.join('log', Rails.env, 'file.log'),
-    5, # número de arquivos antigos para manter (aqui, 5 backups)
-    2 * 1024 * 1024 # tamanho máximo de 2MB
-  )
+  config.logger = ActiveSupport::Logger.new(Rails.root.join('log', "#{Rails.env}.log"), 5, 2 * 1024 * 1024)
 
   config.action_mailer.perform_caching = false
 
