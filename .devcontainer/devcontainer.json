@@ -5,7 +5,7 @@
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "api",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-  "runServices": ["db", "rabbitmq", "redis", "meilisearch"],
+  "runServices": ["db", "db_test", "rabbitmq", "redis", "meilisearch"],
 	"forwardPorts": [3000, 28080],
 	"postCreateCommand": ".devcontainer/boot",
   "postStartCommand": ".devcontainer/start",
