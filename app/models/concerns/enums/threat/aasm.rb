@@ -22,5 +22,7 @@ module Enums::Threat::AASM
         transitions from: %i[working problem disabled], to: :disabled
       end
     end
+
+    include Enums::Threat::Status
   end
 end
