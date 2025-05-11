@@ -331,6 +331,8 @@ GEM
     overmind (2.5.1-aarch64-linux)
     overmind (2.5.1-arm-linux)
     parallel (1.27.0)
+    parallel_tests (5.2.0)
+      parallel
     paranoia (3.0.1)
       activerecord (>= 6, < 8.1)
     parser (3.3.8.0)
@@ -630,6 +632,7 @@ DEPENDENCIES
   meilisearch-rails
   ostruct
   overmind
+  parallel_tests
   paranoia
   pg
   puma (>= 5.0)

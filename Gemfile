@@ -107,6 +107,7 @@ group :development, :test do
   gem 'grpc-tools'
   gem 'gruf-rspec'
   gem 'ostruct'
+  gem 'parallel_tests'
   gem 'rspec'
   gem 'rspec-rails'
   gem 'rswag'
