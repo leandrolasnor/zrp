@@ -74,6 +74,20 @@ services:
         limits:
           memory: 2GB
 
+  db_test:
+    image: bitnami/postgresql:latest
+    container_name: zrp.postgresql.test
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+    - 5432
+    deploy:
+      resources:
+        limits:
+          memory: 2GB
+
   meilisearch:
     image: getmeili/meilisearch:latest
     container_name: zrp.meilisearch

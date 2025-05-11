@@ -7,5 +7,5 @@ class AllocateResource::Transaction
   try :matches, with: 'steps.matches', catch: StandardError
   map :sort, with: 'steps.sort'
   try :allocate, with: 'steps.allocate', catch: StandardError
-  try :notify, with: 'steps.notify', catch: StandardError
+  tee :notify, with: 'steps.notify'
 end

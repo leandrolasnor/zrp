@@ -6,9 +6,5 @@ class Rpc::ApplicationService
 
   param :params, type: Types::Strict::Hash, reader: :private
 
-  def self.call(args)
-    ApplicationRecord.transaction { new(args.to_h).call }
-  rescue StandardError => error
-    Rails.logger.error(error)
-  end
+  def self.call(args) = new(args.to_h).call
 end

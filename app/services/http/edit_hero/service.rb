@@ -14,7 +14,8 @@ module Http::EditHero
       transaction.subscribe(update: listener)
       transaction.call(params) do
         it.success { |r| [:ok, r, serializer] }
-        it.failure(:validate, :find) { |f| [:unprocessable_entity, f.errors] }
+        it.failure(:validate) { |f| [:unprocessable_entity, f.errors] }
+        it.failure(:find) { |f| [:unprocessable_entity, f.errors] }
         it.failure { |f| raise StandardError, f }
       end
     end

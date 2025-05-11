@@ -2,7 +2,7 @@
 
 module Rpc
   module AlertReceives::UN
-    class Service < Rpc::ApplicationService
+    class Service < ApplicationService
       option :transaction,
              type: Types::Interface(:call),
              default: -> { ::AlertReceives::UN::Transaction.new },

@@ -15,7 +15,8 @@ module Http::DestroyHero
       transaction.call(params) do
         it.success { |r| [:ok, r, serializer] }
         it.failure(:find) { |f| [:not_found, f.message] }
-        it.failure(:destroy, :remove_from_index) { |f| [:unprocessable_entity, f.message] }
+        it.failure(:destroy) { |f| [:unprocessable_entity, f.message] }
+        it.failure(:remove_from_index) { |f| [:unprocessable_entity, f.message] }
       end
     end
   end
