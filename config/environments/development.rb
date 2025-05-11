@@ -10,7 +10,7 @@ Rails.application.configure do
     Bullet.console       = true
     Bullet.rails_logger  = true
     Bullet.add_footer    = true
-    cable_logger = ActiveSupport::Logger.new(Rails.root.join('log', 'cable', 'cable.log'), 5, 2 * 1024 * 1024)
+    cable_logger = ActiveSupport::Logger.new(Rails.root.join('log', 'cable.log'), 5, 2 * 1024 * 1024)
     cable_logger.formatter = Rails.logger.formatter
     ActionCable.server.config.logger = cable_logger
     Rails.application.reload_routes!

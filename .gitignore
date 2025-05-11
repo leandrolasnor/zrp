@@ -12,10 +12,7 @@
 /db/*.sqlite3-*
 
 # Ignore all logfiles and tempfiles.
-/log/*.log
-/log/cable/*.log
-/log/resque/*.log
-/log/puma.*.log
+/log/*
 /tmp/*
 !/log/.keep
 !/tmp/.keep
