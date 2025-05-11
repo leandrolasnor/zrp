@@ -60,6 +60,7 @@ services:
     depends_on:
     - redis
     - db
+    - db_test
 
   db:
     image: bitnami/postgresql:latest
