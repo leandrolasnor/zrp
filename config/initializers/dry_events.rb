@@ -13,7 +13,8 @@ class AppEvents
 
   EVENTS = [
     'insufficient.resources', 'resource.allocated', 'resource.not.allocated',
-    'resource.deallocated', 'threat.created', 'metrics.fetched'
+    'resource.deallocated', 'threat.created', 'metrics.fetched',
+    'hero.removed_from_index'
   ].freeze
 
   EVENTS.each { register_event it }
@@ -48,4 +49,9 @@ end
 
 AppEvents.subscribe('resource.not.allocated') do
   AllocateResource::Job.perform_later(it[:threat].id)
+end
+
+AppEvents.subscribe('hero.removed_from_index') do
+  Dashboard::Widgets::HeroesWorking::Job.perform_later
+  Dashboard::Widgets::HeroesDistribution::Job.perform_later
 end

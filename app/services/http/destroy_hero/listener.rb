@@ -4,9 +4,6 @@ module Http::DestroyHero
   module Listener
     module_function
 
-    def on_step_succeeded(_)
-      Dashboard::Widgets::HeroesWorking::Job.perform_later
-      Dashboard::Widgets::HeroesDistribution::Job.perform_later
-    end
+    def on_step_succeeded(e) = RemoveFromIndex::Job.perform_later(e.payload)
   end
 end
