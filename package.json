@@ -1,7 +1,7 @@
 {
   "private": true,
     "workspaces": [
-      "react",
+      "reacting",
       "socket.io/server",
       "socket.io/client"
     ]
