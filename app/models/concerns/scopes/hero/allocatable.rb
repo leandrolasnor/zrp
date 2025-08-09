@@ -4,6 +4,9 @@ module Scopes::Hero::Allocatable
   extend ActiveSupport::Concern
 
   included do
-    scope :allocatable, -> (limit) { enabled.order(:updated_at).limit(limit) }
+    scope :allocatable, -> (limit) do
+      enabled.order(:updated_at).limit(limit).
+        lock('FOR UPDATE SKIP LOCKED')
+    end
   end
 end

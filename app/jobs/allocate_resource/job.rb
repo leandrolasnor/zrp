@@ -9,9 +9,11 @@ module AllocateResource
 
     def call
       ApplicationRecord.connection_pool.with_connection do
-        transaction.call(threat_id) do
-          it.failure { |f| Rails.logger.error(f.message) }
-          it.success {}
+        ApplicationRecord.transaction do
+          transaction.call(threat_id) do
+            it.failure { |f| Rails.logger.error(f.message) }
+            it.success {}
+          end
         end
       end
     end

@@ -14,15 +14,6 @@ class AllocateResource::Steps::Allocate
          default: -> { AllocateResource::Model::Hero.ranks },
          reader: :private
 
-  def commit(battle)
-    battle.hero.with_lock do
-      battle.threat.with_lock do
-        [battle.hero, battle.threat].each(&:working!)
-        battle.save!
-      end
-    end
-  end
-
   def call(matches_sorted)
     ApplicationRecord.transaction do
       first = matches_sorted.first
@@ -30,14 +21,22 @@ class AllocateResource::Steps::Allocate
       threat = matches_sorted.first.threat
 
       if tranks[threat.rank] == hranks[first.hero.rank]
-        commit(first)
+        threat.working!
+        first.hero.working!
+        first.save!
       elsif tranks[threat.rank] == hranks[second.hero.rank]
-        commit(second)
+        threat.working!
+        second.hero.working!
+        second.save!
       elsif tranks[threat.rank] > hranks[first.hero.rank] && tranks[threat.rank] > hranks[second.hero.rank]
-        [first, second].each { commit(it) }
+        threat.working!
+        first.hero.working!
+        second.hero.working!
+        first.save!
+        second.save!
       end
 
-      threat.reload
+      threat
     end
   end
 end
