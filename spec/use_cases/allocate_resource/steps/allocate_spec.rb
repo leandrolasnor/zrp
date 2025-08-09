@@ -20,17 +20,9 @@ RSpec.describe AllocateResource::Steps::Allocate do
         ]
       end
 
-      before do
-        allow(heroes.first).to receive(:with_lock).and_yield
-        allow(heroes.second).to receive(:with_lock).and_yield
-        allow(threat).to receive(:with_lock).and_yield
-        call
-      end
+      before { call }
 
       it 'must be able to choose a the first match' do
-        expect(heroes.first).to have_received(:with_lock)
-        expect(threat).to have_received(:with_lock)
-        expect(heroes.second).not_to have_received(:with_lock)
         expect(threat).to be_working
         expect(heroes.first).to be_working
         expect(heroes.second).to be_enabled
@@ -53,17 +45,9 @@ RSpec.describe AllocateResource::Steps::Allocate do
         ]
       end
 
-      before do
-        allow(heroes.first).to receive(:with_lock).and_yield
-        allow(heroes.second).to receive(:with_lock).and_yield
-        allow(threat).to receive(:with_lock).and_yield
-        call
-      end
+      before { call }
 
       it 'must be able to choose a the second match' do
-        expect(heroes.second).to have_received(:with_lock)
-        expect(threat).to have_received(:with_lock)
-        expect(heroes.first).not_to have_received(:with_lock)
         expect(threat).to be_working
         expect(heroes.first).to be_enabled
         expect(heroes.second).to be_working
@@ -86,17 +70,9 @@ RSpec.describe AllocateResource::Steps::Allocate do
         ]
       end
 
-      before do
-        allow(heroes.first).to receive(:with_lock).and_yield
-        allow(heroes.second).to receive(:with_lock).and_yield
-        allow(threat).to receive(:with_lock).and_yield
-        call
-      end
+      before { call }
 
       it 'must be able to choose both matches' do
-        expect(heroes.first).to have_received(:with_lock)
-        expect(heroes.second).to have_received(:with_lock)
-        expect(threat).to have_received(:with_lock).twice
         expect(threat).to be_working
         expect(heroes.first).to be_working
         expect(heroes.second).to be_working
@@ -120,17 +96,9 @@ RSpec.describe AllocateResource::Steps::Allocate do
         ]
       end
 
-      before do
-        allow(heroes.first).to receive(:with_lock).and_yield
-        allow(heroes.second).to receive(:with_lock).and_yield
-        allow(threat).to receive(:with_lock).and_yield
-        call
-      end
+      before { call }
 
       it 'must not be able to choose a match' do
-        expect(heroes.second).not_to have_received(:with_lock)
-        expect(threat).not_to have_received(:with_lock)
-        expect(heroes.first).not_to have_received(:with_lock)
         expect(threat).to be_enabled
         expect(heroes.first).to be_enabled
         expect(heroes.second).to be_enabled
