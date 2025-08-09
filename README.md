@@ -1,15 +1,18 @@
-# Simulador de batalhas
+# SIMULADOR DE BATALHAS
+
 ![plot](./zrp-workflow.png)
-## [Leia o enunciado](https://zrp.github.io/challenges/dev/)
+##
+### INTERFACE WEB DOS SERVIÇOS
+[`Rails`](http://localhost:3000/rails/info/routes) [`Resque`](http://localhost:3000/jobs) [`React`](http://localhost:5600) [`MeiliSearch`](http://localhost:7700)
+
+[`Rabbitmq`](http://localhost:15672) [`Swagger`](http://localhost:3000/api-docs) [`PostgreSQL`](http://localhost:8080)
 
 `Docker` `Git` `Visual Studio Code`
 
-[`Rails`](http://localhost:3000/rails/info/routes) [`Resque`](http://localhost:3000/jobs) `Sneakers` `gRPC`
+`Socket.io` `Sneakers` `Redis` `gRPC`
 
-[`React`](http://localhost:5600) [`MeiliSearch`](http://localhost:7700) `Socket.io`
+## [LEIA O ENUNCIADO](https://zrp.github.io/challenges/dev/)
 
-`Redis` [`Rabbitmq`](http://localhost:15672) `PostgreSQL` [`Swagger`](http://localhost:3000/api-docs)
-##
 ### pelo prompt :zap:
 
 1. Faça o clone do repositório e dentro da raiz do projeto rode

@@ -90,6 +90,24 @@ services:
         limits:
           memory: 2GB
 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: zrp.pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+      PGADMIN_CONFIG_SERVER_MODE: ${PGADMIN_SERVER_MODE}
+    ports:
+      - 8080
+    depends_on:
+      - db
+      - db_test
+    volumes:
+      - ./servers.json.template:/pgadmin4/servers.json.template
+      - ./entrypoint.sh:/entrypoint.sh
+    entrypoint: ["/bin/bash", "/entrypoint.sh"]
+
   meilisearch:
     image: getmeili/meilisearch:latest
     container_name: zrp.meilisearch
