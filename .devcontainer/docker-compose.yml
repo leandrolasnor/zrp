@@ -34,9 +34,7 @@ services:
       args:
         RUBY_VERSION: ${RUBY_VERSION}
     container_name: zrp.api
-    stdin_open: true
-    tty: true
-    command: sh
+    command: sleep infinity
     environment:
       DB_HOST: ${DB_HOST}
       DB_HOST_TEST: ${DB_HOST_TEST}
