@@ -396,6 +396,8 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.2.1)
+    rbs (3.9.4)
+      logger
     rbtree (0.4.6)
     rdoc (6.13.1)
       psych (>= 4.0.0)
@@ -501,6 +503,12 @@ GEM
       lint_roller (~> 1.1)
       rubocop (~> 1.72, >= 1.72.1)
       rubocop-rspec (~> 3.5)
+    ruby-lsp (0.26.1)
+      language_server-protocol (~> 3.17.0)
+      prism (>= 1.2, < 2.0)
+      rbs (>= 3, < 5)
+    ruby-lsp-rspec (0.1.27)
+      ruby-lsp (~> 0.26.0)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     rufus-scheduler (3.9.2)
@@ -654,6 +662,7 @@ DEPENDENCIES
   rubocop-rails-omakase
   rubocop-rspec
   rubocop-rspec_rails
+  ruby-lsp-rspec
   shoulda-matchers
   simplecov
   simplecov-tailwindcss

@@ -2,7 +2,7 @@
 
 class Delete::Hero::Steps::Destroy
   def call(hero)
-    raise ActiveRecord::RecordNotDestroyed.new(I18n.t(:hero_working, hero: hero.name)) if hero.working?
+    raise ActiveRecord::RecordNotDestroyed.new(I18n.t(:cannot_destroy_hero)) if hero.blank?
 
     hero.destroy!
   end

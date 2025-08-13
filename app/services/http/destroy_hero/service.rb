@@ -14,7 +14,6 @@ module Http::DestroyHero
       transaction.subscribe(destroy: listener)
       transaction.call(params) do
         it.success { |r| [:ok, r, serializer] }
-        it.failure(:find) { |f| [:not_found, f.message] }
         it.failure(:destroy) { |f| [:unprocessable_entity, f.message] }
       end
     end

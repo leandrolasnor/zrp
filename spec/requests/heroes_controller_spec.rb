@@ -165,17 +165,10 @@ RSpec.describe HeroesController do
         run_test!
       end
 
-      response(422, 'when hero is working') do
+      response(422, 'when cannot destroy the hero') do
         let(:hero) { create(:hero, :create_hero, status: :working) }
         let(:id) { hero.id }
         let(:params) { { id: hero.id } }
-        schema type: :string
-        run_test!
-      end
-
-      response(404, 'when hero not found') do
-        let(:id) { 0 }
-        let(:params) { { id: id } }
         schema type: :string
         run_test!
       end

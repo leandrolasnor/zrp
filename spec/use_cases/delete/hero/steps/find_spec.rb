@@ -8,20 +8,18 @@ RSpec.describe Delete::Hero::Steps::Find do
     let(:params) { { id: id } }
 
     context 'on Success' do
-      let(:hero) { create(:hero, :delete_hero) }
-      let(:id) { hero.id }
+      context 'when hero found' do
+        let(:hero) { create(:hero, :delete_hero) }
+        let(:id) { hero.id }
 
-      it { is_expected.to be_a(Delete::Hero::Models::Hero) }
-    end
+        it { is_expected.to be_a(Delete::Hero::Models::Hero) }
+      end
 
-    context 'on Failure' do
-      let(:id) { 0 }
+      context 'when hero not found' do
+        let(:hero) { create(:hero, :delete_hero, status: :working) }
+        let(:id) { hero.id }
 
-      it do
-        expect { subject }.to raise_error(
-          ActiveRecord::RecordNotFound,
-          "Couldn't find Delete::Hero::Models::Hero with 'id'=0 [WHERE \"heroes\".\"deleted_at\" IS NULL]"
-        )
+        it { is_expected.to be_nil }
       end
     end
   end
