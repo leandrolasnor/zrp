@@ -16,7 +16,7 @@ RSpec.describe Delete::Hero::Steps::Destroy do
     context 'on Failure' do
       subject { nil }
 
-      it { expect { call }.to raise_error(StandardError, I18n.t(:hero_working, hero: subject.name)) }
+      it { expect { call }.to raise_error(StandardError, I18n.t(:cannot_destroy_hero)) }
     end
   end
 end
