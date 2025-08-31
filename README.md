@@ -1,8 +1,43 @@
-# SIMULADOR DE BATALHAS
+## IHEROS - BATTLE SIMULATOR
+You are in the year 3150 and are leading the technology division responsible for developing the hero distribution management system to combat threats. The system must monitor threat alerts provided by the UN and allocate heroes to each new threat around the globe, always clearly assigning the hero closest to the location.
 
-![plot](./zrp-workflow.png)
-##
-### INTERFACE WEB DOS SERVIÇOS
+You must listen to notifications from a broadcast system developed by the UN that reports threats randomly across the globe, and the head of the Hero Operations Department has established the following rules to ensure that threats are properly handled:
+
+Each Hero and each Threat has a rank. Heroes must be allocated based on their location (always the closest) and a rank appropriate to the threat level. After a certain amount of time, heroes must be deallocated.
+
+The ranks are as follows:
+- Heroes: Classes S, A, B, and C
+- Threats: Levels God, Dragon, Tiger, and Wolf
+
+__Class S heroes__ have priority against __God-level threats__
+- A battle with a threat of this level must last at least 5 minutes and at most 10 minutes;
+
+__Class A heroes__ have priority against __Dragon-level threats__
+- A battle with a threat of this level must last at least 2 minutes and at most 5 minutes;
+
+__Class B heroes__ have priority against __Tiger-level threats__
+- A battle with a threat of this level must last at least 10 seconds and at most 20 seconds;
+
+__Class C heroes__ have priority against __Wolf-level threats__
+- A battle with a threat of this level must last at least 1 second and at most 2 seconds;
+
+You can allocate twice the number of lower-ranked heroes to deal with a higher-ranked threat if they are closer. In other words, double the heroic force is enough to handle a higher-level threat.
+
+You must consume a socket (built using socket.io) that returns information about detected threats, and each threat has the following format:
+
+```
+{
+    "location": {
+        "lat": -5.836597,
+        "lng": -35.236007,
+    },
+    "dangerLevel": "Dragon",
+    "monsterName": "Black Dragon"
+}
+```
+#
+![plot](./print-screen.png)
+#### SERVICE WEB INTERFACE
 [`Rails`](http://localhost:3000/rails/info/routes) [`Resque`](http://localhost:3000/jobs) [`React`](http://localhost:5600) [`MeiliSearch`](http://localhost:7700)
 
 [`Rabbitmq`](http://localhost:15672) [`Swagger`](http://localhost:3000/api-docs) [`PostgreSQL`](http://localhost:8080)
@@ -10,26 +45,17 @@
 `Docker` `Git` `Visual Studio Code`
 
 `Socket.io` `Sneakers` `Redis` `gRPC`
+###### RUNNING THE APPLICATION USING TERMINAL :zap:
+```
+git clone https://github.com/leandrolasnor/zrp.git
+./zrp/bin/build
+```
+###### :hourglass_flowing_sand: with the container built:
+    docker exec -it zrp.api run
+###### RUNNING THE APPLICATION USING VISUAL STUDIO CODE :rocket: `CTRL+P`
+`> Dev Containers: Clone Repository in Container Volume...`
+###### enter the repository url and press enter
+`https://github.com/leandrolasnor/zrp`
+###### :hourglass_flowing_sand: wait for the environment to be built
 
-## [LEIA O ENUNCIADO](https://zrp.github.io/challenges/dev/)
-
-### pelo prompt :zap:
-
-1. Faça o clone do repositório e dentro da raiz do projeto rode
-
-    `bin/build`
-2. Acesse o shell do container `zrp.api` e rode
-
-    `run`
-##
-### pelo vscode :rocket:
-
-1. Rode o comando no Visual Code e dê ___Enter___.
-    - `> Dev Containers: Clone Repository in Container Volume...`
-2. Informe o _URL_ do repositório e dê ___Enter___
-    - `https://github.com/leandrolasnor/zrp`
-3. :hourglass_flowing_sand: Aguarde o ambiente ser construído
-
-4. Abra o terminal integrado e rode
-
-    `run`
+###### open the integrated terminal and run __`ihero`__
