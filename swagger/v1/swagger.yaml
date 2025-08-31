@@ -191,9 +191,7 @@ paths:
         '200':
           description: successful
         '422':
-          description: when hero is working
-        '404':
-          description: when hero not found
+          description: when cannot destroy the hero
   "/v1/metrics/dashboard":
     get:
       summary: dashboard metric
