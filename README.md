@@ -47,14 +47,6 @@ You must consume a socket (built using socket.io) that returns information about
 `Socket.io` `Sneakers` `Redis` `gRPC`
 ###### RUNNING THE APPLICATION USING TERMINAL :zap:
 ```
-git clone https://github.com/leandrolasnor/zrp.git && zrp/bin/build
+git clone https://github.com/leandrolasnor/zrp.git && \
+make exec -C zrp
 ```
-###### :hourglass_flowing_sand: with the container built:
-    docker exec -it zrp.api ihero
-###### RUNNING THE APPLICATION USING VISUAL STUDIO CODE :rocket: `CTRL+P`
-`> Dev Containers: Clone Repository in Container Volume...`
-###### enter the repository url and press enter
-`https://github.com/leandrolasnor/zrp`
-###### :hourglass_flowing_sand: wait for the environment to be built
-
-###### open the integrated terminal and run __`ihero`__
