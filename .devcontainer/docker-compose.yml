@@ -37,10 +37,10 @@ services:
     command: sleep infinity
     environment:
       DB_HOST: ${DB_HOST}
-      DB_HOST_TEST: ${DB_HOST_TEST}
       DB_NAME: ${DB_NAME}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
+      DB_TEST: ${DB_TEST}
       MEILI_MASTER_KEY: ${MEILI_MASTER_KEY}
       MEILI_URL: ${MEILI_URL}
       AMQP_SERVER: ${AMQP_SERVER}

@@ -6,25 +6,25 @@
 #
 
 postgresql: &postgresql
-  adapter: postgresql
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  adapter:  postgresql
+  pool:     <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  database: <%= ENV["DB_NAME"] %>
+  host:     <%= ENV["DB_HOST"] %>
+  username: <%= ENV["DB_USERNAME"] %>
+  password: <%= ENV["DB_PASSWORD"] %>
   encoding: unicode
-  timeout: 5000
+  timeout:  5000
 
 sqlite: &sqlite
   adapter: sqlite3
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
-development: &development
+development:
   <<: *postgresql
-  database: <%= ENV["DB_NAME"] %>
-  host: <%= ENV["DB_HOST"] %>
-  username: <%= ENV["DB_USERNAME"] %>
-  password: <%= ENV["DB_PASSWORD"] %>
 
 test:
-  <<: *development
-  database: <%= ENV["DB_NAME_TEST"] %>
+  <<: *postgresql
+  database: <%= ENV["DB_TEST"] %>
 
 production:
   <<: *sqlite
