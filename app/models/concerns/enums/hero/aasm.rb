@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Enums::Threat::AASM
+module Enums::Hero::AASM
   extend ActiveSupport::Concern
 
   included do
@@ -8,21 +8,17 @@ module Enums::Threat::AASM
 
     aasm column: :status do
       state :enabled, initial: true
-      state :problem, :disabled, :working
+      state :working, :disabled
 
       event :working do
         transitions from: %i[enabled working], to: :working
       end
 
-      event :problem do
-        transitions from: %i[enabled disabled problem], to: :problem
-      end
-
       event :disabled do
-        transitions from: %i[working disabled], to: :disabled
+        transitions from: %i[enabled working disabled], to: :disabled
       end
     end
 
-    include Enums::Threat::Status
+    include Enums::Hero::Status
   end
 end
