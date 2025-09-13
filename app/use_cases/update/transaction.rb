@@ -3,7 +3,7 @@
 class Update::Transaction
   include Dry::Transaction
 
-  step :validate, with: "validate.step"
-  try :find, with: "find.step", catch: ActiveRecord::RecordNotFound
-  try :update, with: "update.step", catch: StandardError
+  step :validate, with: "steps.validate"
+  try :find, with: "steps.find", catch: ActiveRecord::RecordNotFound
+  try :update, with: "steps.update", catch: StandardError
 end

@@ -3,6 +3,6 @@
 class Create::Transaction
   include Dry::Transaction
 
-  step :validate, with: "validate.step"
-  try :persist, with: "persist.step", catch: StandardError
+  step :validate, with: "steps.validate"
+  try :persist, with: "steps.persist", catch: StandardError
 end

@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-RSpec.describe Update::Hero::Steps::Validate do
-  describe '.call' do
-    let(:call) { subject.(params) }
+RSpec.describe Create::Hero::Container do
+  describe 'steps.validate.call' do
+    let(:call) { described_class['steps.validate'].(params) }
 
     context 'on Success' do
       let(:params) do
         {
-          id: 0,
           name: 'Hero',
           rank: 'c',
           lat: 123.90,
@@ -24,16 +23,14 @@ RSpec.describe Update::Hero::Steps::Validate do
     context 'on Failure' do
       let(:params) do
         {
-          id: 'uuid',
           name: 1,
-          rank: 't',
+          rank: 'p',
           lat: 'hero',
           lng: 'rank'
         }
       end
       let(:expected_errors) do
         {
-          id: ['must be an integer'],
           name: ['must be a string'],
           rank: ['must be one of: c, b, a, s'],
           lat: ['must be a float'],
@@ -44,6 +41,29 @@ RSpec.describe Update::Hero::Steps::Validate do
       it 'must be able to get errors from contract' do
         expect(call).to be_failure
         expect(call.failure.errors.to_h).to match(expected_errors)
+      end
+    end
+  end
+
+  describe 'steps.persist.call' do
+    let(:call) { described_class['steps.persist'].(params) }
+    let(:params) do
+      {
+        name: 'Hero',
+        rank: 0,
+        lat: 123.90,
+        lng: -89.999233
+      }
+    end
+
+    context 'on Success' do
+      before { call }
+
+      it 'must be able to create a hero' do
+        expect(call.name).to eq('Hero')
+        expect(call.rank).to eq('c')
+        expect(call.lat).to eq(123.90)
+        expect(call.lng).to eq(-89.999233)
       end
     end
   end
