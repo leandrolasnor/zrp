@@ -26,7 +26,7 @@ services:
           memory: 1GB
 
   api:
-    image: leandrolasnor/ruby:zrp
+    image: ruby:3.4.2-slim
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
