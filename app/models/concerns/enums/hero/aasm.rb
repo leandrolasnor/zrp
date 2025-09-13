@@ -17,6 +17,10 @@ module Enums::Hero::AASM
       event :disabled do
         transitions from: %i[enabled working disabled], to: :disabled
       end
+
+      event :enabled do
+        transitions from: %i[enabled working disabled], to: :enabled
+      end
     end
 
     include Enums::Hero::Status
