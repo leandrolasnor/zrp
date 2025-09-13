@@ -29,6 +29,7 @@ end
 AppEvents.subscribe('insufficient.resources') do
   REDIS.with { |redis| redis.set('SNEAKERS_REQUEUE', true, ex: 60) }
   AllocateResource::Job.set(wait: 1.minute).perform_later(it[:threat].id)
+  Dashboard::Widgets::HeroesDistribution::Job.perform_later
 end
 
 AppEvents.subscribe('resource.deallocated') do
@@ -49,6 +50,7 @@ end
 
 AppEvents.subscribe('resource.not.allocated') do
   AllocateResource::Job.perform_later(it[:threat].id)
+  Dashboard::Widgets::HeroesDistribution::Job.perform_later
 end
 
 AppEvents.subscribe('hero.removed_from_index') do

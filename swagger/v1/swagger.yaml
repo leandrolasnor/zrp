@@ -192,14 +192,6 @@ paths:
           description: successful
         '422':
           description: when cannot destroy the hero
-  "/v1/metrics/dashboard":
-    get:
-      summary: dashboard metric
-      tags:
-      - Metrics
-      responses:
-        '200':
-          description: successful
   "/v1/threats/set_insurgency":
     post:
       summary: set insurgency time

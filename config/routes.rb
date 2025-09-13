@@ -16,10 +16,6 @@ Rails.application.routes.draw do
       get :historical, on: :collection
       post :set_insurgency, on: :collection
     end
-
-    resources :metrics, only: [] do
-      get :dashboard, on: :collection
-    end
   end
 
   get :up, to: "rails/health#show", as: :rails_health_check

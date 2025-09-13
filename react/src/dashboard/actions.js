@@ -9,14 +9,6 @@ export const historical_threats = pagination => {
   }
 }
 
-export const get_metrics = () => {
-  return dispatch => {
-    let eventSource = new EventSource(`${process.env.REACT_APP_API_URL}/v1/metrics/dashboard`, {})
-    eventSource.onmessage = (e) => dispatch(JSON.parse(e.data))
-    eventSource.onerror = (e) => eventSource.close()
-  }
-}
-
 export const set_insurgency = value => {
   return dispatch => {
     axios.post('/v1/threats/set_insurgency', { insurgency: value }).then(resp => {

@@ -9,12 +9,10 @@ import AverageTimeToMatch from './average_time_to_match.js'
 import AverageScore from './average_score.js'
 import SuperHero from './super_hero.js'
 import { useEffect } from 'react'
-import { get_metrics } from './actions.js'
 
 
 const Dashboard = () => {
   const dispatch = useDispatch()
-  useEffect(() => { dispatch(get_metrics()) }, [dispatch])
 
   return (
     <Grid fluid>
