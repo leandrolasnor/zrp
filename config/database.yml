@@ -15,7 +15,7 @@ sqlite: &sqlite
   adapter: sqlite3
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
-development:
+development: &development
   <<: *postgresql
   database: <%= ENV["DB_NAME"] %>
   host: <%= ENV["DB_HOST"] %>
@@ -23,11 +23,8 @@ development:
   password: <%= ENV["DB_PASSWORD"] %>
 
 test:
-  <<: *postgresql
-  database: <%= ENV["DB_NAME"] %>
-  host: <%= ENV["DB_HOST_TEST"] %>
-  username: <%= ENV["DB_USERNAME"] %>
-  password: <%= ENV["DB_PASSWORD"] %>
+  <<: *development
+  database: <%= ENV["DB_NAME_TEST"] %>
 
 production:
   <<: *sqlite
