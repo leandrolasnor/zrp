@@ -3,6 +3,7 @@ ARG DOCKER_BUILDKIT=1
 
 FROM ruby:$RUBY_VERSION-slim AS base
 WORKDIR /workspaces/zrp
+ENV TZ=America/Sao_Paulo
 ENV PATH=$PATH:/workspaces/zrp/bin
 ENV BUNDLE_DEPLOYMENT=false
 ENV BUNDLE_PATH=/usr/local/bundle
