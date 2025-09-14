@@ -60,6 +60,8 @@ gem 'overmind'
 
 gem 'aasm'
 
+gem 'rails_event_store'
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 

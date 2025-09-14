@@ -13,41 +13,31 @@ RSpec.describe AlertReceives::UN::Model::Threat, type: :model do
   end
 
   describe 'AASM' do
-    context 'on working' do
-      it 'must be able to transition from enabled to working' do
+    context 'on success' do
+      it 'must be able to transitions from: %i[enabled working], to: :working' do
         expect(subject).to transition_from(:enabled).to(:working).on_event(:working)
-      end
-
-      it 'must be able to transition from working to working' do
         expect(subject).to transition_from(:working).to(:working).on_event(:working)
       end
-    end
 
-    context 'on disabled' do
-      it 'must be able to transition from working to disabled' do
+      it 'must be able to transitions from: %i[working disabled], to: :disabled' do
         expect(subject).to transition_from(:working).to(:disabled).on_event(:disabled)
-      end
-
-      it 'must be able to transition from problem to disabled' do
-        expect(subject).to transition_from(:problem).to(:disabled).on_event(:disabled)
-      end
-
-      it 'must be able to transition from disabled to disabled' do
         expect(subject).to transition_from(:disabled).to(:disabled).on_event(:disabled)
       end
+
+      it 'must be able to transitions from: %i[enabled disabled problem], to: :problem' do
+        expect(subject).to transition_from(:enabled).to(:problem).on_event(:problem)
+        expect(subject).to transition_from(:disabled).to(:problem).on_event(:problem)
+        expect(subject).to transition_from(:problem).to(:problem).on_event(:problem)
+      end
     end
 
-    context 'on problem' do
-      it 'must be able to transition from enabled to problem' do
-        expect(subject).to transition_from(:enabled).to(:problem).on_event(:problem)
+    context 'on failure' do
+      it 'must not be able to transactions from: :problem, to: :working' do
+        expect(subject).not_to transition_from(:problem).to(:working).on_event(:working)
       end
 
-      it 'must be able to transition from disabled to problem' do
-        expect(subject).to transition_from(:disabled).to(:problem).on_event(:problem)
-      end
-
-      it 'must be able to transition from problem to problem' do
-        expect(subject).to transition_from(:problem).to(:problem).on_event(:problem)
+      it 'must not be able to transactions from: :problem, to: :disabled' do
+        expect(subject).not_to transition_from(:problem).to(:disabled).on_event(:disabled)
       end
     end
   end
