@@ -640,7 +640,6 @@ DEPENDENCIES
   aasm
   active_model_serializers
   activejob-uniqueness
-  aggregate_root
   benchmark
   bootsnap
   brakeman

@@ -62,8 +62,6 @@ gem 'aasm'
 
 gem 'rails_event_store'
 
-gem 'aggregate_root', require: true
-
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
