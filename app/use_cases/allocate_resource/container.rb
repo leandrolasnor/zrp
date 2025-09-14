@@ -8,7 +8,6 @@ module AllocateResource
     register 'steps.matches', -> { Steps::Matches.new }
     register 'steps.sort', -> { Steps::Sort.new }
     register 'steps.allocate', -> { Steps::Allocate.new }
-    register 'steps.notify', -> { Steps::Notify.new }
   end
 
   module Steps
@@ -86,18 +85,12 @@ module AllocateResource
             second.hero.working!
             first.save!
             second.save!
+          else
+            AppEvents.publish('resource.not.allocated', threat:, matches_sorted:)
           end
-
+          AppEvents.publish('resource.allocated', threat:) if threat.working?
           threat
         end
-      end
-    end
-
-    class Notify
-      def call(threat)
-        AppEvents.publish('resource.allocated', threat:) if threat.working?
-        AppEvents.publish('resource.not.allocated', threat:) if threat.enabled?
-        threat
       end
     end
   end

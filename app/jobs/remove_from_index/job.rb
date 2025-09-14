@@ -12,7 +12,7 @@ module RemoveFromIndex
            reader: :private
 
     def call
-      AppEvents.publish(event_name) if monad.success?
+      AppEvents.publish(event_name, hero: object) if monad.success?
       Job.set(wait: 5.minutes).perform_later(object) if monad.failure?
     end
   end
