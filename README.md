@@ -10,6 +10,8 @@ make exec -C zrp
 
 `Docker` `Git` `Visual Studio Code`
 `Socket.io` `Sneakers` `Redis` `gRPC`
+
+`dry-rb` `Rails Event Store`
 #### You are in the year 3150 and are leading the technology division responsible for developing the hero distribution management system to combat threats. The system must monitor threat alerts provided by the UN and allocate heroes to each new threat around the globe, always clearly assigning the hero closest to the location.
 
 #### You must listen to notifications from a broadcast system developed by the UN that reports threats randomly across the globe, and the head of the Hero Operations Department has established the following rules to ensure that threats are properly handled:
