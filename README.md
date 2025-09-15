@@ -1,4 +1,4 @@
-### IHEROS _ BATTLE SIMULATOR
+### IHEROS BATTLE SIMULATOR
 ![plot](./print-screen.png)
 ###### RUNNING THE APPLICATION USING TERMINAL :zap:
 ```
