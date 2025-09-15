@@ -68,7 +68,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
-    mem_limit: 256m
+    mem_limit: 512m
     container_name: zrp.pgadmin
     restart: always
     environment:
@@ -83,7 +83,7 @@ services:
 
   meilisearch:
     image: getmeili/meilisearch:latest
-    mem_limit: 128m
+    mem_limit: 256m
     container_name: zrp.meilisearch
     environment:
       MEILI_MASTER_KEY: ${MEILI_MASTER_KEY}
