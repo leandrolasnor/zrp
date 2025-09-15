@@ -33,20 +33,20 @@ make exec _C zrp
 #### Each Hero and each Threat has a rank. Heroes must be allocated based on their location (always the closest) and a rank appropriate to the threat level. After a certain amount of time, heroes must be deallocated.
 
 #### The ranks are as follows:
-_ ###### Heroes: Classes S, A, B, and C
-_ ###### Threats: Levels God, Dragon, Tiger, and Wolf
+###### Heroes: Classes S, A, B, and C
+###### Threats: Levels God, Dragon, Tiger, and Wolf
 
 #### __Class S heroes__ have priority against __God_level threats__
-_ ###### A battle with a threat of this level must last at least 5 minutes and at most 10 minutes;
+###### A battle with a threat of this level must last at least 5 minutes and at most 10 minutes;
 
 ##### __Class A heroes__ have priority against __Dragon_level threats__
-_ ###### A battle with a threat of this level must last at least 2 minutes and at most 5 minutes;
+###### A battle with a threat of this level must last at least 2 minutes and at most 5 minutes;
 
 ##### __Class B heroes__ have priority against __Tiger_level threats__
-_ ###### A battle with a threat of this level must last at least 10 seconds and at most 20 seconds;
+###### A battle with a threat of this level must last at least 10 seconds and at most 20 seconds;
 
 ##### __Class C heroes__ have priority against __Wolf_level threats__
-_ ###### A battle with a threat of this level must last at least 1 second and at most 2 seconds;
+###### A battle with a threat of this level must last at least 1 second and at most 2 seconds;
 
 ###### You can allocate twice the number of lower_ranked heroes to deal with a higher_ranked threat if they are closer. In other words, double the heroic force is enough to handle a higher_level threat.
 
