@@ -2,8 +2,7 @@
 services:
   rabbitmq:
     image: rabbitmq:management
-    cpus: 0.5
-    mem_limit: 512m
+    mem_limit: 128m
     container_name: zrp.rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
@@ -13,8 +12,7 @@ services:
 
   redis:
     image: redis:alpine
-    cpus: 0.5
-    mem_limit: 256m
+    mem_limit: 28m
     container_name: zrp.redis
     environment:
       ALLOW_EMPTY_PASSWORD: ${ALLOW_EMPTY_PASSWORD}
@@ -57,8 +55,7 @@ services:
 
   db:
     image: bitnami/postgresql:latest
-    cpus: 1
-    mem_limit: 1g
+    mem_limit: 128m
     container_name: zrp.postgresql
     environment:
       POSTGRES_USER: ${DB_USERNAME}
@@ -71,8 +68,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
-    cpus: 0.5
-    mem_limit: 128m
+    mem_limit: 256m
     container_name: zrp.pgadmin
     restart: always
     environment:
@@ -87,8 +83,7 @@ services:
 
   meilisearch:
     image: getmeili/meilisearch:latest
-    cpus: 1
-    mem_limit: 1g
+    mem_limit: 128m
     container_name: zrp.meilisearch
     environment:
       MEILI_MASTER_KEY: ${MEILI_MASTER_KEY}
