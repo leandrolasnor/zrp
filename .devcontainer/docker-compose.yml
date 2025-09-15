@@ -22,7 +22,7 @@ services:
     - 6379
 
   api:
-    image: ruby:3.4.2-slim
+    image: devcontainer:ruby-3.4.2-slim
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
