@@ -1,5 +1,5 @@
 ### IHEROS _ BATTLE SIMULATOR
-![plot](./print_screen.png)
+![plot](./print-screen.png)
 ###### RUNNING THE APPLICATION USING TERMINAL :zap:
 ```
 git clone https://github.com/leandrolasnor/zrp.git && \
@@ -16,7 +16,7 @@ make exec _C zrp
 | zrp.rabbitmq    | 0.89%  |    75.55MiB / 128MiB |
 | zrp.meilisearch | 0.43%  |    21.69MiB / 256MiB |
 |_________________________________________________|
-|   suitable for a machine with ≥ 12 GiB of RAM   |
+|   suitable for a machine with ≥ 16 GiB of RAM   |
  ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
  ```
 ###### SERVICE WEB INTERFACE
