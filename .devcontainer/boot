@@ -1,7 +1,5 @@
 #!/usr/bin/env zsh
 set -e
-yarn
-bundle
 rails setup
 rails db:seed
 exec "$@"
