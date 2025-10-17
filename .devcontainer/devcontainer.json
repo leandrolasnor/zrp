@@ -16,30 +16,30 @@
     3000,
     28080
   ],
-  // "postCreateCommand": ".devcontainer/boot",
-  // "postStartCommand": ".devcontainer/start",
+  "postCreateCommand": ".devcontainer/boot",
+  "postStartCommand": ".devcontainer/start",
   "customizations": {
     "vscode": {
-      // "extensions": [
-      //   "Shopify.ruby-lsp",
-      //   "eamodio.gitlens",
-      //   "donjayamanne.githistory",
-      //   "EditorConfig.EditorConfig",
-      //   "MS-CEINTL.vscode-language-pack-pt-BR",
-      //   "shyykoserhiy.git-autoconfig",
-      //   "AiryShift.spaces-inside-braces",
-      //   "naumovs.color-highlight",
-      //   "bierner.github-markdown-preview",
-      //   "karunamurti.rspec-snippets",
-      //   "miguelsolorio.symbols",
-      //   "drcika.apc-extension",
-      //   "zxh404.vscode-proto3",
-      //   "lyn-inc.HTML-Speed-Viewer",
-      //   "SterRoque.ai-commit-generator",
-      //   "sitoi.ai-commit",
-      //   "first-try-software.coverage-status",
-      //   "GitHub.copilot-chat"
-      // ]
+      "extensions": [
+        "Shopify.ruby-lsp",
+        "eamodio.gitlens",
+        "donjayamanne.githistory",
+        "EditorConfig.EditorConfig",
+        "MS-CEINTL.vscode-language-pack-pt-BR",
+        "shyykoserhiy.git-autoconfig",
+        "AiryShift.spaces-inside-braces",
+        "naumovs.color-highlight",
+        "bierner.github-markdown-preview",
+        "karunamurti.rspec-snippets",
+        "miguelsolorio.symbols",
+        "drcika.apc-extension",
+        "zxh404.vscode-proto3",
+        "lyn-inc.HTML-Speed-Viewer",
+        "SterRoque.ai-commit-generator",
+        "sitoi.ai-commit",
+        "first-try-software.coverage-status",
+        "GitHub.copilot-chat"
+      ]
     }
   }
 }
