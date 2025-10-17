@@ -62,7 +62,7 @@ services:
     ports:
     - 5432
     volumes:
-    - ./db/initdb:/docker-entrypoint-initdb.d
+    - ../db/initdb:/docker-entrypoint-initdb.d
 
   pgadmin:
     image: dpage/pgadmin4
