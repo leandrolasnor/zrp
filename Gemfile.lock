@@ -185,6 +185,12 @@ GEM
       railties (>= 5.0.0)
     faker (3.5.1)
       i18n (>= 1.8.11, < 2)
+    fast-mcp (1.4.0)
+      base64
+      dry-schema (~> 1.14)
+      json (~> 2.0)
+      mime-types (~> 3.4)
+      rack (~> 3.1)
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
@@ -390,6 +396,12 @@ GEM
     rails-html-sanitizer (1.6.2)
       loofah (~> 2.21)
       nokogiri (>= 1.15.7, != 1.16.7, != 1.16.6, != 1.16.5, != 1.16.4, != 1.16.3, != 1.16.2, != 1.16.1, != 1.16.0.rc1, != 1.16.0)
+    rails-mcp-server (1.2.2)
+      addressable (~> 2.8)
+      fast-mcp (~> 1.4.0)
+      logger (~> 1.7.0)
+      puma (~> 6.6.0)
+      rack (~> 3.1.12)
     rails_event_store (2.17.1)
       activejob (>= 6.0)
       activemodel (>= 6.0)
@@ -669,6 +681,7 @@ DEPENDENCIES
   puma (>= 5.0)
   rack-cors
   rails (~> 8.0.2)
+  rails-mcp-server
   rails_event_store
   rake (~> 13.2.1)
   redis
