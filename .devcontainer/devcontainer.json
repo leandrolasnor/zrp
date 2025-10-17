@@ -20,13 +20,6 @@
   "postStartCommand": ".devcontainer/start",
   "customizations": {
     "vscode": {
-      "servers": {
-        "my-mcp": {
-          "url": "http://localhost:6029/mcp/sse",
-          "type": "http"
-        }
-      },
-      "inputs": [],
       "extensions": [
         "Shopify.ruby-lsp",
         "eamodio.gitlens",
@@ -44,7 +37,8 @@
         "lyn-inc.HTML-Speed-Viewer",
         "SterRoque.ai-commit-generator",
         "sitoi.ai-commit",
-        "first-try-software.coverage-status"
+        "first-try-software.coverage-status",
+        "GitHub.copilot-chat"
       ]
     }
   }

@@ -1,0 +1,9 @@
+{
+	"servers": {
+		"my-mcp": {
+			"url": "http://localhost:6029/mcp/sse",
+			"type": "http"
+		}
+	},
+	"inputs": []
+}
