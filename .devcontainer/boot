@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
 set -e
-rails setup
-rails db:seed
+# rails setup
+# rails db:seed
 exec "$@"
