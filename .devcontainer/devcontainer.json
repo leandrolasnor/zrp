@@ -16,8 +16,8 @@
     3000,
     28080
   ],
-  "postCreateCommand": ".devcontainer/boot",
-  "postStartCommand": ".devcontainer/start",
+  // "postCreateCommand": ".devcontainer/boot",
+  // "postStartCommand": ".devcontainer/start",
   "customizations": {
     "vscode": {
       "extensions": [
