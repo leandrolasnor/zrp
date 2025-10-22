@@ -49,3 +49,4 @@ ENV BUNDLE_WITHOUT=production
 RUN yarn
 RUN bundle
 COPY . .
+CMD ["sleep", "infinity"]
