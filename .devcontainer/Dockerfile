@@ -49,3 +49,4 @@ ENV BUNDLE_WITHOUT=production
 RUN yarn
 RUN bundle
 COPY . .
+CMD ["tail", "-f", "/dev/null"]
