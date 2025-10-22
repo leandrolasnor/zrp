@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/bin/env zsh
 set -e
 rails setup
 rails db:seed
