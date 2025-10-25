@@ -49,4 +49,3 @@ ENV BUNDLE_WITHOUT=production
 RUN yarn
 RUN bundle
 COPY . .
-ENTRYPOINT ["sleep", "infinity"]
