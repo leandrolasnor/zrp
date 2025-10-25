@@ -1,7 +1,7 @@
 ARG RUBY_VERSION=3.4.2
 ARG DOCKER_BUILDKIT=1
 
-FROM ruby:$RUBY_VERSION AS base
+FROM ruby:$RUBY_VERSION-slim AS base
 WORKDIR /workspaces/zrp
 ENV TZ=America/Sao_Paulo
 ENV PATH=$PATH:/workspaces/zrp/bin
