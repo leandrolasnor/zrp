@@ -29,7 +29,7 @@ services:
       args:
         RUBY_VERSION: ${RUBY_VERSION}
     container_name: zrp.api
-    command: ["/bin/bash", "-c", "while true; do sleep 1000; done"]
+    command: sleep infinity
     environment:
       DB_HOST: ${DB_HOST}
       DB_NAME: ${DB_NAME}

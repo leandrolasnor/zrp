@@ -49,4 +49,4 @@ ENV BUNDLE_WITHOUT=production
 RUN yarn
 RUN bundle
 COPY . .
-CMD ["/bin/bash", "-c", "while true; do sleep 1000; done"]
+ENTRYPOINT ["sleep", "infinity"]
