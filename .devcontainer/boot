@@ -2,3 +2,4 @@
 set -e
 rails setup
 rails db:seed
+exec "$@"

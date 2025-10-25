@@ -5,17 +5,8 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "api",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-  "runServices": [
-    "db",
-    "rabbitmq",
-    "redis",
-    "meilisearch",
-    "pgadmin"
-  ],
-  "forwardPorts": [
-    3000,
-    28080
-  ],
+  "runServices": ["db", "rabbitmq", "redis", "meilisearch", "pgadmin"],
+  "forwardPorts": [3000, 28080],
   "postCreateCommand": ".devcontainer/boot",
   "postStartCommand": ".devcontainer/start",
   "customizations": {
