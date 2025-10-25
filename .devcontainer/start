@@ -1,4 +1,4 @@
-#!/bin/env zsh
+#!/usr/bin/env zsh
 set -e
 rm -f tmp/pids/server.pid tmp/pids/rails.pid
 exec "$@"
