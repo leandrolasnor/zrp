@@ -131,6 +131,7 @@ group :development do
   gem 'rubocop-rspec_rails', require: false
   gem "ruby-lsp-rspec", require: false
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
+  gem "rails-mcp-server"
   gem "spring"
 end
 

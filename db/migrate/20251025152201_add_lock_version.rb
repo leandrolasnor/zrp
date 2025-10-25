@@ -1,0 +1,6 @@
+class AddLockVersion < ActiveRecord::Migration[8.0]
+  def change
+    add_column :heroes, :lock_version, :integer, default: 0, null: false
+    add_column :threats, :lock_version, :integer, default: 0, null: false
+  end
+end

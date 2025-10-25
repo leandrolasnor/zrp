@@ -50,9 +50,6 @@ services:
     - 3000:3000
     - 28080:28080
     - 5600:5600
-    depends_on:
-    - redis
-    - db
 
   db:
     image: postgres:15.14-bookworm
@@ -65,7 +62,7 @@ services:
     ports:
     - 5432
     volumes:
-    - ./db/initdb:/docker-entrypoint-initdb.d
+    - ./../db/initdb:/docker-entrypoint-initdb.d
 
   pgadmin:
     image: dpage/pgadmin4
@@ -79,8 +76,6 @@ services:
       PGADMIN_CONFIG_SERVER_MODE: ${PGADMIN_CONFIG_SERVER_MODE}
     ports:
       - 8080:80
-    depends_on:
-      - db
 
   meilisearch:
     image: getmeili/meilisearch:latest

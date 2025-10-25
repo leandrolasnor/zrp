@@ -36,3 +36,4 @@
 /*.rdb
 node_modules
 .overmind.sock
+**/**/*.log

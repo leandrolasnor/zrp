@@ -1,18 +1,18 @@
 // For format details, see https://aka.ms/devcontainer.json.
 {
-	"name": "ZRP project development",
+  "name": "ZRP project development",
   "remoteUser": "root",
-	"dockerComposeFile": "docker-compose.yml",
-	"service": "api",
-	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "api",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "runServices": ["db", "rabbitmq", "redis", "meilisearch", "pgadmin"],
-	"forwardPorts": [3000, 28080],
-	"postCreateCommand": ".devcontainer/boot",
+  "forwardPorts": [3000, 28080],
+  "postCreateCommand": ".devcontainer/boot",
   "postStartCommand": ".devcontainer/start",
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"Shopify.ruby-lsp",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Shopify.ruby-lsp",
         "eamodio.gitlens",
         "donjayamanne.githistory",
         "EditorConfig.EditorConfig",
@@ -28,8 +28,9 @@
         "lyn-inc.HTML-Speed-Viewer",
         "SterRoque.ai-commit-generator",
         "sitoi.ai-commit",
-        "first-try-software.coverage-status"
-			]
-		}
-	}
+        "first-try-software.coverage-status",
+        "GitHub.copilot-chat"
+      ]
+    }
+  }
 }
