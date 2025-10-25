@@ -6,8 +6,8 @@ module RemoveFromIndex
     extend Dry::Initializer
 
     option :id, type: Types::Coercible::Integer, reader: :private
-    option :index, type: Types::Interface(:delete_document), reader: :private
+    option :model, type: Types::Instance(ActiveRecord::Base), reader: :private
 
-    def call = Try(StandardError) { index.delete_document(id) }
+    def call = Try(StandardError) { model.index.delete_document(id) }
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_13_005548) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_25_152201) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -57,6 +57,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_13_005548) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.integer "lock_version", default: 0, null: false
     t.index ["deleted_at"], name: "index_heroes_on_deleted_at"
   end
 
@@ -69,6 +70,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_13_005548) do
     t.text "payload", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "lock_version", default: 0, null: false
   end
 
   add_foreign_key "battles", "heroes"
