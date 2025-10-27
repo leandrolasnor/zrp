@@ -41,6 +41,7 @@ RSpec.describe AlertReceives::UN::Transaction do
           status: 'enabled',
           lat: -0.9089e2,
           lng: 0.123123e3,
+          lock_version: be_a(Integer),
           payload: "{\"monsterName\":\"Monster Name\",\"dangerLevel\":\"Tiger\",\"location\":{\"lat\":-90.89,\"lng\":123.123}}",
           created_at: be_a(Time),
           updated_at: be_a(Time)

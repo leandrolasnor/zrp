@@ -10,6 +10,7 @@ module RemoveFromIndex
     def call
       monad = Monad.new(model: model.constantize, id:).call
       Job.set(wait: 5.seconds).perform_later(model:, id:) if monad.failure?
+      AppEvents.publish('hero.removed_from_index', model:, id:, document: monad.value!) if monad.success?
     end
   end
 

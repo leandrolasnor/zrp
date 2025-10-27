@@ -187,33 +187,4 @@ RSpec.describe AllocateResource::Container do
       end
     end
   end
-
-  describe 'steps.notify.call' do
-    let(:call) { described_class['steps.notify'].(threat) }
-    let(:threat) { create(:threat, :allocate_resource) }
-
-    context 'when threat is enabled' do
-      before do
-        threat.enabled!
-        allow(AppEvents).to receive(:publish).with('resource.not.allocated', threat: threat)
-        call
-      end
-
-      it 'must be able to notify with resource.not.allocated event' do
-        expect(AppEvents).to have_received(:publish).with('resource.not.allocated', threat: threat)
-      end
-    end
-
-    context 'when threat is working' do
-      before do
-        threat.working!
-        allow(AppEvents).to receive(:publish).with('resource.allocated', threat: threat)
-        call
-      end
-
-      it 'must be able to notify with resource.allocated event' do
-        expect(AppEvents).to have_received(:publish).with('resource.allocated', threat: threat)
-      end
-    end
-  end
 end

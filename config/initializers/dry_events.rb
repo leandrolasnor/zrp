@@ -61,5 +61,5 @@ end
 AppEvents.subscribe('hero.removed_from_index') do
   Dashboard::Widgets::HeroesWorking::Job.perform_later
   Dashboard::Widgets::HeroesDistribution::Job.perform_later
-  RES.pub HeroRemovedFromIndex, "#{it[:hero].class.name.demodulize}##{it[:hero].id}", it[:hero].to_json(only: [:name, :rank])
+  RES.pub HeroRemovedFromIndex, "#{it[:model].demodulize}##{it[:id]}", it[:document].to_json
 end
