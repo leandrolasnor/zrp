@@ -17,7 +17,7 @@ RSpec.describe AlertReceives::UN::Transaction do
 
       it 'must be able to get a failure' do
         expect(call).to be_failure
-        expect(call.failure.errors.to_h).to match(expected_errors)
+        expect(call.failure.errors.to_hash).to match(expected_errors)
       end
     end
 
