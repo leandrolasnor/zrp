@@ -67,7 +67,7 @@ services:
   cassandra:
     image: cassandra:5.0.6
     container_name: zrp.cassandra
-    mem_limit: 10g
+    mem_limit: 1g
     environment:
       CASSANDRA_CLUSTER_NAME: ${CASSANDRA_CLUSTER_NAME}
       CASSANDRA_NUM_TOKENS: ${CASSANDRA_NUM_TOKENS}
