@@ -107,6 +107,11 @@ GEM
       sorted_set (~> 1, >= 1.0.2)
     case_transform (0.2)
       activesupport
+    cassandra-driver (3.2.5)
+      ione (~> 1.2)
+    cequel (3.2.1)
+      activemodel (>= 4.0)
+      cassandra-driver (~> 3.0)
     concurrent-ruby (1.3.5)
     connection_pool (2.5.2)
     crack (1.0.0)
@@ -242,9 +247,10 @@ GEM
       csv
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
-    i18n (1.14.7)
+    i18n (1.8.11)
       concurrent-ruby (~> 1.0)
     io-console (0.8.0)
+    ione (1.2.5)
     irb (1.15.2)
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
@@ -656,6 +662,8 @@ DEPENDENCIES
   bootsnap
   brakeman
   bullet
+  cassandra-driver
+  cequel
   connection_pool
   debug
   dotenv
@@ -670,6 +678,7 @@ DEPENDENCIES
   grpc-tools
   gruf
   gruf-rspec
+  i18n (~> 1.8.11)
   kamal
   kaminari
   meilisearch-rails
