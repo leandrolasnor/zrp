@@ -32,7 +32,8 @@
         "SterRoque.ai-commit-generator",
         "sitoi.ai-commit",
         "first-try-software.coverage-status",
-        "GitHub.copilot-chat"
+        "GitHub.copilot-chat",
+        "ms-azuretools.vscode-containers"
       ]
     }
   }
