@@ -13,7 +13,7 @@ class AllocateResource::DomainService::Calculator::Battle
 
   option :calculator,
          type: Types::Instance(Proc),
-         default: -> { proc { Geocoder::Calculations.distance_between(_1, _2) } },
+         default: -> { proc { Geocoder::Calculations.distance_between(_1, _2) } }, # rubocop:disable Style/NumberedParametersLimit
          reader: :private
 
   option :hero_points, type: Types::Strict::Array.of(Types::Decimal), default: -> {
