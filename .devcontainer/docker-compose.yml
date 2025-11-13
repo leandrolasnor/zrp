@@ -2,7 +2,6 @@
 services:
   rabbitmq:
     image: rabbitmq:management
-    mem_limit: 128m
     container_name: zrp.rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
@@ -12,7 +11,6 @@ services:
 
   redis:
     image: redis:alpine
-    mem_limit: 28m
     container_name: zrp.redis
     environment:
       ALLOW_EMPTY_PASSWORD: ${ALLOW_EMPTY_PASSWORD}
@@ -21,7 +19,6 @@ services:
 
   api:
     image: devcontainer:ruby-3.4.2-slim
-    mem_limit: 6g
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
@@ -53,7 +50,6 @@ services:
 
   db:
     image: postgres:15.14-bookworm
-    mem_limit: 128m
     container_name: zrp.postgresql
     environment:
       POSTGRES_USER: ${DB_USERNAME}
@@ -64,23 +60,8 @@ services:
     volumes:
     - ./../db/initdb:/docker-entrypoint-initdb.d
 
-  cassandra:
-    image: cassandra:5.0.6
-    container_name: zrp.cassandra
-    mem_limit: 1g
-    environment:
-      CASSANDRA_CLUSTER_NAME: ${CASSANDRA_CLUSTER_NAME}
-      CASSANDRA_NUM_TOKENS: ${CASSANDRA_NUM_TOKENS}
-      CASSANDRA_START_RPC: ${CASSANDRA_START_RPC}
-      MAX_HEAP_SIZE: ${MAX_HEAP_SIZE}
-      HEAP_NEWSIZE: ${HEAP_NEWSIZE}
-    ports:
-    - 9042:9042
-    - 9160:9160
-
   pgadmin:
     image: dpage/pgadmin4
-    mem_limit: 512m
     container_name: zrp.pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
@@ -92,7 +73,6 @@ services:
 
   meilisearch:
     image: getmeili/meilisearch:latest
-    mem_limit: 1g
     container_name: zrp.meilisearch
     environment:
       MEILI_MASTER_KEY: ${MEILI_MASTER_KEY}

@@ -62,12 +62,6 @@ gem 'aasm'
 
 gem 'rails_event_store'
 
-gem 'cassandra-driver'
-
-gem 'cequel'
-
-gem 'i18n', '~> 1.8.11'
-
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
