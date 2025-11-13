@@ -37,3 +37,4 @@ en:
   dry_validation:
     errors:
       filter_invalid: "Filter invalid"
+      invalid_url_format: "Must be a valid URL starting with http:// or https://"

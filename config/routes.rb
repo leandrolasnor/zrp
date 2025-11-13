@@ -16,6 +16,10 @@ Rails.application.routes.draw do
       get :historical, on: :collection
       post :set_insurgency, on: :collection
     end
+
+    resources :shortened_urls, only: :create do
+      get '/:code', to: 'shortened_urls#redirect', as: :short_redirect
+    end
   end
 
   get :up, to: "rails/health#show", as: :rails_health_check
