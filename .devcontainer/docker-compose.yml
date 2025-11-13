@@ -82,7 +82,6 @@ services:
     image: dpage/pgadmin4
     mem_limit: 512m
     container_name: zrp.pgadmin
-    restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
