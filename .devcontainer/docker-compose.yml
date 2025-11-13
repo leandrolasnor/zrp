@@ -69,7 +69,7 @@ services:
       PGADMIN_SETUP_MASTER_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
       PGADMIN_CONFIG_SERVER_MODE: ${PGADMIN_CONFIG_SERVER_MODE}
     ports:
-      - 8080:80
+    - 8080:80
 
   meilisearch:
     image: getmeili/meilisearch:latest
