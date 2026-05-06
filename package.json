@@ -1,8 +1,8 @@
 {
   "private": true,
-    "workspaces": [
-      "react",
-      "socket.io/server",
-      "socket.io/client"
-    ]
+  "workspaces": [
+    "react",
+    "socket.io/server",
+    "socket.io/client"
+  ]
 }

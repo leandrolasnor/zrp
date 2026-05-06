@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 set -e
+bundle install --jobs $(nproc) --retry 5
+corepack yarn config set --home enableTelemetry 0
+corepack yarn install --no-immutable
 rails setup
 rails db:seed
 exec "$@"
