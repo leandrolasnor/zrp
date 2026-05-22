@@ -5,16 +5,21 @@ FROM ruby:$RUBY_VERSION-slim AS devcontainer
 WORKDIR /workspaces/zrp
 ENV RAILS_ENV=development \
     NODE_ENV=development \
+    YARN_ENABLE_TELEMETRY=0 \
+    GEM_HOME=/workspaces/zrp/.gem \
     BUNDLE_WITHOUT=production \
     BUNDLE_DEPLOYMENT=false \
-    BUNDLE_PATH=/usr/local/bundle \
+    BUNDLE_RETRY=false \
+    BUNDLE_JOBS=$(nproc) \
+    BUNDLE_RETRY=5 \
     BUNDLE_SILENCE_ROOT_WARNING=1 \
     BUNDLE_DISABLE_POSTIT=1 \
     BUNDLE_DISABLE_LOCAL_REVISION_CHECK=true \
     BUNDLE_DISABLE_LOCAL_BRANCH_CHECK=true \
-    PATH=$PATH:/workspaces/zrp/bin \
     XDG_CONFIG_HOME=/workspaces/zrp \
     TZ=America/Sao_Paulo
+ENV PATH=/workspaces/zrp/bin:$PATH
+ENV PATH=$GEM_HOME/bin:$PATH
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
     build-essential libjemalloc2 git wget curl ca-certificates \
@@ -35,4 +40,7 @@ RUN sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highligh
 RUN sed -i 's/ZSH_THEME=\"robbyrussell\"/ZSH_THEME=powerlevel10k\/powerlevel10k/g' ~/.zshrc
 RUN sed -i -e '$aPOWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true' ~/.zshrc
 RUN sed -i -e '$a[[ ! -f .devcontainer/.p10k.zsh ]] || source .devcontainer/.p10k.zsh' ~/.zshrc
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
 COPY . .
+RUN corepack yarn install --no-immutable

@@ -5,7 +5,12 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "api",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-  "runServices": ["db", "rabbitmq", "redis","meilisearch", "pgadmin"],
+  "runServices": [
+    "db", "grafana","meilisearch",
+    "pgadmin", "prometheus", "redis",
+    "db-exporter", "rabbitmq", "redis-exporter",
+    "socket.io.server", "socket.io.client"
+  ],
   "forwardPorts": [3000, 28080],
   "postCreateCommand": ".devcontainer/boot",
   "postStartCommand": ".devcontainer/start",

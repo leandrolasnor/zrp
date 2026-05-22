@@ -26,10 +26,10 @@ const send_event = async (data) => {
 // const socket = io('https://zrp-challenges-dev-production.up.railway.app');
 const socket = io(`${process.env.SOCKET_IO_SERVER}:${process.env.SOCKET_IO_SERVER_PORT}`);
 socket.on("connect", () => {
-  console.log('Connected');
+  console.log('Server Connected');
 });
 socket.on("disconnect", () => {
-  console.log("disconnect"); // false
+  console.log("Server Disconnected");
 });
 socket.on("occurrence", (data) => {
   send_event(data)

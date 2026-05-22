@@ -5,5 +5,3 @@ cable: puma -p 28080 cable/config.ru
 gruf: gruf
 sneakers: sneakers work Processor --require ./sneakers/processor.rb
 react: corepack yarn workspace react start
-socket-io-server: corepack yarn workspace socket.io.server start
-socket-io-client: corepack yarn workspace socket.io.client start
