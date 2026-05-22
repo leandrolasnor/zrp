@@ -60,6 +60,8 @@ gem 'overmind'
 
 gem 'aasm'
 
+gem 'prometheus-client'
+
 gem 'rails_event_store'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
@@ -129,6 +131,7 @@ group :development do
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
   gem 'rubocop-rspec_rails', require: false
+  gem "ruby-lsp", require: false
   gem "ruby-lsp-rspec", require: false
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   gem "rails-mcp-server"
