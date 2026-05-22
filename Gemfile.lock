@@ -371,6 +371,8 @@ GEM
       prettyprint
     prettyprint (0.2.0)
     prism (1.6.0)
+    prometheus-client (4.2.5)
+      base64
     psych (5.2.6)
       date
       stringio
@@ -701,6 +703,7 @@ DEPENDENCIES
   parallel_tests
   paranoia
   pg
+  prometheus-client
   puma (>= 5.0)
   rack-cors
   rails (~> 8.0.2)
@@ -722,6 +725,7 @@ DEPENDENCIES
   rubocop-rails-omakase
   rubocop-rspec
   rubocop-rspec_rails
+  ruby-lsp
   ruby-lsp-rspec
   shoulda-matchers
   simplecov
