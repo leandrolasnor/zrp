@@ -38,3 +38,4 @@ node_modules
 .overmind.sock
 **/**/*.log
 .yarn
+.gem
