@@ -1,0 +1,35 @@
+{
+  "rubyLsp.formatter": "rubocop",
+  "rubyLsp.rubyVersionManager": {
+    "identifier": "rbenv"
+  },
+  "rubyLsp.enabledFeatures": {
+    "codeActions": true,
+    "completion": true,
+    "definition": true,
+    "diagnostics": true,
+    "documentSymbols": true,
+    "foldingRanges": true,
+    "formatting": true,
+    "hover": true,
+    "inlayHint": true,
+    "onTypeFormatting": true,
+    "references": true,
+    "selectionRanges": true,
+    "semanticTokens": true,
+    "signatureHelp": true,
+    "typeHierarchy": true,
+    "workspaceSymbol": true
+  },
+  "rubyLsp.featuresConfiguration": {
+    "completion": {
+      "enableWarnerForInProcess": false
+    }
+  },
+  "[ruby]": {
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.semanticHighlighting.enabled": true
+  }
+}

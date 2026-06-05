@@ -1,12 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { applyMiddleware } from 'redux'
 import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 import reducers from './reducers'
 import ReduxToastr from 'react-redux-toastr'
 import multi from 'redux-multi'
-import promise from 'redux-promise'
 import thunk from 'redux-thunk'
 import App from './App.js'
 import axios from 'axios'
@@ -20,16 +18,12 @@ import './index.css'
 axios.defaults.baseURL = process.env.REACT_APP_API_URL
 axios.defaults.headers.common['Content-type'] = 'application/json'
 
-const devTools =
-  process.env.NODE_ENV === 'development'
-    ? window.__REDUX_DEVTOOLS_EXTENSION__ &&
-    window.__REDUX_DEVTOOLS_EXTENSION__()
-    : null
-const store =
-  process.env.NODE_ENV === 'development'
-    ? applyMiddleware(multi, thunk, promise)(configureStore)({ reducer: reducers }, devTools)
-    : applyMiddleware(multi, thunk, promise)(configureStore)({ reducer: reducers })
-console.log(process.env.REACT_APP_REDIS_URL)
+const store = configureStore({
+  reducer: reducers,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(multi, thunk),
+  devTools: process.env.NODE_ENV === 'development',
+})
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
