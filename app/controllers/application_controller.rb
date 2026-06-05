@@ -6,6 +6,6 @@ class ApplicationController < ApiController
   private
 
   def not_found
-    head: :not_found
+    head :not_found
   end
 end
