@@ -1,0 +1,65 @@
+{
+  "rabbit_version": "3.13",
+  "exchanges": [
+    {
+      "name": "un.dlx",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "queues": [
+    {
+      "name": "un",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "un.dlx"
+      }
+    },
+    {
+      "name": "un.retry",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-message-ttl": 5000,
+        "x-dead-letter-exchange": "",
+        "x-dead-letter-routing-key": "un"
+      }
+    },
+    {
+      "name": "un.dead",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "un.parser.error",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "un.dlx",
+      "destination": "un.retry",
+      "destination_type": "queue",
+      "routing_key": "un"
+    },
+    {
+      "source": "un.dlx",
+      "destination": "un.dead",
+      "destination_type": "queue",
+      "routing_key": "dead"
+    },
+    {
+      "source": "un.dlx",
+      "destination": "un.parser.error",
+      "destination_type": "queue",
+      "routing_key": "parser.error"
+    }
+  ]
+}

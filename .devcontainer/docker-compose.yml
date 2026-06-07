@@ -9,6 +9,9 @@ services:
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
     ports:
     - 15672:15672
+    volumes:
+      - ./.devcontainer/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./.devcontainer/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "ping"]

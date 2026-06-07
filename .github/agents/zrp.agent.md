@@ -246,7 +246,6 @@ rake rswag:specs:swaggerize  # Generate Swagger docs from specs
 ### Utilities
 ```bash
 rake redis:flushall          # Flush all Redis databases
-rake rabbitmq:setup          # Setup RabbitMQ DLX and queues
 rake meilisearch:clear_indexes  # Clear MeiliSearch indexes
 ```
 

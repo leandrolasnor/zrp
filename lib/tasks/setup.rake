@@ -20,10 +20,6 @@ task setup: :environment do
   Rake::Task["db:migrate:reset"].invoke
   puts " Done"
 
-  puts "\n== RabbitMQ DLX =="
-  Rake::Task["rabbitmq:setup"].invoke
-  puts "Done"
-
   puts "\n== Building Swagger docs (http://localhost:3000/api-docs) =="
   Rake::Task["rswag:specs:swaggerize"].invoke
   puts " Done"

@@ -17,37 +17,47 @@ class Processor
   def work(message)
     return reject! if requeue?
 
-    parsed = JSON.parse(message)
-    occurrence = ::Rpc::Occurrence.new(parsed)
-    result = client.(:Alert, occurrence)
-
-    if result.message.is_a?(::Rpc::Threat)
+    occurrence = ::Rpc::Occurrence.new(JSON.parse(message))
+    if ihero.(:Alert, occurrence).success?
       clear_retry_count(message)
       ack!
     else
-      requeue!
+      if retry_exhausted?(message)
+        Sneakers.logger.error "Max retries reached, discarding message to dead queue"
+        dead!(message)
+      else
+        increment_retry(message)
+        reject!
+      end
     end
   rescue JSON::ParserError => error
     Sneakers.logger.error "Invalid JSON: #{error.message}"
-    reject!
+    dead!(message, routing_key: 'parser.error')
   rescue StandardError => error
     Sneakers.logger.error "#{error.message}\n#{error.backtrace&.first(5)&.join("\n")}"
 
     if retry_exhausted?(message)
-      Sneakers.logger.error "Max retries reached, discarding message"
-      reject!
+      Sneakers.logger.error "Max retries reached on StandardError, discarding message to dead queue"
+      dead!(message)
     else
       increment_retry(message)
-      requeue!
+      reject!
     end
   end
 
   private
 
-  def requeue? = REDIS.with { it.get('SNEAKERS_REQUEUE') == 'true' }
+  def dead!(message, routing_key: 'dead')
+    dead_exchange.publish(message, routing_key: routing_key, persistent: true)
+    Sneakers.logger.info "Message dead-lettered to un.#{routing_key.tr('.', '_')}"
+    ack!
+  rescue StandardError => e
+    Sneakers.logger.error "Failed to dead-letter message: #{e.message}"
+    ack!
+  end
 
-  def retry_exhausted?(message)
-    REDIS.with { it.get(retry_key(message)) }.to_i >= MAX_RETRIES
+  def dead_exchange
+    @dead_exchange ||= channel.exchange('un.dlx', type: :direct, durable: true)
   end
 
   def increment_retry(message)
@@ -57,16 +67,13 @@ class Processor
     end
   end
 
-  def clear_retry_count(message)
-    REDIS.with { it.del(retry_key(message)) }
-  end
+  def requeue? = REDIS.with { it.get('SNEAKERS_REQUEUE') == 'true' }
+  def retry_exhausted?(message) = REDIS.with { it.get(retry_key(message)) }.to_i >= MAX_RETRIES
+  def clear_retry_count(message) = REDIS.with { it.del(retry_key(message)) }
+  def retry_key(message) = "sneakers:retry:#{Digest::SHA256.hexdigest(message)}"
 
-  def retry_key(message)
-    "sneakers:retry:#{Digest::SHA256.hexdigest(message)}"
-  end
-
-  def client
-    @client ||=
+  def ihero
+    @ihero ||=
       ::Gruf::Client.new(
         service: ::Rpc::UN,
         options: {
