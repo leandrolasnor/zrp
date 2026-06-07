@@ -34,10 +34,10 @@ const App = () => {
           <ActionCableConsumer
             channel="NotificationChannel"
             onReceived={handleReceived}
-            onConnected={e => console.log("Cable Online")}
-            onDisconnected={e => console.log("Cable Offline")}
-            onInitialized={e => console.log("Cable Initialized")}
-            onRejected={e => console.log("Cable Rejected")}
+            onConnected={e => process.env.NODE_ENV === 'development' && console.log("Cable Online")}
+            onDisconnected={e => process.env.NODE_ENV === 'development' && console.log("Cable Offline")}
+            onInitialized={e => process.env.NODE_ENV === 'development' && console.log("Cable Initialized")}
+            onRejected={e => process.env.NODE_ENV === 'development' && console.log("Cable Rejected")}
           />
         </Content>
       </Container>

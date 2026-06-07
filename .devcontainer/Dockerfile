@@ -28,8 +28,8 @@ RUN apt-get update -qq && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
 RUN npm install -g corepack && \
-    corepack prepare yarn@stable --activate
-
+    corepack prepare yarn@stable --activate && \
+    corepack yarn dlx opencode-ai
 RUN rm -rf /root/.oh-my-zsh
 RUN sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 RUN usermod --shell /bin/zsh root

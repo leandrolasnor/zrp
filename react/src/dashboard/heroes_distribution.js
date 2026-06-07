@@ -17,7 +17,7 @@ const HeroesDistribution = () => {
         Object.entries(colors).map(([rank, color], i) => {
           return (
             <Col key={i}>
-              <Badge color={color} content={heroes_distribution[rank.toLocaleLowerCase()]}>
+              <Badge color={color} content={heroes_distribution[rank.toLowerCase()]}>
                 <Tag>{rank.toUpperCase()}</Tag>
               </Badge>
             </Col>

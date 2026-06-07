@@ -30,7 +30,7 @@ const Searcher = () => {
     </InputGroup>
   )
 
-  useEffect(() => { searchRef.current.value = query })
+  useEffect(() => { searchRef.current.value = query }, [query])
   return (
     <Row className='mt-3'>
       <Col md={22}>

@@ -18,20 +18,26 @@ export const search = (query, pagination, filter, sort) => {
 
 export const create_hero = data => {
   return dispatch => {
-    axios.post('/v1/heroes', data).then(resp => {
+    return axios.post('/v1/heroes', data).then(resp => {
       dispatch({ type: 'HERO_CREATED', payload: resp.data })
       toastr.success('New Hero', _.get(resp, 'data.name', ''))
-    }).catch(e => handle_errors(e))
+    }).catch(e => {
+      handle_errors(e)
+      throw e
+    })
   }
 }
 
 export const update_hero = data => {
   const { id } = data
   return dispatch => {
-    axios.patch(`/v1/heroes/${id}`, data).then(resp => {
+    return axios.patch(`/v1/heroes/${id}`, data).then(resp => {
       dispatch({ type: 'HERO_UPDATED', payload: resp.data })
       toastr.success('Hero updated!', _.get(resp, 'data.name', ''))
-    }).catch(e => handle_errors(e))
+    }).catch(e => {
+      handle_errors(e)
+      throw e
+    })
   }
 }
 

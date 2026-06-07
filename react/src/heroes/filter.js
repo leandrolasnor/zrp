@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { IconButton, Accordion, Tag, Col, Row, InputPicker, Stack } from 'rsuite'
 import Funnel from '@rsuite/icons/Funnel'
@@ -23,8 +23,14 @@ const Filter = () => {
     c: 'red'
   }
 
-  const ranksData = ranks.map((r) => ({ label: <Tag size='sm' color={colors[r]}>{r}</Tag>, value: r }))
-  const statusesData = statuses.map((s) => ({ label: <Tag size='sm'>{s}</Tag>, value: s }))
+  const ranksData = useMemo(() =>
+    ranks.map((r) => ({ label: <Tag size='sm' color={colors[r]}>{r}</Tag>, value: r })).reverse(),
+    [ranks]
+  )
+  const statusesData = useMemo(() =>
+    statuses.map((s) => ({ label: <Tag size='sm'>{s}</Tag>, value: s })).reverse(),
+    [statuses]
+  )
 
   const applyFilter = () => {
     let filter = []
@@ -48,10 +54,10 @@ const Filter = () => {
         <Accordion.Panel eventKey={1} header="Filter" caretAs={FaAngleDoubleDown} >
           <Row className='mt-2'>
             <Col md={4}>
-              <InputPicker placeholder="Rank" key='rank' value={rankFilter} autoFocus data={ranksData.reverse()} onChange={setRankFilter} />
+              <InputPicker placeholder="Rank" key='rank' value={rankFilter} autoFocus data={ranksData} onChange={setRankFilter} />
             </Col >
             <Col md={4}>
-              <InputPicker placeholder="Status" key='status' value={statusFilter} data={statusesData.reverse()} onChange={setStatusFilter} />
+              <InputPicker placeholder="Status" key='status' value={statusFilter} data={statusesData} onChange={setStatusFilter} />
             </Col>
             <Col md={16}>
               <Stack justifyContent="flex-end"><IconButton onClick={applyFilter} icon={<Funnel />}>Apply</IconButton></Stack>

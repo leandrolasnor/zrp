@@ -7,7 +7,10 @@ const InsurgencySlider = () => {
   const dispatch = useDispatch()
   const data = { '5s': 5, '10s': 10, '20s': 20 }
   const [insurgency, setInsurgency] = useState(Object.keys(data).length - 1)
-  useEffect(() => dispatch(set_insurgency(Object.values(data)[insurgency])), [insurgency])
+  useEffect(() => {
+    const timer = setTimeout(() => dispatch(set_insurgency(Object.values(data)[insurgency])), 1000)
+    return () => clearTimeout(timer)
+  }, [insurgency])
   return (
     <Slider
       progress

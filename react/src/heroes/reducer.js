@@ -5,6 +5,8 @@ const INITIAL_STATE = {
     hits: [],
     query: '',
     totalHits: 0,
+    page: 1,
+    hitsPerPage: 30,
     filter: [],
     sort: ['name:asc']
   }

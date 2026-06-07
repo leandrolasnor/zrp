@@ -11,8 +11,9 @@ const Paginate = () => {
   const handleChangePerPage = per_page => dispatch(search(query, { per_page: per_page, page: 1 }, filter, sort))
   const handleChangePage = page => dispatch(search(query, { per_page: hitsPerPage || limitOptions[0], page: page }, filter, sort))
 
-  useEffect(() => {dispatch(search(query, { page: 1, per_page: hitsPerPage || limitOptions[0] }, filter, []))}, [query, filter])
-  useEffect(() => { dispatch(search(query, { page: page || 1, per_page: hitsPerPage || limitOptions[0] }, filter, sort)) }, [sort])
+  useEffect(() => {
+    dispatch(search(query, { page: 1, per_page: hitsPerPage || limitOptions[0] }, filter, sort || []))
+  }, [query, filter, sort])
 
   return (
     <Row className='mt-3'>

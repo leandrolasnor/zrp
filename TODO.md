@@ -33,44 +33,44 @@ Relatório gerado em: 05/06/2026
   });
   ```
 
-- [ ] **Validar eventos do WebSocket antes de despachar como ação Redux** (`react/src/App.js:21-22`)
+- [x] **Validar eventos do WebSocket antes de despachar como ação Redux** (`react/src/App.js:21-22`)
   `onReceived={e => dispatch(e)}` dá controle total do store ao servidor. Implementar whitelist/validação.
 
 ### ALTO
 
-- [ ] **Remover console.log da Redis URL** (`react/src/index.js:32`)
+- [x] **Remover console.log da Redis URL** (`react/src/index.js:32`)
   `console.log(process.env.REACT_APP_REDIS_URL)` vaza URL em produção.
 
-- [ ] **Consolidar useEffect duplicados** (`react/src/heroes/paginate.js:14-15`)
+- [x] **Consolidar useEffect duplicados** (`react/src/heroes/paginate.js:14-15`)
   Duas chamadas de API no mount. Unificar em um único effect.
 
-- [ ] **Adicionar page e hitsPerPage ao INITIAL_STATE** (`react/src/heroes/reducer.js:1-11`)
+- [x] **Adicionar page e hitsPerPage ao INITIAL_STATE** (`react/src/heroes/reducer.js:1-11`)
   Valores `undefined` no primeiro render causam comportamento imprevisível.
 
-- [ ] **Corrigir regex destrutiva em handle_errors** (`react/src/handle_errors.js:11`)
+- [x] **Corrigir regex destrutiva em handle_errors** (`react/src/handle_errors.js:11`)
   Regex remove dígitos e pontuação de mensagens de erro. Implementar extração estruturada.
 
-- [ ] **Escrever testes significativos** (`react/src/App.test.js`)
+- [x] **Escrever testes significativos** (`react/src/App.test.js`)
   Único teste existente é boilerplate CRA. Testar componentes, reducers e actions.
 
 ### MÉDIO
 
-- [ ] **Proteger console.logs em produção** (`react/src/App.js:23-26`)
+- [x] **Proteger console.logs em produção** (`react/src/App.js:23-26`)
   Envolver em `if (process.env.NODE_ENV === 'development')` ou remover.
 
-- [ ] **Adicionar useMemo em dados computados** (`react/src/heroes/filter.js:51,54`, `react/src/heroes/hero_form.js:55`)
+- [x] **Adicionar useMemo em dados computados** (`react/src/heroes/filter.js:51,54`, `react/src/heroes/hero_form.js:55`)
   `.reverse()` modifica array original a cada render. Usar `useMemo` + slice.
 
-- [ ] **Adicionar array de dependências no useEffect** (`react/src/heroes/searcher.js:33`)
+- [x] **Adicionar array de dependências no useEffect** (`react/src/heroes/searcher.js:33`)
   `useEffect` sem dependências executa em todo render.
 
-- [ ] **Debounce no slider de insurgency** (`react/src/navbar/insurgency_slider.js:10`)
+- [x] **Debounce no slider de insurgency** (`react/src/navbar/insurgency_slider.js:10`)
   Dispara POST a cada movimento. Adicionar debounce de 300-500ms.
 
-- [ ] **Separar close() do dispatch assíncrono** (`react/src/heroes/hero_form.js:46`)
+- [x] **Separar close() do dispatch assíncrono** (`react/src/heroes/hero_form.js:46`)
   Modal fecha antes da resposta da API. Mover `close()` para callback de sucesso.
 
-- [ ] **Trocar toLocaleLowerCase() por toLowerCase()** (`react/src/dashboard/threats_distribution.js:21`, `react/src/dashboard/heroes_distribution.js:20`)
+- [x] **Trocar toLocaleLowerCase() por toLowerCase()** (`react/src/dashboard/threats_distribution.js:21`, `react/src/dashboard/heroes_distribution.js:20`)
 
 ### BAIXO
 

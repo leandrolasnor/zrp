@@ -8,7 +8,8 @@ const handle_errors = e => {
       Object.entries(e.response.data).forEach(error => {
         const [key, value] = error
         if (Array.isArray(value)) return toastr.error(_.capitalize(key), value.join(' '));
-        toastr.error(_.capitalize(key), JSON.stringify(value).replace(/,|\d|:|[|]|'|{|}/g, ' '))
+        const message = typeof value === 'string' ? value : JSON.stringify(value, null, 2)
+        toastr.error(_.capitalize(key), message)
       })
     } else if (typeof e.response.data === 'string') {
       toastr.error('Error', e.response.data)
