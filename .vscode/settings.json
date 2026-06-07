@@ -1,7 +1,7 @@
 {
   "rubyLsp.formatter": "rubocop",
   "rubyLsp.rubyVersionManager": {
-    "identifier": "rbenv"
+    "identifier": "none"
   },
   "rubyLsp.enabledFeatures": {
     "codeActions": true,
