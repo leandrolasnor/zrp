@@ -40,6 +40,13 @@ RUN sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highligh
 RUN sed -i 's/ZSH_THEME=\"robbyrussell\"/ZSH_THEME=powerlevel10k\/powerlevel10k/g' ~/.zshrc
 RUN sed -i -e '$aPOWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true' ~/.zshrc
 RUN sed -i -e '$a[[ ! -f .devcontainer/.p10k.zsh ]] || source .devcontainer/.p10k.zsh' ~/.zshrc
+COPY package.json yarn.lock ./
+COPY react/package.json ./react/
+COPY socket.io/client/package.json ./socket.io/client/
+COPY socket.io/server/package.json ./socket.io/server/
+RUN corepack yarn install --no-immutable
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
 COPY . .
 RUN bundle install
 RUN corepack yarn install --no-immutable
