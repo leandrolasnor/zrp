@@ -12,7 +12,12 @@ const send_event = async (data) => {
     connection = await amqp.connect(`${process.env.AMQP_SERVER}`);
     const channel = await connection.createChannel();
 
-    await channel.assertQueue(queue, { durable: true });
+    await channel.assertQueue(queue, {
+      durable: true,
+      arguments: {
+        "x-dead-letter-exchange": "un.dlx"
+      }
+    });
     channel.sendToQueue(queue, Buffer.from(JSON.stringify(data)));
     console.log(data);
     await channel.close();

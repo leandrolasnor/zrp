@@ -28,8 +28,8 @@ RUN apt-get update -qq && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
 RUN npm install -g corepack && \
-    corepack prepare yarn@stable --activate && \
-    corepack yarn dlx opencode-ai
+    corepack prepare yarn@stable --activate
+
 RUN rm -rf /root/.oh-my-zsh
 RUN sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 RUN usermod --shell /bin/zsh root
@@ -40,6 +40,7 @@ RUN sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highligh
 RUN sed -i 's/ZSH_THEME=\"robbyrussell\"/ZSH_THEME=powerlevel10k\/powerlevel10k/g' ~/.zshrc
 RUN sed -i -e '$aPOWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true' ~/.zshrc
 RUN sed -i -e '$a[[ ! -f .devcontainer/.p10k.zsh ]] || source .devcontainer/.p10k.zsh' ~/.zshrc
+RUN curl -fsSL https://opencode.ai/install | bash
 COPY . .
 RUN bundle install
 RUN corepack yarn install --no-immutable

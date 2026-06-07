@@ -9,6 +9,12 @@ namespace :rabbitmq do
 
     channel.exchange('un.dlx', type: :direct, durable: true)
 
+    channel.queue('un',
+      durable: true,
+      arguments: {
+        'x-dead-letter-exchange' => 'un.dlx'
+      })
+
     channel.queue('un.retry',
       durable: true,
       arguments: {
