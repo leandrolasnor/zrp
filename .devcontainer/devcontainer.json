@@ -37,7 +37,8 @@
         "GitHub.copilot-chat",
         "ms-azuretools.vscode-containers",
         "KoichiSasada.vscode-rdbg",
-        "kaiwood.endwise"
+        "kaiwood.endwise",
+        "SantiagoRomanChillon.opencode-zen-copilot"
       ]
     }
   }

@@ -40,7 +40,6 @@ RUN sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highligh
 RUN sed -i 's/ZSH_THEME=\"robbyrussell\"/ZSH_THEME=powerlevel10k\/powerlevel10k/g' ~/.zshrc
 RUN sed -i -e '$aPOWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true' ~/.zshrc
 RUN sed -i -e '$a[[ ! -f .devcontainer/.p10k.zsh ]] || source .devcontainer/.p10k.zsh' ~/.zshrc
-RUN curl -fsSL https://opencode.ai/install | bash
 COPY . .
 RUN bundle install
 RUN corepack yarn install --no-immutable
