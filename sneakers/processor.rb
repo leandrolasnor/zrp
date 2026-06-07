@@ -18,7 +18,7 @@ class Processor
     return reject! if requeue?
 
     occurrence = ::Rpc::Occurrence.new(JSON.parse(message))
-    if ihero.(:Alert, occurrence).success?
+    if ihero.(:Alert, occurrence).message.is_a?(::Rpc::Threat)
       clear_retry_count(message)
       ack!
     else
