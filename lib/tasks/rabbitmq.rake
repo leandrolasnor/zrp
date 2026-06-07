@@ -26,6 +26,5 @@ namespace :rabbitmq do
     channel.queue('un.retry').bind('un.dlx', routing_key: 'un')
 
     conn.close
-    puts "Done"
   end
 end
