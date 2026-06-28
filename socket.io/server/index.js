@@ -8,10 +8,13 @@ config()
 const redis = createClient({ url: process.env.REDIS_URL })
 redis.on('error', err => console.log('Redis Client Error', err))
 await redis.connect()
-const insurgency_time = async () => await redis.get('INSURGENCY_TIME')
-insurgency_time().then(async t => {
-  if (Number(t) == 0) await redis.set('INSURGENCY_TIME', process.env.INSURGENCY_TIME)
-})
+
+const INSURGENCY_DEFAULT = process.env.INSURGENCY_TIME || 20000
+
+const insurgency_time = async () => {
+  const t = await redis.get('INSURGENCY_TIME')
+  return t !== null ? Number(t) : Number(INSURGENCY_DEFAULT)
+}
 
 const io = new Server({ /* options */ });
 const occurrence = () => {
@@ -28,10 +31,9 @@ const occurrence = () => {
 const emitOccurrence = async socket => {
   let payload = occurrence()
   console.log(payload)
-  insurgency_time().then(t => {
-    socket.timeout(t).emit("occurrence", payload, (err) => {
-      if (err) emitOccurrence(socket)
-    })
+  const t = await insurgency_time()
+  socket.timeout(t).emit("occurrence", payload, (err) => {
+    if (err) emitOccurrence(socket)
   })
 }
 
