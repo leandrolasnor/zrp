@@ -4,7 +4,7 @@ Resque.logger = ActiveSupport::Logger.new(Rails.root.join('log', 'resque.log'), 
 Resque.logger.level = Logger::INFO
 
 Resque.redis = Redis::Namespace.new(
-  :resque,
+  :jobs,
   redis: Redis.new(
     host: ENV.fetch('REDIS_HOST', 'localhost'),
     port: ENV.fetch('REDIS_PORT', '6379'),
