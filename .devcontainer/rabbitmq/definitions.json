@@ -16,8 +16,7 @@
       "durable": true,
       "auto_delete": false,
       "arguments": {
-        "x-dead-letter-exchange": "un.dlx",
-        "x-dead-letter-routing-key": "un"
+        "x-dead-letter-exchange": "un.dlx"
       }
     },
     {
@@ -48,19 +47,19 @@
       "source": "un.dlx",
       "destination": "un.retry",
       "destination_type": "queue",
-      "routing_key": ""
+      "routing_key": "un"
     },
     {
       "source": "un.dlx",
       "destination": "un.dead",
       "destination_type": "queue",
-      "routing_key": ""
+      "routing_key": "dead"
     },
     {
       "source": "un.dlx",
       "destination": "un.parser.error",
       "destination_type": "queue",
-      "routing_key": ""
+      "routing_key": "parser.error"
     }
   ]
 }
