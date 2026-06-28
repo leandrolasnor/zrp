@@ -5,8 +5,8 @@ module Http::CreateHero
     module_function
 
     def on_step_succeeded(_)
-      Dashboard::Widgets::HeroesWorking::Job.perform_later
-      Dashboard::Widgets::HeroesDistribution::Job.perform_later
+      Dashboard::Widgets::Job.enqueue(:heroes_working)
+      Dashboard::Widgets::Job.enqueue(:heroes_distribution)
     end
   end
 end

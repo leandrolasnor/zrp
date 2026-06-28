@@ -1,12 +1,13 @@
 import axios from 'axios'
-import handle_errors from '../handle_errors'
+import handle_errors from '../handleErrors'
 import { toastr } from 'react-redux-toastr'
 
-const qs = require('qs');
-const _ = require('lodash')
+import qs from 'qs';
+import _ from 'lodash'
 
 export const search = (query, pagination, filter, sort) => {
   return dispatch => {
+    dispatch({ type: 'HEROES_LOADING' })
     axios.get('/v1/heroes/search', {
       params: { ...pagination, filter: filter, query: query, sort: sort },
       paramsSerializer: params => qs.stringify(params, { arrayFormat: 'brackets' }),

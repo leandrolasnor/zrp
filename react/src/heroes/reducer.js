@@ -1,6 +1,7 @@
 const INITIAL_STATE = {
   ranks: [],
   statuses: [],
+  loading: false,
   search: {
     hits: [],
     query: '',
@@ -75,7 +76,13 @@ var reducer = (state = INITIAL_STATE, action) => {
     case 'HEROES_FETCHED':
       return {
         ...state,
+        loading: false,
         search: { ...state.search, ...action.payload }
+      }
+    case 'HEROES_LOADING':
+      return {
+        ...state,
+        loading: true
       }
     case 'QUERY_CHANGED':
       return {

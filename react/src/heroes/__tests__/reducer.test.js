@@ -3,6 +3,7 @@ import reducer from '../reducer'
 const INITIAL_STATE = {
   ranks: [],
   statuses: [],
+  loading: false,
   search: {
     hits: [],
     query: '',
@@ -66,6 +67,13 @@ describe('heroes reducer', () => {
       const state = reducer(undefined, { type: 'HEROES_FETCHED', payload })
       expect(state.search.hits).toEqual([{ id: 1, name: 'Test' }])
       expect(state.search.totalHits).toBe(1)
+    })
+  })
+
+  describe('HEROES_LOADING', () => {
+    it('sets loading to true', () => {
+      const state = reducer(undefined, { type: 'HEROES_LOADING' })
+      expect(state.loading).toBe(true)
     })
   })
 

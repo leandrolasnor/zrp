@@ -60,11 +60,7 @@ RSpec.describe AllocateResource::Job do
     end
 
     before do
-      allow(Dashboard::Widgets::HeroesWorking::Job).to receive(:perform_later)
-      allow(Dashboard::Widgets::BattlesLineup::Job).to receive(:perform_later)
-      allow(Dashboard::Widgets::AverageScore::Job).to receive(:perform_later)
-      allow(Dashboard::Widgets::AverageTimeToMatch::Job).to receive(:perform_later)
-      allow(Dashboard::Widgets::SuperHero::Job).to receive(:perform_later)
+      allow(Dashboard::Widgets::Job).to receive(:enqueue)
       allow(DeallocateResource::Job)
         .to receive(:set)
         .with(wait_until: duck_type(:to_time))
@@ -75,11 +71,11 @@ RSpec.describe AllocateResource::Job do
     end
 
     it 'must be able to create a threat and allocate heroes' do
-      expect(Dashboard::Widgets::HeroesWorking::Job).to have_received(:perform_later)
-      expect(Dashboard::Widgets::BattlesLineup::Job).to have_received(:perform_later)
-      expect(Dashboard::Widgets::AverageScore::Job).to have_received(:perform_later)
-      expect(Dashboard::Widgets::AverageTimeToMatch::Job).to have_received(:perform_later)
-      expect(Dashboard::Widgets::SuperHero::Job).to have_received(:perform_later)
+      expect(Dashboard::Widgets::Job).to have_received(:enqueue).with(:heroes_working)
+      expect(Dashboard::Widgets::Job).to have_received(:enqueue).with(:battles_lineup)
+      expect(Dashboard::Widgets::Job).to have_received(:enqueue).with(:average_score)
+      expect(Dashboard::Widgets::Job).to have_received(:enqueue).with(:average_time_to_match)
+      expect(Dashboard::Widgets::Job).to have_received(:enqueue).with(:super_hero)
       expect(job).to have_received(:perform_later).with(threat.id)
     end
   end

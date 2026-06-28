@@ -12,10 +12,10 @@ module Http::CreateHero
 
     def call
       transaction.subscribe(persist: listener)
-      transaction.call(params) do
-        it.success { |r| [:created, r, serializer] }
-        it.failure(:validate) { |f| [:unprocessable_entity, f.errors] }
-        it.failure { |f| raise StandardError, f }
+      transaction.call(params) do |step|
+        step.success { |r| [:created, r, serializer] }
+        step.failure(:validate) { |f| [:unprocessable_entity, f.errors] }
+        step.failure { |f| raise StandardError, f }
       end
     end
   end

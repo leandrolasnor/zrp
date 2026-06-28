@@ -13,11 +13,11 @@ module Http::EditHero
     def call
       ApplicationRecord.transaction do
         transaction.subscribe(update: listener)
-        transaction.call(params) do
-          it.success { |r| [:ok, r, serializer] }
-          it.failure(:validate) { |f| [:unprocessable_entity, f.errors] }
-          it.failure(:find) { |f| [:unprocessable_entity, f.errors] }
-          it.failure { |f| raise StandardError, f }
+        transaction.call(params) do |step|
+          step.success { |r| [:ok, r, serializer] }
+          step.failure(:validate) { |f| [:unprocessable_entity, f.errors] }
+          step.failure(:find) { |f| [:unprocessable_entity, f.errors] }
+          step.failure { |f| raise StandardError, f }
         end
       end
     end

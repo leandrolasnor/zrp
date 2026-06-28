@@ -11,14 +11,30 @@ class Dashboard::Widgets::HeroesWorking::Monad
       idle = model.ms_raw_search('', page: 0, facets: [:rank], filter: ['status != disabled'])
       working = model.ms_raw_search('', page: 0, facets: [:rank], filter: ['status = working'])
 
-      {
-        global: (working["totalHits"].to_f / idle["totalHits"] * 100).round(0),
-        s: (working["facetDistribution"]["rank"]["s"].to_f / idle["facetDistribution"]["rank"]["s"] * 100).round,
-        a: (working["facetDistribution"]["rank"]["a"].to_f / idle["facetDistribution"]["rank"]["a"] * 100).round,
-        b: (working["facetDistribution"]["rank"]["b"].to_f / idle["facetDistribution"]["rank"]["b"] * 100).round,
-        c: (working["facetDistribution"]["rank"]["c"].to_f / idle["facetDistribution"]["rank"]["c"] * 100).round,
-        count: working["totalHits"]
-      }
+      build_metrics(working, idle)
     end
+  end
+
+  private
+
+  def build_metrics(working, idle)
+    {
+      global: rank_pct(working["totalHits"], idle["totalHits"], 0),
+      s: rank_pct(facet(working, :s), facet(idle, :s)),
+      a: rank_pct(facet(working, :a), facet(idle, :a)),
+      b: rank_pct(facet(working, :b), facet(idle, :b)),
+      c: rank_pct(facet(working, :c), facet(idle, :c)),
+      count: working["totalHits"]
+    }
+  end
+
+  def facet(result, rank)
+    result.dig("facetDistribution", "rank", rank.to_s) || 0
+  end
+
+  def rank_pct(value, total, fallback = 0)
+    return fallback if total.zero?
+
+    (value.to_f / total * 100).round
   end
 end

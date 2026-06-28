@@ -12,14 +12,14 @@ RSpec.describe Processor do
       let(:redis_instance) { double }
 
       before do
-        allow(subject).to receive(:requeue!)
+        allow(subject).to receive(:reject!)
         allow(redis_instance).to receive(:get).with('SNEAKERS_REQUEUE').and_return('true')
         allow(REDIS).to receive(:with).and_yield(redis_instance)
         work
       end
 
       it 'must be able to requeue message' do
-        expect(subject).to have_received(:requeue!)
+        expect(subject).to have_received(:reject!)
       end
     end
   end

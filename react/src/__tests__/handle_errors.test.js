@@ -1,4 +1,4 @@
-import handle_errors from '../handle_errors'
+import handle_errors from '../handleErrors'
 
 jest.mock('react-redux-toastr', () => ({
   toastr: { error: jest.fn() }
@@ -17,6 +17,18 @@ describe('handle_errors', () => {
       handle_errors(e)
       expect(toastr.error).toHaveBeenCalled()
     })
+
+    it('handles non-array, non-string values in array entries', () => {
+      const e = { response: { data: [{ field: 'value' }] } }
+      handle_errors(e)
+      expect(toastr.error).toHaveBeenCalled()
+    })
+
+    it('handles string values in array entries', () => {
+      const e = { response: { data: ['simple error'] } }
+      handle_errors(e)
+      expect(toastr.error).toHaveBeenCalled()
+    })
   })
 
   describe('with response.data string', () => {
@@ -24,6 +36,14 @@ describe('handle_errors', () => {
       const e = { response: { data: 'Internal server error' } }
       handle_errors(e)
       expect(toastr.error).toHaveBeenCalledWith('Error', 'Internal server error')
+    })
+  })
+
+  describe('with response.data object (not string, not array)', () => {
+    it('silently ignores non-array non-string response.data', () => {
+      const e = { response: { data: { some: 'object' } } }
+      handle_errors(e)
+      expect(toastr.error).not.toHaveBeenCalled()
     })
   })
 

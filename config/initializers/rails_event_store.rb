@@ -6,6 +6,7 @@ end
 
 class RES
   include Singleton
+
   def self.client = self.instance.client
   def client = Rails.configuration.event_store
   def self.pub(...) = self.instance.pub(...)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CreateEventStoreEvents < ActiveRecord::Migration[8.0]
-  def change
+  def change # rubocop:disable Metrics/MethodLength
     create_table(:event_store_events, id: :bigserial, force: false) do |t|
       t.references  :event,       null: false, type: :uuid, index: { unique: true }
       t.string      :event_type,  null: false, index: true

@@ -10,7 +10,7 @@ task "resque:clear" => :environment do
 
   puts "Clearing delayed..." # in case of scheduler - doesn't break if no scheduler module is installed
   Resque.redis.keys("delayed:*").each do |key|
-    Resque.redis.del "#{key}"
+    Resque.redis.del key.to_s
   end
   Resque.redis.del "delayed_queue_schedule"
 
