@@ -32,7 +32,9 @@ class Dashboard::Widgets::HeroesWorking::Monad
     result.dig("facetDistribution", "rank", rank.to_s) || 0
   end
 
-  def rank_pct(value, total, round_mode = :round)
-    (value.to_f / total * 100).public_send(round_mode)
+  def rank_pct(value, total, fallback = 0)
+    return fallback if total.zero?
+
+    (value.to_f / total * 100).round
   end
 end

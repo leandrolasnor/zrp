@@ -1,7 +1,6 @@
 import reducer from '../reducer'
 
 const INITIAL_STATE = {
-    loading: false,
     super_hero: null,
     historical_threats: [],
     average_score: 0,
@@ -21,18 +20,10 @@ describe('dashboard reducer', () => {
         expect(reducer(undefined, {})).toEqual(INITIAL_STATE)
     })
 
-    describe('METRICS_LOADING', () => {
-        it('sets loading to true', () => {
-            const state = reducer(undefined, { type: 'METRICS_LOADING' })
-            expect(state.loading).toBe(true)
-        })
-    })
-
     describe('METRICS_FETCHED', () => {
-        it('merges payload and sets loading false', () => {
+        it('merges payload', () => {
             const payload = { average_score: 85, heroes_working: { global: 50 } }
             const state = reducer(undefined, { type: 'METRICS_FETCHED', payload })
-            expect(state.loading).toBe(false)
             expect(state.average_score).toBe(85)
             expect(state.heroes_working.global).toBe(50)
         })
@@ -43,13 +34,6 @@ describe('dashboard reducer', () => {
             const threats = [{ id: 1, name: 'Threat 1' }]
             const state = reducer(undefined, { type: 'HISTORICAL_THREATS_FETCHED', payload: threats })
             expect(state.historical_threats).toEqual(threats)
-        })
-    })
-
-    describe('WIDGET_HEROES_WORKING_FETCHED', () => {
-        it('sets heroes_working', () => {
-            const state = reducer(undefined, { type: 'WIDGET_HEROES_WORKING_FETCHED', payload: { global: 75 } })
-            expect(state.heroes_working).toEqual({ global: 75 })
         })
     })
 

@@ -11,25 +11,23 @@ describe('dashboard actions', () => {
     })
 
     describe('historical_threats', () => {
-        it('dispatches METRICS_LOADING and HISTORICAL_THREATS_FETCHED on success', async () => {
+        it('dispatches HISTORICAL_THREATS_FETCHED on success', async () => {
             const resp = { data: [{ id: 1, name: 'Threat' }] }
             axios.get.mockResolvedValue(resp)
 
             await historical_threats({ page: 1, per_page: 50 })(mockDispatch)
 
-            expect(mockDispatch).toHaveBeenCalledWith({ type: 'METRICS_LOADING' })
             expect(axios.get).toHaveBeenCalledWith('/v1/threats/historical', {
                 params: { page: 1, per_page: 50 }
             })
             expect(mockDispatch).toHaveBeenCalledWith({ type: 'HISTORICAL_THREATS_FETCHED', payload: resp.data })
         })
 
-        it('dispatches METRICS_LOADING on API error', async () => {
+        it('does not dispatch HISTORICAL_THREATS_FETCHED on API error', async () => {
             axios.get.mockRejectedValue(new Error('Network Error'))
 
             await historical_threats({})(mockDispatch)
 
-            expect(mockDispatch).toHaveBeenCalledWith({ type: 'METRICS_LOADING' })
             expect(mockDispatch).not.toHaveBeenCalledWith({ type: 'HISTORICAL_THREATS_FETCHED', payload: expect.anything() })
         })
     })

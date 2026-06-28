@@ -1,12 +1,17 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, act } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import HistoricalThreats from '../HistoricalThreats'
 import reducer from '../reducer'
 
+let resolveLoading
 jest.mock('../actions', () => ({
-    historical_threats: () => () => { }
+    historical_threats: () => () => new Promise(resolve => { resolveLoading = resolve })
 }))
+
+beforeEach(() => {
+    resolveLoading = undefined
+})
 
 const renderHistoricalThreats = (metricsState) => {
     const store = configureStore({
@@ -17,7 +22,6 @@ const renderHistoricalThreats = (metricsState) => {
 }
 
 const baseMetrics = {
-    loading: false,
     super_hero: null,
     historical_threats: [],
     average_score: 0,
@@ -66,56 +70,74 @@ const singleHeroThreat = {
 
 describe('HistoricalThreats', () => {
     describe('loading state', () => {
-        it('shows loader when loading is true', () => {
-            renderHistoricalThreats({ ...baseMetrics, loading: true })
+        it('shows loader while loading', () => {
+            renderHistoricalThreats(baseMetrics)
             expect(screen.getByText('Loading historical threats...')).toBeInTheDocument()
+        })
+
+        it('hides loader and shows content after loading completes', async () => {
+            renderHistoricalThreats(baseMetrics)
+            expect(screen.getByText('Loading historical threats...')).toBeInTheDocument()
+
+            await act(async () => {
+                resolveLoading()
+            })
+
+            expect(screen.queryByText('Loading historical threats...')).not.toBeInTheDocument()
         })
     })
 
     describe('empty state', () => {
-        it('shows "No historical threats yet" when list is empty', () => {
+        it('shows "No historical threats yet" when list is empty', async () => {
             renderHistoricalThreats(baseMetrics)
+            await act(async () => { resolveLoading() })
             expect(screen.getByText('No historical threats yet')).toBeInTheDocument()
         })
     })
 
     describe('data state', () => {
-        it('renders table with threats', () => {
+        it('renders table with threats', async () => {
             renderHistoricalThreats({ ...baseMetrics, historical_threats: [twoHeroThreat, singleHeroThreat] })
+            await act(async () => { resolveLoading() })
             expect(screen.getByText('Godzilla')).toBeInTheDocument()
             expect(screen.getByText('Mothra')).toBeInTheDocument()
             expect(screen.getByText('NAME')).toBeInTheDocument()
             expect(screen.getByText('LOCATION')).toBeInTheDocument()
         })
 
-        it('renders rank badges for each threat', () => {
+        it('renders rank badges for each threat', async () => {
             renderHistoricalThreats({ ...baseMetrics, historical_threats: [twoHeroThreat, singleHeroThreat] })
+            await act(async () => { resolveLoading() })
             expect(screen.getByText('god')).toBeInTheDocument()
             expect(screen.getByText('dragon')).toBeInTheDocument()
         })
 
-        it('renders refresh button', () => {
+        it('renders refresh button', async () => {
             renderHistoricalThreats({ ...baseMetrics, historical_threats: [twoHeroThreat] })
+            await act(async () => { resolveLoading() })
             const refreshButton = document.querySelector('.rs-btn-icon')
             expect(refreshButton).toBeInTheDocument()
         })
 
-        it('renders initial date column', () => {
+        it('renders initial date column', async () => {
             renderHistoricalThreats({ ...baseMetrics, historical_threats: [twoHeroThreat] })
+            await act(async () => { resolveLoading() })
             expect(screen.getByText('INITIAL DATE')).toBeInTheDocument()
             expect(screen.getByText('FINISH DATE')).toBeInTheDocument()
         })
     })
 
     describe('expanded row', () => {
-        it('renders expand buttons for each row', () => {
+        it('renders expand buttons for each row', async () => {
             renderHistoricalThreats({ ...baseMetrics, historical_threats: [twoHeroThreat] })
+            await act(async () => { resolveLoading() })
             const expandButtons = document.querySelectorAll('.rs-btn-icon-circle')
             expect(expandButtons.length).toBeGreaterThanOrEqual(1)
         })
 
-        it('expands row on click and shows battle details', () => {
+        it('expands row on click and shows battle details', async () => {
             renderHistoricalThreats({ ...baseMetrics, historical_threats: [singleHeroThreat] })
+            await act(async () => { resolveLoading() })
             const expandBtn = document.querySelector('.rs-btn-icon-circle')
             if (expandBtn) {
                 fireEvent.click(expandBtn)
@@ -127,8 +149,9 @@ describe('HistoricalThreats', () => {
     })
 
     describe('single hero battle', () => {
-        it('renders threat with single hero', () => {
+        it('renders threat with single hero', async () => {
             renderHistoricalThreats({ ...baseMetrics, historical_threats: [singleHeroThreat] })
+            await act(async () => { resolveLoading() })
             // Verify the threat name appears (rsuite Table renders threat name cells)
             expect(screen.getByText('Mothra')).toBeInTheDocument()
             expect(screen.getByText('dragon')).toBeInTheDocument()

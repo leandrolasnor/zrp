@@ -5,7 +5,7 @@ import { Table, IconButton, Row, Col, Badge, Tag, TagGroup, Loader, Panel } from
 import CollaspedOutlineIcon from '@rsuite/icons/CollaspedOutline';
 import ExpandOutlineIcon from '@rsuite/icons/ExpandOutline';
 import { historical_threats as historical } from './actions.js'
-import { FaArrowRotateRight } from 'react-icons/fa6'
+import { FaArrowRotateRight, FaBoxOpen } from 'react-icons/fa6'
 import PropTypes from 'prop-types'
 
 const { Column, HeaderCell, Cell } = Table;
@@ -147,11 +147,14 @@ const renderRowExpanded = rowData => {
 };
 
 const HistoricalThreats = () => {
-  const { historical_threats, threats_disabled: { count }, loading } = useSelector(state => state.metrics)
+  const { historical_threats, threats_disabled: { count } } = useSelector(state => state.metrics)
   const dispatch = useDispatch()
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    dispatch(historical({ page: 1, per_page: 50 }))
+    dispatch(historical({ page: 1, per_page: 50 })).then(() => {
+      setLoading(false)
+    })
   }, [count, dispatch])
 
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
@@ -180,8 +183,9 @@ const HistoricalThreats = () => {
       {loading ? (
         <Loader center content="Loading historical threats..." />
       ) : historical_threats.length === 0 ? (
-        <Panel bordered style={{ textAlign: 'center', padding: 20, marginTop: 10 }}>
-          <p style={{ opacity: 0.6 }}>No historical threats yet</p>
+        <Panel bordered style={{ textAlign: 'center', padding: 40, marginTop: 10 }}>
+          <FaBoxOpen style={{ fontSize: 64, opacity: 0.3, marginBottom: 16 }} />
+          <p style={{ opacity: 0.6, fontSize: 16 }}>No historical threats yet</p>
         </Panel>
       ) : (
         <Table
