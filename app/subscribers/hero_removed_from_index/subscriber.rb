@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Subscribers
-  class HeroRemovedFromIndex
+module HeroRemovedFromIndex
+  class Subscriber
     extend Dry::Initializer
 
     param :event, reader: :private

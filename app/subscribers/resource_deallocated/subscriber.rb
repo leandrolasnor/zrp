@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Subscribers
-  class ResourceDeallocated
+module ResourceDeallocated
+  class Subscriber
     extend Dry::Initializer
 
     param :event, reader: :private

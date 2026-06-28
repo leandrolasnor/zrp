@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Subscribers
-  class InsufficientResources
+module InsufficientResources
+  class Subscriber
     extend Dry::Initializer
 
     param :event, reader: :private
