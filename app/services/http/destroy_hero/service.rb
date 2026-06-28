@@ -12,9 +12,9 @@ module Http::DestroyHero
 
     def call
       transaction.subscribe(destroy: listener)
-      transaction.call(params) do
-        it.success { |r| [:ok, r, serializer] }
-        it.failure(:destroy) { |f| [:unprocessable_entity, f.message] }
+      transaction.call(params) do |step|
+        step.success { |r| [:ok, r, serializer] }
+        step.failure(:destroy) { |f| [:unprocessable_entity, f.message] }
       end
     end
   end

@@ -26,7 +26,7 @@ module AlertReceives::UN
 
     class Notify
       def call(threat)
-        AppEvents.publish('threat_created', threat:) if threat.enabled?
+        AppEvents.publish('un_threat_created', threat:) if threat.enabled?
       end
     end
   end

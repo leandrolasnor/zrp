@@ -9,9 +9,9 @@ module Rpc
              reader: :private
 
       def call
-        transaction.call(params) do
-          it.failure { |f| raise StandardError, f.errors }
-          it.success do |r|
+        transaction.call(params) do |step|
+          step.failure { |f| raise StandardError, f.errors }
+          step.success do |r|
             ::Rpc::Threat.new(
               status: r.status,
               name: r.name, rank: r.rank,

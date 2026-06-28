@@ -3,14 +3,14 @@
 module Dashboard::Widgets
   class Job < ApplicationJob
     WIDGETS = {
-      super_hero:             { event: 'WIDGET_SUPER_HERO_FETCHED',             queue: :low_priority },
-      average_score:          { event: 'WIDGET_AVERAGE_SCORE_FETCHED',          queue: :low_priority },
-      average_time_to_match:  { event: 'WIDGET_AVERAGE_TIME_TO_MATCH_FETCHED',  queue: :low_priority },
-      battles_lineup:         { event: 'WIDGET_BATTLES_LINEUP_FETCHED',         queue: :critical },
-      heroes_working:         { event: 'WIDGET_HEROES_WORKING_FETCHED',         queue: :critical },
-      heroes_distribution:    { event: 'WIDGET_HEROES_DISTRIBUTION_FETCHED',    queue: :critical },
-      threats_disabled:       { event: 'WIDGET_THREATS_DISABLED_FETCHED',       queue: :critical },
-      threats_distribution:   { event: 'WIDGET_THREATS_DISTRIBUTION_FETCHED',   queue: :critical }
+      super_hero: { event: 'WIDGET_SUPER_HERO_FETCHED', queue: :low_priority },
+      average_score: { event: 'WIDGET_AVERAGE_SCORE_FETCHED', queue: :low_priority },
+      average_time_to_match: { event: 'WIDGET_AVERAGE_TIME_TO_MATCH_FETCHED',  queue: :low_priority },
+      battles_lineup: { event: 'WIDGET_BATTLES_LINEUP_FETCHED',         queue: :critical },
+      heroes_working: { event: 'WIDGET_HEROES_WORKING_FETCHED',         queue: :critical },
+      heroes_distribution: { event: 'WIDGET_HEROES_DISTRIBUTION_FETCHED', queue: :critical },
+      threats_disabled: { event: 'WIDGET_THREATS_DISABLED_FETCHED', queue: :critical },
+      threats_distribution: { event: 'WIDGET_THREATS_DISTRIBUTION_FETCHED', queue: :critical }
     }.freeze
 
     queue_as :low_priority

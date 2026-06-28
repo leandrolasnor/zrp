@@ -22,27 +22,14 @@ class Processor
       clear_retry_count(message)
       ack!
     else
-      if retry_exhausted?(message)
-        Sneakers.logger.error "Max retries reached, discarding message to dead queue"
-        dead!(message)
-      else
-        increment_retry(message)
-        reject!
-      end
+      handle_retry(message)
     end
   rescue JSON::ParserError => error
     Sneakers.logger.error "Invalid JSON: #{error.message}"
     dead!(message, routing_key: 'parser.error')
   rescue StandardError => error
     Sneakers.logger.error "#{error.message}\n#{error.backtrace&.first(5)&.join("\n")}"
-
-    if retry_exhausted?(message)
-      Sneakers.logger.error "Max retries reached on StandardError, discarding message to dead queue"
-      dead!(message)
-    else
-      increment_retry(message)
-      reject!
-    end
+    handle_retry(message)
   end
 
   private
@@ -51,13 +38,23 @@ class Processor
     dead_exchange.publish(message, routing_key: routing_key, persistent: true)
     Sneakers.logger.info "Message dead-lettered to un.#{routing_key.tr('.', '_')}"
     ack!
-  rescue StandardError => e
-    Sneakers.logger.error "Failed to dead-letter message: #{e.message}"
+  rescue StandardError => error
+    Sneakers.logger.error "Failed to dead-letter message: #{error.message}"
     ack!
   end
 
   def dead_exchange
     @dead_exchange ||= channel.exchange('un.dlx', type: :direct, durable: true)
+  end
+
+  def handle_retry(message)
+    if retry_exhausted?(message)
+      Sneakers.logger.error "Max retries reached, discarding message to dead queue"
+      dead!(message)
+    else
+      increment_retry(message)
+      reject!
+    end
   end
 
   def increment_retry(message)

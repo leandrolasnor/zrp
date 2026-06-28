@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ResourceDeallocated::Subscriber
+class UNThreatCreated::Subscriber
   extend Dry::Initializer
 
   param :event, reader: :private
@@ -10,8 +10,9 @@ class ResourceDeallocated::Subscriber
   def call
     threat = event[:threat]
 
-    Dashboard::Widgets::Job.enqueue(:heroes_working)
+    AllocateResource::Job.perform_later(threat.id)
     Dashboard::Widgets::Job.enqueue(:threats_disabled)
-    RES.pub ResourceDeallocated, "#{threat.class.name.demodulize}##{threat.id}", threat.heroes.to_json
+    Dashboard::Widgets::Job.enqueue(:threats_distribution)
+    RES.pub UN::AlertReceived, "#{threat.class.name.demodulize}##{threat.id}", threat.payload
   end
 end

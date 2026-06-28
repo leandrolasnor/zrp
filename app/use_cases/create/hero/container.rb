@@ -24,11 +24,11 @@ module Create
         option :model, type: Types::Interface(:create), default: -> { Models::Hero }, reader: :private
 
         def call(params)
-          model.create do
-            it.name = params[:name]
-            it.rank = params[:rank]
-            it.lat = params[:lat]
-            it.lng = params[:lng]
+          model.create do |record|
+            record.name = params[:name]
+            record.rank = params[:rank]
+            record.lat = params[:lat]
+            record.lng = params[:lng]
           end
         end
       end

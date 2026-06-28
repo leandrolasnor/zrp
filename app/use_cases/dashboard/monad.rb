@@ -23,9 +23,9 @@ module Dashboard
 
     def call
       Try do
-        result = metrics.map do
-          name = it.class.name.split('::').third.underscore.to_sym
-          res = it.call
+        result = metrics.map do |widget|
+          name = widget.class.name.split('::').third.underscore.to_sym
+          res = widget.call
           payload = res.success? ? [name, res.value!] : [name, nil]
           payload
         end

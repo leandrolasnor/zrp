@@ -8,33 +8,33 @@ class Dashboard::Widgets::ThreatsDisabled::Monad
 
   def call
     Try do
-      threats = model.ms_raw_search(
-        '',
-        page: 0,
-        facets: [:rank],
-        filter: [
-          'status != problem',
-          "created_at > #{20.minutes.ago.to_time.to_i}"
-        ]
-      )
-      threats_disabled = model.ms_raw_search(
-        '',
-        page: 0,
-        facets: [:rank],
-        filter: [
-          'status = disabled',
-          "created_at > #{20.minutes.ago.to_time.to_i}"
-        ]
-      )
+      filter_base = ["created_at > #{20.minutes.ago.to_time.to_i}"]
+      threats = search_threats(['status != problem', *filter_base])
+      disabled = search_threats(['status = disabled', *filter_base])
 
-      count = threats_disabled["totalHits"]
-      global = (threats_disabled["totalHits"].to_f / threats["totalHits"] * 100).round(0) rescue 0
-      metrics = { global: global, count: count }
-      threats_disabled["facetDistribution"]["rank"].each do |k, v|
-        metrics[k] = (v.to_f / threats["facetDistribution"]["rank"][k] * 100).round(0) rescue 0
-      end
-
-      metrics
+      build_metrics(disabled, threats)
     end
+  end
+
+  private
+
+  def search_threats(filter)
+    model.ms_raw_search('', page: 0, facets: [:rank], filter:)
+  end
+
+  def build_metrics(disabled, all)
+    global = safe_pct(disabled["totalHits"], all["totalHits"], 0)
+    metrics = { global: global, count: disabled["totalHits"] }
+
+    disabled.dig("facetDistribution", "rank")&.each do |rank, value|
+      total = all.dig("facetDistribution", "rank", rank) || 0
+      metrics[rank] = safe_pct(value, total, 0)
+    end
+
+    metrics
+  end
+
+  def safe_pct(value, total, default = 0)
+    (value.to_f / total * 100).round(0) rescue default
   end
 end

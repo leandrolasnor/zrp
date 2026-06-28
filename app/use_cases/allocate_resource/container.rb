@@ -14,6 +14,7 @@ module AllocateResource
     class Find
       include Dry::Monads[:result]
       extend  Dry::Initializer
+
       option :threat, type: Types::Interface(:find), default: -> { AllocateResource::Model::Threat }, reader: :private
       def call(id) = threat.enabled.lock.find(id)
     end
@@ -67,30 +68,50 @@ module AllocateResource
 
       def call(matches_sorted)
         ApplicationRecord.transaction do
-          first = matches_sorted.first
-          second = matches_sorted.second
-          threat = matches_sorted.first.threat
+          @first = matches_sorted.first
+          @second = matches_sorted.second
+          @threat = @first.threat
 
-          if tranks[threat.rank] == hranks[first.hero.rank]
-            threat.working!
-            first.hero.working!
-            first.save!
-          elsif tranks[threat.rank] == hranks[second.hero.rank]
-            threat.working!
-            second.hero.working!
-            second.save!
-          elsif tranks[threat.rank] > hranks[first.hero.rank] && tranks[threat.rank] > hranks[second.hero.rank]
-            threat.working!
-            first.hero.working!
-            second.hero.working!
-            first.save!
-            second.save!
-          else
-            AppEvents.publish('resource_not_allocated', threat:, matches_sorted:)
-          end
-          AppEvents.publish('resource_allocated', threat:) if threat.working?
-          threat
+          allocated = try_allocate
+          AppEvents.publish('resource_allocated', threat: @threat) if allocated
+          AppEvents.publish('resource_not_allocated', threat: @threat, matches_sorted:) unless allocated
+          @threat
         end
+      end
+
+      private
+
+      def try_allocate
+        if rank_match?(@first)
+          perform_allocate_one(@first)
+        elsif rank_match?(@second)
+          perform_allocate_one(@second)
+        elsif can_allocate_both?
+          perform_allocate_both
+        end
+      end
+
+      def perform_allocate_one(match)
+        @threat.working!
+        match.hero.working!
+        match.save!
+      end
+
+      def perform_allocate_both
+        @threat.working!
+        @first.hero.working!
+        @second.hero.working!
+        @first.save!
+        @second.save!
+      end
+
+      def rank_match?(match)
+        tranks[@threat.rank] == hranks[match.hero.rank]
+      end
+
+      def can_allocate_both?
+        tranks[@threat.rank] > hranks[@first.hero.rank] &&
+          tranks[@threat.rank] > hranks[@second.hero.rank]
       end
     end
   end
