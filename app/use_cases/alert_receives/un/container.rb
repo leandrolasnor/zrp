@@ -21,12 +21,12 @@ module AlertReceives::UN
       extend Dry::Initializer
 
       option :model, type: Types::Interface(:create), default: -> { Model::Threat }, reader: :private
-      def call(res) = model.connection_pool.with_connection { model.create(res.to_h) }
+      def call(res) = model.create(res.to_h)
     end
 
     class Notify
       def call(threat)
-        AppEvents.publish('threat.created', threat:) if threat.enabled?
+        AppEvents.publish('threat_created', threat:) if threat.enabled?
       end
     end
   end

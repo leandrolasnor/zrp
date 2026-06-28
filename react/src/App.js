@@ -1,10 +1,11 @@
 import { Container, Content, Header, CustomProvider } from 'rsuite'
-import NavBar from './navbar/component.js'
-import Routes from './routes'
+import NavBar from './navbar/NavBar.js'
+import Routes from './Routes'
 import { ActionCableConsumer } from 'react-actioncable-provider'
 import { EventSourcePolyfill } from 'event-source-polyfill'
 import { useDispatch } from 'react-redux'
 import WS_ACTION_TYPES from './ws_action_types'
+import ErrorBoundary from './ErrorBoundary'
 
 global.EventSource = EventSourcePolyfill
 
@@ -25,22 +26,24 @@ const App = () => {
 
   return (
     <CustomProvider theme="dark">
-      <Container>
-        <Header>
-          <NavBar />
-        </Header>
-        <Content>
-          <Routes />
-          <ActionCableConsumer
-            channel="NotificationChannel"
-            onReceived={handleReceived}
-            onConnected={e => process.env.NODE_ENV === 'development' && console.log("Cable Online")}
-            onDisconnected={e => process.env.NODE_ENV === 'development' && console.log("Cable Offline")}
-            onInitialized={e => process.env.NODE_ENV === 'development' && console.log("Cable Initialized")}
-            onRejected={e => process.env.NODE_ENV === 'development' && console.log("Cable Rejected")}
-          />
-        </Content>
-      </Container>
+      <ErrorBoundary>
+        <Container>
+          <Header>
+            <NavBar />
+          </Header>
+          <Content>
+            <Routes />
+            <ActionCableConsumer
+              channel="NotificationChannel"
+              onReceived={handleReceived}
+              onConnected={e => process.env.NODE_ENV === 'development' && console.log("Cable Online")}
+              onDisconnected={e => process.env.NODE_ENV === 'development' && console.log("Cable Offline")}
+              onInitialized={e => process.env.NODE_ENV === 'development' && console.log("Cable Initialized")}
+              onRejected={e => process.env.NODE_ENV === 'development' && console.log("Cable Rejected")}
+            />
+          </Content>
+        </Container>
+      </ErrorBoundary>
     </CustomProvider>
   );
 }

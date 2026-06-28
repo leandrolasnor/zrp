@@ -74,15 +74,15 @@ Relatório gerado em: 05/06/2026
 
 ### BAIXO
 
-- [ ] Migrar `require('lodash')` para `import _ from 'lodash'`
-- [ ] Adicionar PropTypes ou migrar para TypeScript
-- [ ] Adicionar Error Boundaries
-- [ ] Adicionar estados de loading e empty state
-- [ ] Padronizar nome de arquivos (PascalCase para componentes)
-- [ ] Padronizar uso de ponto e vírgula (ESLint + Prettier)
-- [ ] Remover imports não utilizados (`useDispatch`, `useEffect`, `Slider`)
-- [ ] Remover chaves numéricas em maps (usar `key` estável)
-- [ ] Corrigir `reportWebVitals()` sem argumento (`react/src/index.js:56`)
+- [x] Migrar `require('lodash')` para `import _ from 'lodash'`
+- [x] Adicionar PropTypes ou migrar para TypeScript
+- [x] Adicionar Error Boundaries
+- [x] Adicionar estados de loading e empty state
+- [x] Padronizar nome de arquivos (PascalCase para componentes)
+- [x] ~~Padronizar uso de ponto e vírgula (ESLint + Prettier)~~ *(descartado — prefere sem `;`)*
+- [x] Remover imports não utilizados (`useDispatch`, `useEffect`, `Slider`)
+- [x] Remover chaves numéricas em maps (usar `key` estável)
+- [x] Corrigir `reportWebVitals()` sem argumento (`react/src/index.js:56`)
 
 ---
 
@@ -99,24 +99,28 @@ Relatório gerado em: 05/06/2026
   ```
   Causa `ArgumentError` em qualquer requisição com registro não encontrado.
 
-- [ ] **Restringir CORS** (`config/initializers/cors.rb:12`)
-  `origins "*"` permite qualquer origem. Especificar origens permitidas.
+- [x] ~~**Restringir CORS** (`config/initializers/cors.rb:12`)~~
+  ~~`origins "*"` permite qualquer origem. Especificar origens permitidas.~~
+  *(Ignorado — ambiente todo em devcontainer)*
 
 ### ALTO
 
 - [ ] **Consolidar modelos de Hero duplicados** (`app/use_cases/*/model/*/hero.rb`)
   ~9 modelos diferentes para a mesma tabela. Criar um modelo único com scopes/concerns.
 
-- [ ] **Extrair subscribers do initializer** (`config/initializers/dry_events.rb:23-65`)
-  Lógica de aplicação misturada com configuração. Mover para service objects.
+- [x] **Extrair subscribers do initializer** (`config/initializers/dry_events.rb:23-65`)
+  Lógica movida para `app/subscribers/` (6 classes no módulo `Subscribers`).
+  Initializer agora delega com `Subscribers::Xxx.call(event)`.
 
-- [ ] **Refatorar dashboard widgets em job único parametrizado** (`app/jobs/dashboard/widgets/*/job.rb`)
-  8 arquivos ~idênticos. Um único job com parâmetros.
+- [x] **Refatorar dashboard widgets em job único parametrizado** (`app/jobs/dashboard/widgets/job.rb`)
+  `Dashboard::Widgets::Job` único com `WIDGETS` constante (widget → event + queue).
+  Uso: `Dashboard::Widgets::Job.enqueue(:heroes_working)`.
+  8 `job.rb` removidos, ~6KB eliminados.
 
-- [ ] **Remover `debugger` do código de produção** (`app/services/http/application_service.rb:17`)
+- [x] ~~**Remover `debugger` do código de produção** (`app/services/http/application_service.rb:17`)~~
+  *(Ignorado — a pedido do usuário)*
 
-- [ ] **Adicionar autenticação HTTP** (`app/controllers/application_controller.rb:3`)
-  API completamente aberta sem autenticação.
+- [ ] **Adicionar autenticação via SSO com Keycloak** (`app/controllers/application_controller.rb:3`)
 
 - [ ] **Corrigir database.yml** (`config/database.yml:30`)
   SQLite em produção e PostgreSQL em dev/test é inversão perigosa.
@@ -132,17 +136,18 @@ Relatório gerado em: 05/06/2026
 - [ ] **Trocar `rescue_from StandardError` genérico** (`app/controllers/api_controller.rb:4`)
   Resgatar apenas exceções específicas ou retornar detalhes no body.
 
-- [ ] **Adicionar timeout no Redis.new** (`config/initializers/redis.rb:4-8`)
-  `Redis.new(timeout: 5_000)` para evitar workers pendurados.
+- [x] **Adicionar timeout no Redis.new** (`config/initializers/redis.rb:4-8`)
+  `timeout: 5_000` adicionado em ambos os pools (`REDIS` e `REDIS_JOBS`).
 
-- [ ] **Reativar métricas do Rubocop** (`.rubocop.yml:100-125`)
-  AbcSize, MethodLength, CyclomaticComplexity desabilitados.
+- [x] **Reativar métricas do Rubocop** (`.rubocop.yml`)
+  `Metrics/AbcSize` (max 30), `Metrics/CyclomaticComplexity` (max 12) e
+  `Metrics/MethodLength` (max 15) reativados com limites toleráveis.
 
-- [ ] **Remover `connection_pool.with_connection` redundante** (`app/use_cases/alert_receives/un/container.rb:24`)
-  ActiveRecord já gerencia connection pool.
+- [x] **Remover `connection_pool.with_connection` redundante** (`app/use_cases/alert_receives/un/container.rb:24`)
+  Removido. ActiveRecord já gerencia connection pool automaticamente.
 
-- [ ] **Criar locale files para I18n.t()** (`app/use_cases/allocate_resource/container.rb:43`)
-  Mensagens de erro usam I18n mas não há arquivos de locale visíveis.
+- [x] **Criar locale files para I18n.t()** (`config/locales/en.yml`)
+  Adicionadas chaves `insufficient_resources` e `cannot_destroy_hero`.
 
 ### BAIXO
 

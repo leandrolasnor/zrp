@@ -1,4 +1,5 @@
 const INITIAL_STATE = {
+  loading: false,
   super_hero: null,
   historical_threats: [],
   average_score: 0,
@@ -15,9 +16,15 @@ const INITIAL_STATE = {
 
 var reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case "METRICS_LOADING":
+      return {
+        ...state,
+        loading: true
+      }
     case "METRICS_FETCHED":
       return {
         ...state,
+        loading: false,
         ...action.payload
       }
     case "HISTORICAL_THREATS_FETCHED":

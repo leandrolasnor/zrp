@@ -39,7 +39,7 @@ module AllocateResource
         end
         return matches if matches.count >= 2
 
-        AppEvents.publish('insufficient.resources', threat:)
+        AppEvents.publish('insufficient_resources', threat:)
         raise StandardError, I18n.t(:insufficient_resources)
       end
     end
@@ -86,9 +86,9 @@ module AllocateResource
             first.save!
             second.save!
           else
-            AppEvents.publish('resource.not.allocated', threat:, matches_sorted:)
+            AppEvents.publish('resource_not_allocated', threat:, matches_sorted:)
           end
-          AppEvents.publish('resource.allocated', threat:) if threat.working?
+          AppEvents.publish('resource_allocated', threat:) if threat.working?
           threat
         end
       end

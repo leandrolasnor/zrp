@@ -1,0 +1,25 @@
+import { toastr } from 'react-redux-toastr'
+import _ from 'lodash'
+
+const handle_errors = e => {
+  if (_.get(e, 'response.data', false)) {
+    if (Array.isArray(e.response.data)) {
+      Object.entries(e.response.data).forEach(error => {
+        const [key, value] = error
+        if (Array.isArray(value)) return toastr.error(_.capitalize(key), value.join(' '));
+        const message = typeof value === 'string' ? value : JSON.stringify(value, null, 2)
+        toastr.error(_.capitalize(key), message)
+      })
+    } else if (typeof e.response.data === 'string') {
+      toastr.error('Error', e.response.data)
+    }
+  } else if (_.get(e, 'response', false)) {
+    toastr.error(String(e.response.status), e.response.statusText)
+  } else if (_.get(e, 'message', false) === 'Network Error') {
+    toastr.error('API', e.message)
+  } else {
+    toastr.error('Error', _.get(e, 'message', 'unknown error'))
+  }
+}
+
+export default handle_errors

@@ -13,7 +13,7 @@ class DeallocateResource::Monad
         record.touch # rubocop:disable Rails/SkipsModelValidations
         record.disabled!
         record.heroes.lock.each(&:enabled!)
-        AppEvents.publish('resource.deallocated', threat: record)
+        AppEvents.publish('resource_deallocated', threat: record)
         record
       end
     end

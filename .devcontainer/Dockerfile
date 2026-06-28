@@ -6,10 +6,8 @@ WORKDIR /workspaces/zrp
 ENV RAILS_ENV=development \
     NODE_ENV=development \
     YARN_ENABLE_TELEMETRY=0 \
-    GEM_HOME=/workspaces/zrp/.gem \
     BUNDLE_WITHOUT=production \
     BUNDLE_DEPLOYMENT=false \
-    BUNDLE_RETRY=false \
     BUNDLE_JOBS=$(nproc) \
     BUNDLE_RETRY=5 \
     BUNDLE_SILENCE_ROOT_WARNING=1 \

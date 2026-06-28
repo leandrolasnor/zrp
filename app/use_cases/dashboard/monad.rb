@@ -27,7 +27,6 @@ module Dashboard
           name = it.class.name.split('::').third.underscore.to_sym
           res = it.call
           payload = res.success? ? [name, res.value!] : [name, nil]
-          AppEvents.publish('metrics.fetched', [payload].to_h) if payload.second.present?
           payload
         end
 

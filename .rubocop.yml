@@ -5,7 +5,7 @@ require:
   - rubocop-rspec_rails
 
 AllCops:
-  TargetRubyVersion: 3.4.2
+  TargetRubyVersion: 3.4
   TargetRailsVersion: 8.0
 
   NewCops: enable
@@ -98,7 +98,8 @@ Layout/SpaceInLambdaLiteral:
   EnforcedStyle: require_space
 
 Metrics/AbcSize:
-  Enabled: false
+  Enabled: true
+  Max: 30
 
 Metrics/BlockLength:
   Enabled: false
@@ -110,10 +111,12 @@ Metrics/ClassLength:
   Enabled: false
 
 Metrics/CyclomaticComplexity:
-  Enabled: false
+  Enabled: true
+  Max: 12
 
 Metrics/MethodLength:
-  Enabled: false
+  Enabled: true
+  Max: 15
 
 Metrics/ModuleLength:
   Enabled: false

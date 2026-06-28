@@ -30,8 +30,7 @@ RSpec.describe Rpc::AlertReceives::UN::Service do
 
         before do
           allow(AllocateResource::Job).to receive(:perform_later).with(kind_of(Integer))
-          allow(Dashboard::Widgets::ThreatsDisabled::Job).to receive(:perform_later)
-          allow(Dashboard::Widgets::ThreatsDistribution::Job).to receive(:perform_later)
+          allow(Dashboard::Widgets::Job).to receive(:enqueue)
         end
 
         it 'must be able to return a Rpc::Threat instance' do
@@ -39,8 +38,8 @@ RSpec.describe Rpc::AlertReceives::UN::Service do
           expect(subject.lat).to eq(params.dig(:location, :lat))
           expect(subject.lng).to eq(params.dig(:location, :lng))
           expect(AllocateResource::Job).to have_received(:perform_later).with(kind_of(Integer))
-          expect(Dashboard::Widgets::ThreatsDisabled::Job).to have_received(:perform_later)
-          expect(Dashboard::Widgets::ThreatsDistribution::Job).to have_received(:perform_later)
+          expect(Dashboard::Widgets::Job).to have_received(:enqueue).with(:threats_disabled)
+          expect(Dashboard::Widgets::Job).to have_received(:enqueue).with(:threats_distribution)
         end
       end
     end
@@ -59,15 +58,13 @@ RSpec.describe Rpc::AlertReceives::UN::Service do
 
       before do
         allow(AllocateResource::Job).to receive(:perform_later).with(kind_of(Integer))
-        allow(Dashboard::Widgets::ThreatsDisabled::Job).to receive(:perform_later)
-        allow(Dashboard::Widgets::ThreatsDistribution::Job).to receive(:perform_later)
+        allow(Dashboard::Widgets::Job).to receive(:enqueue)
       end
 
       it 'must be able to raise a exception' do
         expect { subject }.to raise_error(StandardError)
         expect(AllocateResource::Job).not_to have_received(:perform_later).with(kind_of(Integer))
-        expect(Dashboard::Widgets::ThreatsDisabled::Job).not_to have_received(:perform_later)
-        expect(Dashboard::Widgets::ThreatsDistribution::Job).not_to have_received(:perform_later)
+        expect(Dashboard::Widgets::Job).not_to have_received(:enqueue)
       end
     end
   end
