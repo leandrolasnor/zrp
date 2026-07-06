@@ -5,5 +5,8 @@ build:
 exec: build
 	docker exec -it zrp.api ihero
 
+test: build
+	docker exec -it zrp.api rspec
+
 down:
 	docker compose --file './.devcontainer/docker-compose.yml' --project-name 'zrp_devcontainer' down -v
