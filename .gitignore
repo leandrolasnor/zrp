@@ -39,3 +39,7 @@ node_modules
 **/**/*.log
 .yarn
 .gem
+
+# Ignore vendas personalizadas
+/.github
+/.claude
