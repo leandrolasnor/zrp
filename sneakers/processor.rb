@@ -58,15 +58,12 @@ class Processor
   end
 
   def increment_retry(message)
-    REDIS.with do |r|
-      r.incr(retry_key(message))
-      r.expire(retry_key(message), RETRY_TTL)
-    end
+    Rails.cache.increment(retry_key(message), 1, expires_in: RETRY_TTL)
   end
 
-  def requeue? = REDIS.with { it.get('SNEAKERS_REQUEUE') == 'true' }
-  def retry_exhausted?(message) = REDIS.with { it.get(retry_key(message)) }.to_i >= MAX_RETRIES
-  def clear_retry_count(message) = REDIS.with { it.del(retry_key(message)) }
+  def requeue? = Rails.cache.read('SNEAKERS_REQUEUE') == true
+  def retry_exhausted?(message) = Rails.cache.read(retry_key(message)).to_i >= MAX_RETRIES
+  def clear_retry_count(message) = Rails.cache.delete(retry_key(message))
   def retry_key(message) = "sneakers:retry:#{Digest::SHA256.hexdigest(message)}"
 
   def ihero

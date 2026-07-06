@@ -10,7 +10,7 @@ class InsufficientResources::Subscriber
   def call
     threat = event[:threat]
 
-    REDIS.with { |redis| redis.set('SNEAKERS_REQUEUE', true, ex: 60) }
+    Rails.cache.write('SNEAKERS_REQUEUE', true, expires_in: 1.minute)
     AllocateResource::Job.set(wait: 1.minute).perform_later(threat.id)
     Dashboard::Widgets::Job.enqueue(:heroes_distribution)
     RES.pub InsufficientResources, "#{threat.class.name.demodulize}##{threat.id}"

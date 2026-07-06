@@ -5,7 +5,6 @@ RSpec.describe AllocateResource::Job do
   let(:perform) { described_class.new.perform(threat.id) }
   let(:threat) { create(:threat, :allocate_resource) }
   let(:job) { double }
-  let(:redis_instance) { double }
 
   context 'on Failure' do
     context 'on matches step' do
@@ -16,15 +15,14 @@ RSpec.describe AllocateResource::Job do
         allow(Rails.logger).to receive(:error).with(error_message)
         allow(described_class).to receive(:set).with(wait: 1.minute).and_return(job)
         allow(job).to receive(:perform_later).with(threat.id)
-        allow(REDIS).to receive(:with).and_yield(redis_instance)
-        allow(redis_instance).to receive(:set).with('SNEAKERS_REQUEUE', true, ex: 60)
+        allow(Rails.cache).to receive(:write).with('SNEAKERS_REQUEUE', true, expires_in: 60)
         perform
       end
 
       it 'must be able to write error on logger' do
         expect(Rails.logger).to have_received(:error).with(error_message)
         expect(job).to have_received(:perform_later).with(threat.id)
-        expect(redis_instance).to have_received(:set).with('SNEAKERS_REQUEUE', true, ex: 60)
+        expect(Rails.cache).to have_received(:write).with('SNEAKERS_REQUEUE', true, expires_in: 60)
       end
     end
 

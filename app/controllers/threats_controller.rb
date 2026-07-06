@@ -7,7 +7,7 @@ class ThreatsController < BaseController
   end
 
   def set_insurgency
-    REDIS.with { it.set('INSURGENCY_TIME', set_insurgency_params[:insurgency].to_i * 1000) }
+    Rails.cache.write('INSURGENCY_TIME', set_insurgency_params[:insurgency].to_i * 1000, raw: true, expires_in: nil)
     head :ok
   end
 

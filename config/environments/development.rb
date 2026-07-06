@@ -46,7 +46,13 @@ Rails.application.configure do
     }
   else
     config.action_controller.perform_caching = true
-    config.cache_store = :redis_cache_store, { url: ENV.fetch('REDIS_URL', 'redis://redis:6379/0'), pool_size: ENV.fetch("RAILS_MAX_THREADS", 5) }
+    config.cache_store =
+      :redis_cache_store, {
+        **Rails.application.config_for(:redis).symbolize_keys,
+        error_handler: -> (_method:, _returning:, exception:) {
+          Rails.logger.error "Redis cache error: #{exception.class} - #{exception.message}"
+        }
+      }
   end
 
   # Store uploaded files on the local file system (see config/storage.yml for options).

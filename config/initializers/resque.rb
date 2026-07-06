@@ -1,15 +1,11 @@
 # frozen_string_literal: true
 
-Resque.logger = ActiveSupport::Logger.new(Rails.root.join('log', 'resque.log'), 5, 2 * 1024 * 1024)
-Resque.logger.level = Logger::INFO
+if (redis_config = Rails.application.config_for(:redis))
+  Resque.logger = ActiveSupport::Logger.new(Rails.root.join('log', 'resque.log'), 5, 2 * 1024 * 1024)
+  Resque.logger.level = Logger::DEBUG
 
-Resque.redis = Redis::Namespace.new(
-  :jobs,
-  redis: Redis.new(
-    host: ENV.fetch('REDIS_HOST', 'localhost'),
-    port: ENV.fetch('REDIS_PORT', '6379'),
-    db: 0,
-    reconnect_attempts: 3,
-    timeout: 5_000
+  Resque.redis = Redis::Namespace.new(
+    :jobs,
+    redis: Redis.new(**redis_config.symbolize_keys)
   )
-)
+end

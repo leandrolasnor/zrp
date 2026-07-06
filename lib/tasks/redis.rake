@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 namespace :redis do
-  desc "Flush all Redis databases"
+  desc "Clear Redis data"
   task flushall: :environment do
-    puts "Flushing all Redis data..."
-    REDIS.with(&:flushall)
+    puts "Clearing all Redis data..."
+    Rails.cache.clear
     puts "Done!"
   end
 end

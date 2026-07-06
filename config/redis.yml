@@ -1,0 +1,14 @@
+default: &default
+  host: <%= ENV.fetch('REDIS_HOST', 'localhost') %>
+  port: <%= ENV.fetch('REDIS_PORT', 6379) %>
+  db: 0
+  connect_timeout: 5
+  read_timeout: 1
+  write_timeout: 1
+  reconnect_attempts: 1
+
+development:
+  <<: *default
+
+production:
+  <<: *default

@@ -9,12 +9,9 @@ RSpec.describe Processor do
     let(:message) { 'message' }
 
     context 'when need trigger message requeue' do
-      let(:redis_instance) { double }
-
       before do
         allow(subject).to receive(:reject!)
-        allow(redis_instance).to receive(:get).with('SNEAKERS_REQUEUE').and_return('true')
-        allow(REDIS).to receive(:with).and_yield(redis_instance)
+        allow(Rails.cache).to receive(:read).with('SNEAKERS_REQUEUE').and_return(true)
         work
       end
 
