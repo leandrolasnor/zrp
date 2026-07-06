@@ -1,7 +1,7 @@
 # docker-compose.yml
 services:
   rabbitmq:
-    image: rabbitmq:management
+    image: rabbitmq:3.13-management
     container_name: zrp.rabbitmq
     command: sh -c "rabbitmq-plugins enable rabbitmq_prometheus && rabbitmq-server"
     environment:
@@ -10,8 +10,8 @@ services:
     ports:
     - 15672:15672
     volumes:
-      - ./.devcontainer/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
-      - ./.devcontainer/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "ping"]

@@ -25,7 +25,7 @@ RUN apt-get update -qq && \
     shared-mime-info zsh libyaml-dev tmux lsb-release && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
-RUN npm install -g corepack && \
+RUN npm install -g corepack repomix && \
     corepack prepare yarn@stable --activate
 
 RUN rm -rf /root/.oh-my-zsh
@@ -46,5 +46,9 @@ RUN corepack yarn install --no-immutable
 COPY Gemfile Gemfile.lock ./
 RUN bundle install
 COPY . .
-RUN bundle install
+RUN bundle check || bundle install
 RUN corepack yarn install --no-immutable
+RUN repomix --skill-generate --skill-output .github/skills --style markdown \
+    --parsable-style --remove-empty-lines --truncate-base64 \
+    --compress --force --quiet \
+    -i .devcontainer/.p10k.zsh

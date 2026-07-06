@@ -1,8 +1,30 @@
 {
   "rabbit_version": "3.13",
+  "users": [
+    {
+      "name": "guest",
+      "password": "guest",
+      "tags": "administrator"
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "guest",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
   "exchanges": [
     {
       "name": "un.dlx",
+      "vhost": "/",
       "type": "direct",
       "durable": true,
       "auto_delete": false,
@@ -13,6 +35,7 @@
   "queues": [
     {
       "name": "un",
+      "vhost": "/",
       "durable": true,
       "auto_delete": false,
       "arguments": {
@@ -21,6 +44,7 @@
     },
     {
       "name": "un.retry",
+      "vhost": "/",
       "durable": true,
       "auto_delete": false,
       "arguments": {
@@ -31,12 +55,14 @@
     },
     {
       "name": "un.dead",
+      "vhost": "/",
       "durable": true,
       "auto_delete": false,
       "arguments": {}
     },
     {
       "name": "un.parser.error",
+      "vhost": "/",
       "durable": true,
       "auto_delete": false,
       "arguments": {}
@@ -45,18 +71,21 @@
   "bindings": [
     {
       "source": "un.dlx",
+      "vhost": "/",
       "destination": "un.retry",
       "destination_type": "queue",
       "routing_key": "un"
     },
     {
       "source": "un.dlx",
+      "vhost": "/",
       "destination": "un.dead",
       "destination_type": "queue",
       "routing_key": "dead"
     },
     {
       "source": "un.dlx",
+      "vhost": "/",
       "destination": "un.parser.error",
       "destination_type": "queue",
       "routing_key": "parser.error"
