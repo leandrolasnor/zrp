@@ -12,3 +12,11 @@ class RES
   def self.pub(...) = self.instance.pub(...)
   def pub(e, s, p = nil) = client.publish(e.new(data: p), stream_name: s)
 end
+
+class HeroRemovedFromIndex < RailsEventStore::Event; end
+class InsufficientResources < RailsEventStore::Event; end
+class ResourceAllocated < RailsEventStore::Event; end
+class ResourceDeallocated < RailsEventStore::Event; end
+class ResourceNotAllocated < RailsEventStore::Event; end
+module UN; end
+class UN::AlertReceived < RailsEventStore::Event; end
