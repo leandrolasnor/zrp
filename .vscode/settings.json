@@ -1,4 +1,5 @@
 {
+  // ── Ruby LSP (Shopify.ruby-lsp) ──────────────────────────────────────────
   "rubyLsp.formatter": "rubocop",
   "rubyLsp.rubyVersionManager": {
     "identifier": "none"
@@ -8,6 +9,8 @@
     "completion": true,
     "definition": true,
     "diagnostics": true,
+    "documentHighlights": true,
+    "documentLink": true,
     "documentSymbols": true,
     "foldingRanges": true,
     "formatting": true,
@@ -16,20 +19,156 @@
     "onTypeFormatting": true,
     "references": true,
     "selectionRanges": true,
-    "semanticTokens": true,
+    "semanticHighlighting": true,
     "signatureHelp": true,
     "typeHierarchy": true,
     "workspaceSymbol": true
   },
-  "rubyLsp.featuresConfiguration": {
-    "completion": {
-      "enableWarnerForInProcess": false
-    }
+  "rubyLsp.linters": null,
+  "rubyLsp.indexing": {
+    "excludedPatterns": ["test/fixture/**/*"]
   },
+
+  // ── Ruby Debugger – rdbg (KoichiSasada.vscode-rdbg) ─────────────────────
+  "ruby.lsp.debug.rdbg": true,
+
+  // ── Editor (geral) ────────────────────────────────────────────────────────
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "Shopify.ruby-lsp",
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.semanticHighlighting.enabled": true,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  "editor.suggest.showKeywords": true,
+  "editor.suggest.showSnippets": true,
+  "editor.inlineSuggest.enabled": true,
+
+  // ── Indentação por linguagem ──────────────────────────────────────────────
   "[ruby]": {
     "editor.formatOnSave": true,
     "editor.tabSize": 2,
     "editor.insertSpaces": true,
-    "editor.semanticHighlighting.enabled": true
-  }
+    "editor.semanticHighlighting.enabled": true,
+    "editor.defaultFormatter": "Shopify.ruby-lsp"
+  },
+  "[erb]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "[html]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "[javascript]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "[json]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "[yaml]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "[protobuf]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "[markdown]": {
+    "editor.wordWrap": "on",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+
+  // ── Associções de arquivos ────────────────────────────────────────────────
+  "files.associations": {
+    "*.rake": "ruby",
+    "Gemfile": "ruby",
+    "Gemfile.lock": "ruby",
+    "Rakefile": "ruby",
+    "Vagrantfile": "ruby",
+    "Berksfile": "ruby",
+    "Capfile": "ruby",
+    "*.gruf.rb": "ruby",
+    "*.pb.rb": "ruby",
+    "*.proto": "protobuf",
+    "*.erb": "erb",
+    "*.erb.html": "erb",
+    "*.jbuilder": "ruby",
+    "*.jbuilder.json": "ruby",
+    "Procfile*": "dotenv",
+    "*.yml": "yaml",
+    "*.yml.erb": "ruby"
+  },
+
+  // ── Arquivos ignorados ────────────────────────────────────────────────────
+  "files.exclude": {
+    "**/.git": true,
+    "**/tmp": true,
+    "**/log": true,
+    "**/vendor/bundle": true,
+    "**/.bundle": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/tmp": true,
+    "**/log": true,
+    "**/vendor": true,
+    "**/coverage": true,
+    "**/db/schema.rb": true
+  },
+
+  // ── GitLens (eamodio.gitlens) ────────────────────────────────────────────
+  "gitlens.hovers.currentLine.over": "line",
+  "gitlens.codeLens.enabled": true,
+  "gitlens.currentLine.enabled": true,
+  "gitlens.currentLine.dateFormat": "dd/MM/yyyy HH:mm",
+  "gitlens.blame.toggleMode": "file",
+  "gitlens.showWelcomeOnStartup": false,
+  "gitlens.advanced.blame.customArguments": [],
+
+  // ── Endwise (kaiwood.endwise) ─────────────────────────────────────────────
+  "endwise.global": true,
+
+  // ── Coverage Status (first-try-software.coverage-status) ──────────────────
+  "coverageStatus.branch": "main",
+  "coverageStatus.path": "coverage/index.html",
+
+  // ── Protobuf (DrBlury.protobuf-vsc) ──────────────────────────────────────
+  "protobuf.lsp.autoLint": true,
+
+  // ── Copilot / AI Commit ──────────────────────────────────────────────────
+  "github.copilot.enable": {
+    "*": true,
+    "ruby": true,
+    "erb": true,
+    "yaml": true,
+    "protobuf": true,
+    "markdown": true
+  },
+
+  // ── Test / RSpec ──────────────────────────────────────────────────────────
+  "rubyLsp.featuresConfiguration": {
+    "completion": {
+      "enableWarnerForInProcess": false
+    },
+    "codeLens": {
+      "enabled": true
+    }
+  },
+
+  // ── Terminal ──────────────────────────────────────────────────────────────
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "terminal.integrated.fontSize": 13,
+
+  // ── Trailing whitespace / EOF ─────────────────────────────────────────────
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+
+  // ── Workbench ─────────────────────────────────────────────────────────────
+  "workbench.startupEditor": "none",
+  "explorer.compactFolders": false
 }
