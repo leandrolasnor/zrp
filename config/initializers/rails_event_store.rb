@@ -7,13 +7,12 @@ end
 class RES
   include Singleton
 
-  def self.client = self.instance.client
-  def self.pub(...) = self.instance.pub(...)
+  def self.pub(...) = instance.pub(...)
 
-  private
-
-  def client = Rails.configuration.event_store
-  def pub(e, s, p = nil) = client.publish(e.new(data: p), stream_name: s)
+  def pub(e, s, p = nil) = Rails.configuration.event_store.publish(
+    e.new(data: p),
+    stream_name: s
+  )
 end
 
 class HeroRemovedFromIndex < RailsEventStore::Event; end
