@@ -8,8 +8,11 @@ class RES
   include Singleton
 
   def self.client = self.instance.client
-  def client = Rails.configuration.event_store
   def self.pub(...) = self.instance.pub(...)
+
+  private
+
+  def client = Rails.configuration.event_store
   def pub(e, s, p = nil) = client.publish(e.new(data: p), stream_name: s)
 end
 
