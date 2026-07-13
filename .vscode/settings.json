@@ -107,7 +107,6 @@
   "files.exclude": {
     "**/.git": true,
     "**/tmp": true,
-    "**/log": true,
     "**/vendor/bundle": true,
     "**/.bundle": true
   },

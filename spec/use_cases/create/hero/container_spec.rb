@@ -43,6 +43,23 @@ RSpec.describe Create::Hero::Container do
         expect(call.failure.errors.to_hash).to match(expected_errors)
       end
     end
+
+    context 'when lat/lng exceed decimal precision' do
+      let(:params) do
+        {
+          name: 'Hero',
+          rank: 'c',
+          lat: 1234.567,
+          lng: 12.345
+        }
+      end
+
+      it 'fails with decimal overflow error' do
+        expect(call).to be_failure
+        expect(call.failure.errors.to_h.keys).to include(:lat)
+        expect(call.failure.errors[:lat]).to include(a_string_matching(/precision|overflow/))
+      end
+    end
   end
 
   describe 'steps.persist.call' do
