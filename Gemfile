@@ -64,6 +64,8 @@ gem 'prometheus-client'
 
 gem 'rails_event_store'
 
+gem 'gelf'
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 

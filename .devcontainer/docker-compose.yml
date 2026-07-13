@@ -66,6 +66,12 @@ services:
       GRUF_CONTROLLERS_PATH: ${GRUF_CONTROLLERS_PATH}
       RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
       RESQUE_DEBUG: ${RESQUE_DEBUG}
+      GRAYLOG_ENABLED: ${GRAYLOG_ENABLED}
+      GRAYLOG_HOST: ${GRAYLOG_HOST}
+      GRAYLOG_PORT: ${GRAYLOG_PORT}
+      GRAYLOG_PROTOCOL: ${GRAYLOG_PROTOCOL}
+      GRAYLOG_FACILITY: ${GRAYLOG_FACILITY}
+      GRAYLOG_LEVEL: ${GRAYLOG_LEVEL}
     ports:
     - 3000:3000
     - 28080:28080
@@ -170,3 +176,61 @@ services:
     depends_on:
     - prometheus
     restart: unless-stopped
+
+  mongodb:
+    image: mongo:7
+    container_name: zrp.mongodb
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+  opensearch:
+    image: opensearchproject/opensearch:2.18.0
+    container_name: zrp.opensearch
+    environment:
+      - discovery.type=single-node
+      - DISABLE_SECURITY_PLUGIN=true
+      - DISABLE_INSTALL_DEMO_CONFIG=true
+      - OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g
+      - bootstrap.memory_lock=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - opensearch_data:/usr/share/opensearch/data
+    restart: unless-stopped
+
+  graylog:
+    image: graylog/graylog:6.1.6
+    container_name: zrp.graylog
+    hostname: graylog
+    environment:
+      GRAYLOG_NODE_ID_FILE: /usr/share/graylog/data/data/node-id
+      GRAYLOG_HTTP_BIND_ADDRESS: 0.0.0.0:9000
+      GRAYLOG_HTTP_EXTERNAL_URI: http://localhost:9000/
+      GRAYLOG_ELASTICSEARCH_HOSTS: http://opensearch:9200
+      GRAYLOG_MONGODB_URI: mongodb://mongodb:27017/graylog
+      GRAYLOG_PASSWORD_SECRET: ${GRAYLOG_PASSWORD_SECRET}
+      GRAYLOG_ROOT_PASSWORD_SHA2: ${GRAYLOG_ROOT_PASSWORD_SHA2}
+      GRAYLOG_TIMEZONE: America/Sao_Paulo
+      GRAYLOG_TRANSPORT_EMAIL_ENABLED: "false"
+      GRAYLOG_HTTP_ENABLE_CORS: "true"
+    ports:
+    - 9000:9000  # Graylog web UI
+    - 12201:12201/udp  # GELF UDP input
+    - 12201:12201/tcp  # GELF TCP input
+    depends_on:
+      - mongodb
+      - opensearch
+    volumes:
+      - graylog_data:/usr/share/graylog/data
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
+  opensearch_data:
+  graylog_data:

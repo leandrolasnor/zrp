@@ -195,6 +195,8 @@ GEM
     fugit (1.12.1)
       et-orbi (~> 1.4)
       raabro (~> 1.4)
+    gelf (3.1.0)
+      json
     geocoder (1.8.6)
       base64 (>= 0.1.0)
       csv (>= 3.0.0)
@@ -691,6 +693,7 @@ DEPENDENCIES
   dry-validation
   factory_bot_rails
   faker
+  gelf
   geocoder
   grpc-tools
   gruf

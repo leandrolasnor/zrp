@@ -69,7 +69,15 @@ Rails.application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
-  config.logger = ActiveSupport::Logger.new(Rails.root.join('log', "#{Rails.env}.log"), 5, 2 * 1024 * 1024)
+  # Configure Graylog (GELF) logger if enabled
+  if GraylogConfig.enabled?
+    graylog_logger = GraylogConfig.build_logger
+    file_logger = ActiveSupport::Logger.new(Rails.root.join('log', "#{Rails.env}.log"), 5, 2 * 1024 * 1024)
+    broadcast_logger = ActiveSupport::BroadcastLogger.new(file_logger, graylog_logger)
+    config.logger = ActiveSupport::TaggedLogging.new(broadcast_logger)
+  else
+    config.logger = ActiveSupport::Logger.new(Rails.root.join('log', "#{Rails.env}.log"), 5, 2 * 1024 * 1024)
+  end
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load

@@ -9,7 +9,8 @@
     "db", "grafana","meilisearch",
     "pgadmin", "prometheus", "redis",
     "db-exporter", "rabbitmq", "redis-exporter",
-    "socket.io.server", "socket.io.client"
+    "socket.io.server", "socket.io.client",
+    "mongodb", "opensearch", "graylog"
   ],
   "forwardPorts": [3000, 28080],
   "postCreateCommand": ".devcontainer/boot",
@@ -38,7 +39,8 @@
         "ms-azuretools.vscode-containers",
         "KoichiSasada.vscode-rdbg",
         "kaiwood.endwise",
-        "SantiagoRomanChillon.opencode-zen-copilot"
+        "SantiagoRomanChillon.opencode-zen-copilot",
+        "sevenc-nanashi.gemfile-lock-highlight"
       ]
     }
   }

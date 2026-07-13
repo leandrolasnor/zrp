@@ -86,7 +86,7 @@
   "files.associations": {
     "*.rake": "ruby",
     "Gemfile": "ruby",
-    "Gemfile.lock": "ruby",
+    "Gemfile.lock": "gemfile-lock",
     "Rakefile": "ruby",
     "Vagrantfile": "ruby",
     "Berksfile": "ruby",
