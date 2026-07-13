@@ -39,18 +39,25 @@ module GraylogConfig
   end
 
   def build_notifier
-    GELF::Notifier.new(host, port, protocol, facility: facility)
+    GELF::Notifier.new(host, port, 'WAN', protocol: gelf_protocol, facility: facility)
+  end
+
+  def gelf_protocol
+    case protocol
+    when :tcp then GELF::Protocol::TCP
+    else           GELF::Protocol::UDP
+    end
   end
 
   def build_logger
-    notifier = build_notifier
-    notifier.level = GELF::Logger::INFO if level == :info
-    notifier.level = GELF::Logger::DEBUG if level == :debug
-    notifier.level = GELF::Logger::WARN if level == :warn
-    notifier.level = GELF::Logger::ERROR if level == :error
-    notifier.level = GELF::Logger::FATAL if level == :fatal
-
-    logger = GELF::Logger.new(notifier)
+    logger = GELF::Logger.new(host, port, 'WAN', protocol: gelf_protocol, facility: facility)
+    logger.level = {
+      debug: GELF::DEBUG,
+      info: GELF::INFO,
+      warn: GELF::WARN,
+      error: GELF::ERROR,
+      fatal: GELF::FATAL
+    }.fetch(level, GELF::INFO)
     logger.formatter = graylog_formatter
     logger
   end
@@ -65,40 +72,6 @@ module GraylogConfig
         environment: Rails.env,
         hostname: Socket.gethostname
       }
-    end
-  end
-end
-
-# Monkey-patch GELF::Logger to support tagged logging
-if defined?(GELF)
-  module GELF
-    class Logger
-      def tagged(*tags)
-        if tags.flatten.any?
-          @tags = (@tags || []) + tags.flatten
-        end
-        yield self
-      ensure
-        tags.flatten.each { |t| @tags&.delete(t) } if tags.flatten.any?
-      end
-
-      def add_tags(*tags)
-        @tags ||= []
-        @tags.concat(tags.flatten)
-      end
-
-      def clear_tags!
-        @tags = []
-      end
-
-      private
-
-      def notify_with_tags(severity, message, options = {})
-        options[:_tags] = @tags.dup if @tags&.any?
-        notify_without_tags(severity, message, options)
-      end
-      alias notify_without_tags notify
-      alias notify notify_with_tags
     end
   end
 end
