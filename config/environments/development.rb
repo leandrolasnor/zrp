@@ -69,15 +69,11 @@ Rails.application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
-  # Configure Graylog (GELF) logger if enabled
-  if GraylogConfig.enabled?
-    graylog_logger = GraylogConfig.build_logger
-    file_logger = ActiveSupport::Logger.new(Rails.root.join('log', "#{Rails.env}.log"), 5, 2 * 1024 * 1024)
-    broadcast_logger = ActiveSupport::BroadcastLogger.new(file_logger, graylog_logger)
-    config.logger = ActiveSupport::TaggedLogging.new(broadcast_logger)
-  else
-    config.logger = ActiveSupport::Logger.new(Rails.root.join('log', "#{Rails.env}.log"), 5, 2 * 1024 * 1024)
-  end
+  # Logs are collected by Fluentd via Docker log driver
+  config.logger = ActiveSupport::Logger.new(Rails.root.join('log', "#{Rails.env}.log"), 5, 2 * 1024 * 1024)
+
+  # Change to "debug" to log everything (including potentially personally-identifiable information!)
+  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load

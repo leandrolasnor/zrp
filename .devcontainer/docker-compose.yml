@@ -10,8 +10,8 @@ services:
     ports:
     - 15672:15672
     volumes:
-      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
-      - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+    - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "ping"]
@@ -24,20 +24,6 @@ services:
     container_name: zrp.redis
     environment:
       ALLOW_EMPTY_PASSWORD: ${ALLOW_EMPTY_PASSWORD}
-    ports:
-    - 6379
-    restart: unless-stopped
-
-  redis-exporter:
-    image: oliver006/redis_exporter:latest
-    container_name: zrp.redis-exporter
-    environment:
-      REDIS_ADDR: redis://redis:6379
-      REDIS_PASSWORD: ""
-    ports:
-    - 9121
-    depends_on:
-    - redis
     restart: unless-stopped
 
   api:
@@ -46,6 +32,8 @@ services:
       context: ..
       dockerfile: .devcontainer/Dockerfile
       target: devcontainer
+      cache_from:
+      - devcontainer:ruby-3.4.2-slim
       args:
         RUBY_VERSION: ${RUBY_VERSION}
     container_name: zrp.api
@@ -66,12 +54,6 @@ services:
       GRUF_CONTROLLERS_PATH: ${GRUF_CONTROLLERS_PATH}
       RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
       RESQUE_DEBUG: ${RESQUE_DEBUG}
-      GRAYLOG_ENABLED: ${GRAYLOG_ENABLED}
-      GRAYLOG_HOST: ${GRAYLOG_HOST}
-      GRAYLOG_PORT: ${GRAYLOG_PORT}
-      GRAYLOG_PROTOCOL: ${GRAYLOG_PROTOCOL}
-      GRAYLOG_FACILITY: ${GRAYLOG_FACILITY}
-      GRAYLOG_LEVEL: ${GRAYLOG_LEVEL}
     ports:
     - 3000:3000
     - 28080:28080
@@ -92,8 +74,6 @@ services:
     image: devcontainer:ruby-3.4.2-slim
     container_name: zrp.socket-io-server
     command: corepack yarn workspace socket.io.server start
-    ports:
-    - 3003
     restart: unless-stopped
 
   db:
@@ -108,22 +88,8 @@ services:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
-    ports:
-    - 5432
     volumes:
     - ./../db/initdb:/docker-entrypoint-initdb.d
-    restart: unless-stopped
-
-  db-exporter:
-    image: quay.io/prometheuscommunity/postgres-exporter:latest
-    container_name: zrp.postgresql-exporter
-    environment:
-      DATA_SOURCE_NAME: "postgresql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable"
-    ports:
-    - 9187
-    depends_on:
-      db:
-        condition: service_started
     restart: unless-stopped
 
   pgadmin:
@@ -148,89 +114,3 @@ services:
     ports:
     - 7700:7700
     restart: unless-stopped
-
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: zrp.prometheus
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    command:
-    - '--config.file=/etc/prometheus/prometheus.yml'
-    - '--storage.tsdb.path=/prometheus'
-    - '--web.console.libraries=/etc/prometheus/console_libraries'
-    - '--web.console.templates=/etc/prometheus/consoles'
-    - '--web.enable-lifecycle'
-    ports:
-    - 9090:9090
-    restart: unless-stopped
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: zrp.grafana
-    environment:
-      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
-      GF_USERS_ALLOW_SIGN_UP: "false"
-    ports:
-    - 3001:3000
-    depends_on:
-    - prometheus
-    restart: unless-stopped
-
-  mongodb:
-    image: mongo:7
-    container_name: zrp.mongodb
-    volumes:
-      - mongo_data:/data/db
-    restart: unless-stopped
-
-  opensearch:
-    image: opensearchproject/opensearch:2.18.0
-    container_name: zrp.opensearch
-    environment:
-      - discovery.type=single-node
-      - DISABLE_SECURITY_PLUGIN=true
-      - DISABLE_INSTALL_DEMO_CONFIG=true
-      - OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g
-      - bootstrap.memory_lock=true
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-        soft: 65536
-        hard: 65536
-    volumes:
-      - opensearch_data:/usr/share/opensearch/data
-    restart: unless-stopped
-
-  graylog:
-    image: graylog/graylog:6.1.6
-    container_name: zrp.graylog
-    hostname: graylog
-    environment:
-      GRAYLOG_NODE_ID_FILE: /usr/share/graylog/data/data/node-id
-      GRAYLOG_HTTP_BIND_ADDRESS: 0.0.0.0:9000
-      GRAYLOG_HTTP_EXTERNAL_URI: http://localhost:9000/
-      GRAYLOG_ELASTICSEARCH_HOSTS: http://opensearch:9200
-      GRAYLOG_MONGODB_URI: mongodb://mongodb:27017/graylog
-      GRAYLOG_PASSWORD_SECRET: ${GRAYLOG_PASSWORD_SECRET}
-      GRAYLOG_ROOT_PASSWORD_SHA2: ${GRAYLOG_ROOT_PASSWORD_SHA2}
-      GRAYLOG_TIMEZONE: America/Sao_Paulo
-      GRAYLOG_TRANSPORT_EMAIL_ENABLED: "false"
-      GRAYLOG_HTTP_ENABLE_CORS: "true"
-    ports:
-    - 9000:9000  # Graylog web UI
-    - 12201:12201/udp  # GELF UDP input
-    - 12201:12201/tcp  # GELF TCP input
-    depends_on:
-      - mongodb
-      - opensearch
-    volumes:
-      - graylog_data:/usr/share/graylog/data
-    restart: unless-stopped
-
-volumes:
-  mongo_data:
-  opensearch_data:
-  graylog_data:

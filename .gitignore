@@ -43,3 +43,9 @@ node_modules
 # Ignore vendas personalizadas
 /.github
 /.claude
+
+# Ignore arquivos do repomix
+/repomix-output.*
+/repomix.config.json
+/repomix.config.*.json
+

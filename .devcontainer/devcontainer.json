@@ -6,11 +6,9 @@
   "service": "api",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "runServices": [
-    "db", "grafana","meilisearch",
-    "pgadmin", "prometheus", "redis",
-    "db-exporter", "rabbitmq", "redis-exporter",
-    "socket.io.server", "socket.io.client",
-    "mongodb", "opensearch", "graylog"
+    "db", "meilisearch",
+    "pgadmin", "redis", "rabbitmq",
+    "socket.io.server", "socket.io.client"
   ],
   "forwardPorts": [3000, 28080],
   "postCreateCommand": ".devcontainer/boot",
