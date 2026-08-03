@@ -1,10 +1,11 @@
 import { Tooltip, Whisper, Progress, Panel, Row, Col } from 'rsuite'
 import { useSelector } from 'react-redux'
 import ThreatsDistribution from './ThreatsDistribution'
+import { memo } from 'react'
 import _ from 'lodash'
 
 const ThreatsDisabled = () => {
-  const { threats_disabled } = useSelector(state => state.metrics)
+  const threats_disabled = useSelector(state => state.metrics.threats_disabled)
 
   return (
     <Panel bodyFill>
@@ -40,4 +41,4 @@ const ThreatsDisabled = () => {
   )
 }
 
-export default ThreatsDisabled
+export default memo(ThreatsDisabled)

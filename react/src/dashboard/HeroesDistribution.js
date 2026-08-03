@@ -1,9 +1,10 @@
 import { useSelector } from 'react-redux'
 import { Tag, Col, Badge } from 'rsuite'
+import { memo } from 'react'
 import _ from 'lodash'
 
 const HeroesDistribution = () => {
-  const { heroes_distribution } = useSelector(state => state.metrics)
+  const heroes_distribution = useSelector(state => state.metrics.heroes_distribution)
   const colors = {
     s: 'blue',
     a: 'green',
@@ -28,4 +29,4 @@ const HeroesDistribution = () => {
   )
 }
 
-export default HeroesDistribution
+export default memo(HeroesDistribution)

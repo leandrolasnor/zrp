@@ -1,10 +1,11 @@
 import { Row, Col, Panel } from 'rsuite'
 import { PieChart } from '@rsuite/charts'
 import { useSelector } from 'react-redux'
+import { memo } from 'react'
 
 const colors = ['#34c3ff', '#1464ac']
 const BattlesCharts = () => {
-  const { battles_lineup } = useSelector(state => state.metrics)
+  const battles_lineup = useSelector(state => state.metrics.battles_lineup)
 
   return (
     <Panel bodyFill>
@@ -17,4 +18,4 @@ const BattlesCharts = () => {
   )
 }
 
-export default BattlesCharts
+export default memo(BattlesCharts)

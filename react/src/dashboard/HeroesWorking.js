@@ -1,10 +1,11 @@
 import { Row, Col, Panel, Tooltip, Whisper, Progress } from 'rsuite'
 import { useSelector } from 'react-redux'
 import HeroesDistribution from './HeroesDistribution'
+import { memo } from 'react'
 import _ from 'lodash'
 
 const HeroesWorking = () => {
-  const { heroes_working } = useSelector(state => state.metrics)
+  const heroes_working = useSelector(state => state.metrics.heroes_working)
 
   return (
     <Panel bodyFill>
@@ -41,4 +42,4 @@ const HeroesWorking = () => {
 }
 
 
-export default HeroesWorking
+export default memo(HeroesWorking)

@@ -14,7 +14,7 @@ const rowKey = 'id'
 const List = () => {
   const dispatch = useDispatch()
   const { search: { hits, query, filter }, loading } = useSelector(state => state.heroes)
-  const { super_hero } = useSelector(state => state.metrics)
+  const super_hero = useSelector(state => state.metrics.super_hero)
   const [openUpdateHeroForm, setOpenUpdateHeroForm] = useState(false)
   const [dataHeroForm, setDataHeroForm] = useState({})
   const [sortColumn, setSortColumn] = useState();

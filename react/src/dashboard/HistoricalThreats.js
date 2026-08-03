@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, memo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Icon } from '@rsuite/icons'
 import { Table, IconButton, Row, Col, Badge, Tag, TagGroup, Loader, Panel } from 'rsuite'
@@ -147,14 +147,17 @@ const renderRowExpanded = rowData => {
 };
 
 const HistoricalThreats = () => {
-  const { historical_threats, threats_disabled: { count } } = useSelector(state => state.metrics)
+  const historical_threats = useSelector(state => state.metrics.historical_threats)
+  const count = useSelector(state => state.metrics.threats_disabled.count)
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    let active = true
     dispatch(historical({ page: 1, per_page: 50 })).then(() => {
-      setLoading(false)
+      if (active) setLoading(false)
     })
+    return () => { active = false }
   }, [count, dispatch])
 
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
@@ -239,4 +242,4 @@ const HistoricalThreats = () => {
   );
 };
 
-export default HistoricalThreats
+export default memo(HistoricalThreats)

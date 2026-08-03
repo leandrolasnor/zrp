@@ -45,7 +45,6 @@ node_modules
 /.claude
 
 # Ignore arquivos do repomix
-/repomix-output.*
-/repomix.config.json
-/repomix.config.*.json
-
+**/repomix-output.*
+**/repomix.config.json
+**/repomix.config.*.json

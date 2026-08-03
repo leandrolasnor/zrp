@@ -2,9 +2,10 @@ import { useSelector } from 'react-redux'
 import { Tag, Badge } from 'rsuite'
 import { Icon } from '@rsuite/icons'
 import { FaTrophy } from 'react-icons/fa6'
+import { memo } from 'react'
 
 const SuperHero = () => {
-  const { super_hero } = useSelector(state => state.metrics)
+  const super_hero = useSelector(state => state.metrics.super_hero)
   const colors = {
     s: 'blue',
     a: 'green',
@@ -21,4 +22,4 @@ const SuperHero = () => {
   )
 }
 
-export default SuperHero
+export default memo(SuperHero)

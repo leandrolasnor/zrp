@@ -1,8 +1,9 @@
 import { Tag, Badge } from 'rsuite'
 import { useSelector } from 'react-redux'
+import { memo } from 'react'
 
 const AverageTimeToMatch = () => {
-  const { average_time_to_match: { hours, minutes, seconds } } = useSelector(state => state.metrics)
+  const { hours, minutes, seconds } = useSelector(state => state.metrics.average_time_to_match)
 
   let result = ''
   if (hours) result = `${Number(hours).toFixed(0)}h`
@@ -12,4 +13,4 @@ const AverageTimeToMatch = () => {
   if (result) return <Tag><Badge color="green" content={result}>avg time to match</Badge></Tag>
 }
 
-export default AverageTimeToMatch
+export default memo(AverageTimeToMatch)
