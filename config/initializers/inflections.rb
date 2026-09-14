@@ -13,6 +13,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym "UN"
   inflect.acronym "CRUD"
   inflect.acronym "AASM"
+  inflect.acronym "SSE"
   #   inflect.uncountable %w( fish sheep )
 end
 

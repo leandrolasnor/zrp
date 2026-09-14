@@ -18,15 +18,15 @@ module Dashboard::Widgets
     unique :until_and_while_executing, lock_ttl: 5.seconds
 
     def perform(widget)
+      redis = Redis.new(url: ENV.fetch('REDIS_URL', 'redis://localhost:6379/0'))
       config = self.class.widget_config(widget)
       monad = self.class.module_parent.const_get("#{widget.to_s.camelize}::Monad").new
       result = monad.call
 
-      if result.success?
-        ActionCable.server.broadcast('token', { type: config[:event], payload: result.value! })
-      else
-        Rails.logger.error(result.exception)
-      end
+      redis.publish('sse:widgets', { type: config[:event], payload: result.value! }.to_json) if result.success?
+      Rails.logger.error(result.exception) if result.failure?
+    ensure
+      redis&.close
     end
 
     def self.widget_config(widget)

@@ -20,6 +20,7 @@ class InsufficientResources < RailsEventStore::Event; end
 class ResourceAllocated < RailsEventStore::Event; end
 class ResourceDeallocated < RailsEventStore::Event; end
 class ResourceNotAllocated < RailsEventStore::Event; end
+
 module UN
   class AlertReceived < RailsEventStore::Event; end
 end

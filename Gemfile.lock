@@ -195,8 +195,6 @@ GEM
     fugit (1.12.1)
       et-orbi (~> 1.4)
       raabro (~> 1.4)
-    gelf (3.1.0)
-      json
     geocoder (1.8.6)
       base64 (>= 0.1.0)
       csv (>= 3.0.0)
@@ -373,8 +371,6 @@ GEM
       prettyprint
     prettyprint (0.2.0)
     prism (1.6.0)
-    prometheus-client (4.2.5)
-      base64
     psych (5.2.6)
       date
       stringio
@@ -693,7 +689,6 @@ DEPENDENCIES
   dry-validation
   factory_bot_rails
   faker
-  gelf
   geocoder
   grpc-tools
   gruf
@@ -706,7 +701,6 @@ DEPENDENCIES
   parallel_tests
   paranoia
   pg
-  prometheus-client
   puma (>= 5.0)
   rack-cors
   rails (~> 8.0.2)
