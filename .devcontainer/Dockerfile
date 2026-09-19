@@ -25,8 +25,6 @@ RUN apt-get update -qq && \
     shared-mime-info zsh libyaml-dev tmux lsb-release && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
-RUN npm install -g corepack repomix && \
-    corepack prepare yarn@stable --activate
 
 RUN rm -rf /root/.oh-my-zsh
 RUN sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -42,6 +40,7 @@ COPY package.json yarn.lock ./
 COPY react/package.json ./react/
 COPY socket.io/client/package.json ./socket.io/client/
 COPY socket.io/server/package.json ./socket.io/server/
+RUN corepack prepare yarn@stable --activate
 RUN corepack yarn install --no-immutable
 COPY Gemfile Gemfile.lock ./
 RUN bundle install
