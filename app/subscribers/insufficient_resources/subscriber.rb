@@ -12,7 +12,6 @@ class InsufficientResources::Subscriber
 
     Rails.cache.write('SNEAKERS_REQUEUE', true, expires_in: 1.minute)
     AllocateResource::Job.set(wait: 1.minute).perform_later(threat.id)
-    Dashboard::Widgets::Job.enqueue(:heroes_distribution)
     RES.pub InsufficientResources, "#{threat.class.name.demodulize}##{threat.id}"
   end
 end
