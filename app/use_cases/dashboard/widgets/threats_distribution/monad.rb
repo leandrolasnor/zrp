@@ -16,7 +16,7 @@ class Dashboard::Widgets::ThreatsDistribution::Monad
         filter: ["status NOT IN [problem]", "created_at > #{20.minutes.ago.to_time.to_i}"]
       )
 
-      dist = search['facetDistribution']['rank']
+      dist = search.dig('facetDistribution', 'rank') || {}
       count = ranks.map { [it, dist[it]] }
 
       count.to_h.symbolize_keys
