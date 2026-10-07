@@ -25,7 +25,7 @@ RUN apt-get update -qq && \
     shared-mime-info zsh libyaml-dev tmux lsb-release && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
-RUN npm install -g corepack repomix opencode-ai
+RUN npm install -g corepack opencode-ai
 RUN sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 RUN usermod --shell /bin/zsh root
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
@@ -46,7 +46,3 @@ RUN bundle install
 COPY . .
 RUN bundle check || bundle install
 RUN corepack yarn install --no-immutable
-RUN repomix --skill-generate --skill-output .github/skills --style markdown \
-    --parsable-style --remove-empty-lines --truncate-base64 \
-    --compress --force --quiet \
-    -i .devcontainer/.p10k.zsh
