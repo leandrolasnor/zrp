@@ -71,8 +71,8 @@ class Processor
       ::Gruf::Client.new(
         service: ::Rpc::UN,
         options: {
-          hostname: ENV.fetch('GRUF_SERVER', nil),
-          password: ENV.fetch('GRUF_AUTH_TOKEN', nil)
+          hostname: ENV.fetch('GRUF_SERVER'),
+          password: ENV.fetch('GRUF_AUTH_TOKEN')
         },
         client_options: {
           timeout: 5
