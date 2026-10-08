@@ -679,7 +679,6 @@ DEPENDENCIES
   bootsnap
   brakeman
   bullet
-  connection_pool
   debug
   dotenv
   dry-container

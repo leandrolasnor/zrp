@@ -75,7 +75,7 @@ class Processor
           password: ENV.fetch('GRUF_AUTH_TOKEN')
         },
         client_options: {
-          timeout: 5
+          timeout: 10
         }
       )
   end

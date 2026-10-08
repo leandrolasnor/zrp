@@ -32,8 +32,6 @@ gem 'redis'
 
 gem 'redis-namespace'
 
-gem 'connection_pool'
-
 gem 'kaminari'
 
 gem 'geocoder'
