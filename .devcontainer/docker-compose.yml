@@ -65,6 +65,8 @@ services:
     command: corepack yarn workspace socket.io.client start
     environment:
       AMQP_SERVER: ${AMQP_SERVER}
+      SOCKET_IO_SERVER: ${SOCKET_IO_SERVER}
+      SOCKET_IO_SERVER_PORT: ${SOCKET_IO_SERVER_PORT}
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -75,6 +77,9 @@ services:
     container_name: zrp.socket-io-server
     command: corepack yarn workspace socket.io.server start
     restart: unless-stopped
+    environment:
+      INSURGENCY_TIME: ${INSURGENCY_TIME}
+      REDIS_URL: redis://${REDIS_HOST}:${REDIS_PORT}/0
 
   db:
     image: postgres:15.14-bookworm

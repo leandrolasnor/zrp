@@ -11,7 +11,6 @@
     "start": "node ./index.js"
   },
   "dependencies": {
-    "dotenv": "^16.4.1",
     "http": "^0.0.1-security",
     "lodash": "^4.17.21",
     "redis": "^4.7.0",
