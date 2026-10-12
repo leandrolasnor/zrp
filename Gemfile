@@ -95,6 +95,8 @@ gem "thruster", require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem "rack-cors"
 
+gem "permit_params"
+
 group :development, :test do
   gem 'benchmark'
   gem 'bullet'
