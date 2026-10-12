@@ -15,7 +15,7 @@ module AllocateResource
       include Dry::Monads[:result]
       extend  Dry::Initializer
 
-      option :threat, type: Types::Interface(:find), default: -> { AllocateResource::Model::Threat }, reader: :private
+      option :threat, type: Types::Interface(:find), default: -> { Model::Threat }, reader: :private
       def call(id) = threat.enabled.lock.find(id)
     end
 
@@ -23,10 +23,10 @@ module AllocateResource
       include Dry::Monads[:result]
       extend  Dry::Initializer
 
-      option :battle, type: Types::Interface(:find), default: -> { AllocateResource::Model::Battle }, reader: :private
+      option :battle, type: Types::Interface(:find), default: -> { Model::Battle }, reader: :private
       option :heroes,
              type: Types::Interface(:allocatable),
-             default: -> { AllocateResource::Model::Hero }, reader: :private
+             default: -> { Model::Hero }, reader: :private
       option :limit, type: Types::Integer, default: -> { 5 }, reader: :private
 
       def call(threat)
@@ -58,12 +58,12 @@ module AllocateResource
 
       option :tranks,
              type: Types::Instance(ActiveSupport::HashWithIndifferentAccess),
-             default: -> { AllocateResource::Model::Threat.ranks },
+             default: -> { Model::Threat.ranks },
              reader: :private
 
       option :hranks,
              type: Types::Instance(ActiveSupport::HashWithIndifferentAccess),
-             default: -> { AllocateResource::Model::Hero.ranks },
+             default: -> { Model::Hero.ranks },
              reader: :private
 
       def call(matches_sorted)
@@ -106,12 +106,15 @@ module AllocateResource
       end
 
       def rank_match?(match)
-        tranks[@threat.rank] == hranks[match.hero.rank]
+        tranks[@threat.rank] == hranks[match.hero.rank] &&
+          match.score! >= ENV.fetch('SCORE_THRESHOLD', 75).to_i
       end
 
       def can_allocate_both?
         tranks[@threat.rank] > hranks[@first.hero.rank] &&
-          tranks[@threat.rank] > hranks[@second.hero.rank]
+          tranks[@threat.rank] > hranks[@second.hero.rank] &&
+          @first.score! >= ENV.fetch('SCORE_THRESHOLD', 75).to_i &&
+          @second.score! >= ENV.fetch('SCORE_THRESHOLD', 75).to_i
       end
     end
   end
