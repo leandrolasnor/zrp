@@ -20,7 +20,7 @@ ENV PATH=/workspaces/zrp/bin:$PATH
 ENV PATH=$GEM_HOME/bin:$PATH
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
-    build-essential libjemalloc2 git wget curl ca-certificates \
+    build-essential libjemalloc2 git gh wget curl ca-certificates \
     cmake pkg-config libpq-dev openssh-client nodejs npm \
     shared-mime-info zsh libyaml-dev tmux lsb-release && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
