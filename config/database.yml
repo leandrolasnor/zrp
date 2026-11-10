@@ -24,7 +24,7 @@ development:
 
 test:
   <<: *postgresql
-  database: <%= ENV["DB_TEST"] %>
+  database: <%= ENV["DB_TEST"] %><%= ENV["TEST_ENV_NUMBER"] %>
 
 production:
   <<: *sqlite

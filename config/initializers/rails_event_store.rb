@@ -9,10 +9,12 @@ class RES
 
   def self.pub(...) = instance.pub(...)
 
-  def pub(e, s, p = nil) = Rails.configuration.event_store.publish(
-    e.new(data: p),
-    stream_name: s
-  )
+  def pub(e, s, p = nil)
+    Rails.configuration.event_store.publish(
+      e.new(data: p),
+      stream_name: s
+    )
+  end
 end
 
 class HeroRemovedFromIndex < RailsEventStore::Event; end

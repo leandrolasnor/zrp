@@ -2,10 +2,10 @@
 
 FactoryBot.define do
   factory :hero do
-    name { Faker::Name.unique.name }
-    rank { rand(0..3) }
-    lat { Faker::Address.latitude }
-    lng { Faker::Address.longitude }
+    sequence(:name) { |n| "Hero #{n}" }
+    rank { :c }
+    lat { 0 }
+    lng { 0 }
 
     trait :allocate_resource do
       initialize_with { AllocateResource::Model::Hero.new(attributes) }

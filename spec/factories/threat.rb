@@ -2,11 +2,11 @@
 
 FactoryBot.define do
   factory :threat do
-    name { Faker::Name.unique.name }
-    rank { rand(0..3) }
+    sequence(:name) { |n| "Threat #{n}" }
+    rank { :wolf }
     status { 1 }
-    lat { Faker::Address.latitude }
-    lng { Faker::Address.longitude }
+    lat { 0 }
+    lng { 0 }
     payload do
       {
         location: { lat: lat, lng: lng },

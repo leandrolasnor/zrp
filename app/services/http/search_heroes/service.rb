@@ -6,7 +6,7 @@ module Http::SearchHeroes
 
     def call
       res = monad.call
-      raise StandardError, res.exception if res.failure?
+      raise res.exception if res.failure?
 
       [:ok, res.value!]
     end

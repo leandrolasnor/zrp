@@ -15,7 +15,7 @@ const renderSearcher = (state) => {
     reducer: { heroes: reducer },
     preloadedState: { heroes: state }
   })
-  return render(<Provider store={store}><Searcher /></Provider>)
+  return { store, ...render(<Provider store={store}><Searcher /></Provider>) }
 }
 
 const baseState = {
@@ -43,7 +43,7 @@ describe('Searcher', () => {
   it('renders with existing query value', () => {
     renderSearcher({ ...baseState, search: { ...baseState.search, query: 'existing hero' } })
     const input = screen.getByPlaceholderText('Search')
-    expect(input).toBeInTheDocument()
+    expect(input.value).toBe('existing hero')
   })
 
   it('renders search icon button', () => {
@@ -58,12 +58,14 @@ describe('Searcher', () => {
     expect(heroButton).toBeInTheDocument()
   })
 
-  it('dispatches QUERY_CHANGED on Enter key', () => {
-    renderSearcher(baseState)
+  it('keeps the typed term in the input after searching with Enter', () => {
+    const { store } = renderSearcher(baseState)
     const input = screen.getByPlaceholderText('Search')
     fireEvent.change(input, { target: { value: 'hero search' } })
     fireEvent.keyDown(input, { key: 'Enter' })
-    // No error means dispatch was called
+
+    expect(store.getState().heroes.search.query).toBe('hero search')
+    expect(screen.getByPlaceholderText('Search').value).toBe('hero search')
   })
 
   it('dispatches QUERY_CHANGED on Escape key (clears input)', () => {

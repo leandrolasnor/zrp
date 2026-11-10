@@ -3,16 +3,38 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 require 'aasm/rspec'
+require 'simplecov'
+require 'simplecov-tailwindcss'
+
+SimpleCov.command_name "rspec-#{ENV['TEST_ENV_NUMBER']}" if ENV['TEST_ENV_NUMBER']
+
+SimpleCov.start do
+  add_filter '/spec/'
+  add_filter '/config/'
+  add_filter '/db/'
+  add_filter '/react/'
+  add_filter '/vendor/'
+
+  track_files 'app/**/*.rb'
+  track_files 'lib/**/*.rb'
+  track_files 'sneakers/**/*.rb'
+
+  formatter SimpleCov::Formatter::MultiFormatter.new(
+    [
+      SimpleCov::Formatter::HTMLFormatter,
+      SimpleCov::Formatter::TailwindFormatter
+    ]
+  )
+
+  minimum_coverage ENV['COVERAGE_MINIMUM'].to_i if ENV['COVERAGE_MINIMUM']
+end
+
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
-require 'simplecov'
-SimpleCov.start
-require 'simplecov-tailwindcss'
-SimpleCov.formatter = SimpleCov::Formatter::TailwindFormatter
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are

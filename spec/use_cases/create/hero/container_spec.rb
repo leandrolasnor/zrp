@@ -56,7 +56,7 @@ RSpec.describe Create::Hero::Container do
 
       it 'fails with decimal overflow error' do
         expect(call).to be_failure
-        expect(call.failure.errors.to_h.keys).to include(:lat)
+        expect(call.failure.errors.to_hash.keys).to include(:lat)
         expect(call.failure.errors[:lat]).to include(a_string_matching(/precision|overflow/))
       end
     end

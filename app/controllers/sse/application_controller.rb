@@ -5,7 +5,7 @@ class SSE::ApplicationController < ApiController
 
   rescue_from StandardError, with: :handle_error
   rescue_from JSON::ParserError, with: :handle_error
-  rescue_from ActionController::Live::ClientDisconnected do end;
+  rescue_from ActionController::Live::ClientDisconnected, with: -> (_error) {}
   before_action :set_headers
 
   private
@@ -20,5 +20,4 @@ class SSE::ApplicationController < ApiController
     response.headers['Connection'] = 'keep-alive'
     response.headers['X-Accel-Buffering'] = 'no'
   end
-
 end

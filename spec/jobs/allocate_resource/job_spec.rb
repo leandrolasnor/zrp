@@ -41,13 +41,15 @@ RSpec.describe AllocateResource::Job do
   end
 
   context 'on Success' do
+    let(:threat) { create(:threat, :allocate_resource, rank: :god, lat: 0, lng: 0) }
     let(:heroes) do
       hero1 = build(:hero, :allocate_resource)
       hero2 = build(:hero, :allocate_resource)
 
       hero1.rank = AlertReceives::UN::Model::Threat.ranks[threat.rank]
-      hero1.lat = threat.lat
-      hero1.lng = threat.lng
+      hero1.lat = 0
+      hero1.lng = 180
+      hero2.rank = :c
       hero2.lat = threat.lat
       hero2.lng = threat.lng
 

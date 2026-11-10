@@ -14,7 +14,7 @@ module Http::CreateHero
       transaction.subscribe(persist: listener)
       transaction.call(params) do |step|
         step.success { |r| [:created, r, serializer] }
-        step.failure(:validate) { |f| [:unprocessable_entity, f.errors] }
+        step.failure(:validate) { |f| [:unprocessable_entity, f.errors.to_hash] }
         step.failure { |f| raise StandardError, f }
       end
     end

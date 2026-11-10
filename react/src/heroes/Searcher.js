@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Input, InputGroup, IconButton, Row, Col } from 'rsuite'
 import HeroForm from './HeroForm.js'
@@ -8,38 +8,44 @@ import PropTypes from 'prop-types'
 
 const Searcher = () => {
   const { search: { query } } = useSelector(state => state.heroes)
-  const searchRef = useRef(null)
   const dispatch = useDispatch()
+  const [searchTerm, setSearchTerm] = useState(query)
   const [openCreateHeroForm, setOpenCreateHeroForm] = useState(false)
-  const keyDownSearchHandler = event => {
+
+  useEffect(() => {
+    setSearchTerm(query)
+  }, [query])
+
+  const submitSearch = () => {
+    dispatch({ type: 'QUERY_CHANGED', payload: searchTerm })
+  }
+
+  const keyDownSearchHandler = (event) => {
     if (event.key === 'Escape') {
       event.preventDefault()
-      searchRef.current.value = ''
-      dispatch({ type: 'QUERY_CHANGED', payload: searchRef.current.value })
+      setSearchTerm('')
+      dispatch({ type: 'QUERY_CHANGED', payload: '' })
     } else if (event.key === 'Enter') {
       event.preventDefault()
-      dispatch({ type: 'QUERY_CHANGED', payload: searchRef.current.value })
+      submitSearch()
     }
   }
 
-  const CustomInputGroupWithButton = ({ placeholder, ...props }) => (
-    <InputGroup {...props} inside>
-      <Input placeholder={placeholder} autoFocus onKeyDown={keyDownSearchHandler} ref={searchRef} />
-      <InputGroup.Button onClick={() => dispatch({ type: 'QUERY_CHANGED', payload: searchRef.current.value })}>
-        <SearchIcon />
-      </InputGroup.Button>
-    </InputGroup>
-  )
-
-  CustomInputGroupWithButton.propTypes = {
-    placeholder: PropTypes.string,
-  }
-
-  useEffect(() => { searchRef.current.value = query }, [query])
   return (
     <Row className='mt-3'>
       <Col md={22}>
-        <CustomInputGroupWithButton placeholder="Search" />
+        <InputGroup inside>
+          <Input
+            placeholder="Search"
+            autoFocus
+            value={searchTerm}
+            onChange={setSearchTerm}
+            onKeyDown={keyDownSearchHandler}
+          />
+          <InputGroup.Button onClick={submitSearch}>
+            <SearchIcon />
+          </InputGroup.Button>
+        </InputGroup>
       </Col>
       <Col md={2}>
         <IconButton onClick={() => setOpenCreateHeroForm(true)} icon={<PlusIcon />}>Hero</IconButton>
@@ -48,5 +54,7 @@ const Searcher = () => {
     </Row>
   )
 }
+
+Searcher.propTypes = {}
 
 export default Searcher

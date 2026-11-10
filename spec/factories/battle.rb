@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :battle do
-    score { rand(40..60) }
+    score { 0 }
     finished_at { 1.minute.from_now }
 
     trait :allocate_resource do

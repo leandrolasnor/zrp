@@ -86,11 +86,11 @@ RSpec.describe AllocateResource::Container do
     let(:call) { described_class['steps.allocate'].(matches_sorted) }
 
     context 'when threats rank is equal heros first rank' do
-      let(:threat) { create(:threat, :allocate_resource, rank: :god) }
+      let(:threat) { create(:threat, :allocate_resource, rank: :god, lat: 0, lng: 0) }
       let(:heroes) do
         [
-          create(:hero, :allocate_resource, rank: :s),
-          create(:hero, :allocate_resource, rank: :c)
+          create(:hero, :allocate_resource, rank: :s, lat: 0, lng: 180),
+          create(:hero, :allocate_resource, rank: :c, lat: 0, lng: 0)
         ]
       end
       let(:matches_sorted) do
@@ -111,11 +111,11 @@ RSpec.describe AllocateResource::Container do
     end
 
     context 'when heros second is the chosen' do
-      let(:threat) { create(:threat, :allocate_resource, rank: :god) }
+      let(:threat) { create(:threat, :allocate_resource, rank: :god, lat: 0, lng: 0) }
       let(:heroes) do
         [
-          create(:hero, :allocate_resource, rank: :c),
-          create(:hero, :allocate_resource, rank: :s)
+          create(:hero, :allocate_resource, rank: :c, lat: 0, lng: 0),
+          create(:hero, :allocate_resource, rank: :s, lat: 0, lng: 180)
         ]
       end
       let(:matches_sorted) do
@@ -136,11 +136,11 @@ RSpec.describe AllocateResource::Container do
     end
 
     context 'when two heroes are the chosen' do
-      let(:threat) { create(:threat, :allocate_resource, rank: :god) }
+      let(:threat) { create(:threat, :allocate_resource, rank: :god, lat: 0, lng: 0) }
       let(:heroes) do
         [
-          create(:hero, :allocate_resource, rank: :c),
-          create(:hero, :allocate_resource, rank: :a)
+          create(:hero, :allocate_resource, rank: :a, lat: 0, lng: 180),
+          create(:hero, :allocate_resource, rank: :a, lat: 0, lng: 180)
         ]
       end
       let(:matches_sorted) do
@@ -161,12 +161,69 @@ RSpec.describe AllocateResource::Container do
       end
     end
 
-    context 'when no hero is chosen' do
-      let(:threat) { create(:threat, :allocate_resource, rank: :wolf) }
+    context 'when the score is exactly the threshold' do
+      let(:threat) { create(:threat, :allocate_resource, rank: :god, lat: 0, lng: 0) }
       let(:heroes) do
         [
-          create(:hero, :allocate_resource, rank: :b),
-          create(:hero, :allocate_resource, rank: :a)
+          create(:hero, :allocate_resource, rank: :s, lat: 0, lng: 0),
+          create(:hero, :allocate_resource, rank: :s, lat: 0, lng: 0)
+        ]
+      end
+      let(:matches_sorted) do
+        [
+          build(:battle, :allocate_resource, hero: heroes.first, threat: threat),
+          build(:battle, :allocate_resource, hero: heroes.second, threat: threat)
+        ]
+      end
+
+      before do
+        matches_sorted.each { |match| allow(match).to receive(:score!).and_return(75) }
+        call
+      end
+
+      it 'must be able to choose the first match' do
+        expect(threat).to be_working
+        expect(heroes.first).to be_working
+        expect(heroes.second).to be_enabled
+        expect(matches_sorted.first).to be_persisted
+      end
+    end
+
+    context 'when the score is below the threshold' do
+      let(:threat) { create(:threat, :allocate_resource, rank: :god, lat: 0, lng: 0) }
+      let(:heroes) do
+        [
+          create(:hero, :allocate_resource, rank: :s, lat: 0, lng: 0),
+          create(:hero, :allocate_resource, rank: :s, lat: 0, lng: 0)
+        ]
+      end
+      let(:matches_sorted) do
+        [
+          build(:battle, :allocate_resource, hero: heroes.first, threat: threat),
+          build(:battle, :allocate_resource, hero: heroes.second, threat: threat)
+        ]
+      end
+
+      before do
+        matches_sorted.each { |match| allow(match).to receive(:score!).and_return(74) }
+        call
+      end
+
+      it 'must not be able to choose any match' do
+        expect(threat).to be_enabled
+        expect(heroes.first).to be_enabled
+        expect(heroes.second).to be_enabled
+        expect(matches_sorted.first).not_to be_persisted
+        expect(matches_sorted.second).not_to be_persisted
+      end
+    end
+
+    context 'when no hero is chosen' do
+      let(:threat) { create(:threat, :allocate_resource, rank: :wolf, lat: 0, lng: 0) }
+      let(:heroes) do
+        [
+          create(:hero, :allocate_resource, rank: :b, lat: 0, lng: 180),
+          create(:hero, :allocate_resource, rank: :a, lat: 0, lng: 180)
         ]
       end
       let(:matches_sorted) do
