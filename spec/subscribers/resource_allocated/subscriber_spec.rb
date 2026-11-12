@@ -28,7 +28,10 @@ RSpec.describe ResourceAllocated::Subscriber do
       expect(Dashboard::Widgets::Job).to have_received(:enqueue).with(:heroes_working)
       expect(Dashboard::Widgets::Job).to have_received(:enqueue).with(:super_hero)
       expect(RES).to have_received(:pub)
-        .with(ResourceAllocated, "Threat##{threat.id}", threat.heroes.to_json)
+        .with(ResourceAllocated, "Threat##{threat.id}", {
+          threat: threat, heroes: threat.heroes,
+          battles: threat.battles
+        })
     end
   end
 end

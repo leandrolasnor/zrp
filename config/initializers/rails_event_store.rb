@@ -17,6 +17,9 @@ class RES
   end
 end
 
+class HeroCreated < RailsEventStore::Event; end
+class HeroUpdated < RailsEventStore::Event; end
+class HeroDestroyed < RailsEventStore::Event; end
 class HeroRemovedFromIndex < RailsEventStore::Event; end
 class InsufficientResources < RailsEventStore::Event; end
 class ResourceAllocated < RailsEventStore::Event; end

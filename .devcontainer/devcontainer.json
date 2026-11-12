@@ -37,7 +37,6 @@
         "ms-azuretools.vscode-containers",
         "KoichiSasada.vscode-rdbg",
         "kaiwood.endwise",
-        "SantiagoRomanChillon.opencode-zen-copilot",
         "sevenc-nanashi.gemfile-lock-highlight"
       ]
     }

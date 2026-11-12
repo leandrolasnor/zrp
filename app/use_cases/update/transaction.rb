@@ -6,4 +6,5 @@ class Update::Transaction
   step :validate, with: "steps.validate"
   try :find, with: "steps.find", catch: ActiveRecord::RecordNotFound
   try :update, with: "steps.update", catch: StandardError
+  tee :notify, with: "steps.notify"
 end

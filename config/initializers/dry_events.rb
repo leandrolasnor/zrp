@@ -3,6 +3,7 @@
 EVENTS = %w[
   insufficient_resources resource_allocated resource_not_allocated
   resource_deallocated un_threat_created hero_removed_from_index
+  hero_created hero_updated hero_destroyed
 ].freeze
 
 class AppEvents

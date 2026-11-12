@@ -18,7 +18,7 @@ RSpec.describe HeroRemovedFromIndex::Subscriber do
       expect(Dashboard::Widgets::Job).to have_received(:enqueue).with(:heroes_working)
       expect(Dashboard::Widgets::Job).to have_received(:enqueue).with(:heroes_distribution)
       expect(RES).to have_received(:pub)
-        .with(HeroRemovedFromIndex, 'Hero#1', document.to_json)
+        .with(HeroRemovedFromIndex, 'Hero#1', document)
     end
   end
 end

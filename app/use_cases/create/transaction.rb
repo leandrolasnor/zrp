@@ -5,4 +5,5 @@ class Create::Transaction
 
   step :validate, with: "steps.validate"
   try :persist, with: "steps.persist", catch: StandardError
+  tee :notify, with: "steps.notify"
 end

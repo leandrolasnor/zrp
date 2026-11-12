@@ -13,6 +13,6 @@ class ResourceNotAllocated::Subscriber
     AllocateResource::Job.perform_later(threat.id)
     Dashboard::Widgets::Job.enqueue(:heroes_distribution)
     RES.pub ResourceNotAllocated, "#{threat.class.name.demodulize}##{threat.id}",
-            event[:matches_sorted].map(&:hero).to_json
+            event[:matches_sorted].map(&:hero)
   end
 end

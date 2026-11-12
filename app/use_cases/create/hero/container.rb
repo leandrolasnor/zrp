@@ -7,6 +7,7 @@ module Create
 
       register 'steps.validate', -> { Steps::Validate.new }
       register 'steps.persist', -> { Steps::Persist.new }
+      register 'steps.notify', -> { Steps::Notify.new }
     end
 
     module Steps
@@ -30,6 +31,12 @@ module Create
             record.lat = params[:lat]
             record.lng = params[:lng]
           end
+        end
+      end
+
+      class Notify
+        def call(hero)
+          AppEvents.publish('hero_created', hero: hero)
         end
       end
     end

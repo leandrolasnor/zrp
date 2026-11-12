@@ -8,6 +8,7 @@ module Update
       register 'steps.find', -> { Steps::Find.new }
       register 'steps.validate', -> { Steps::Validate.new }
       register 'steps.update', -> { Steps::Update.new }
+      register 'steps.notify', -> { Steps::Notify.new }
     end
 
     module Steps
@@ -31,6 +32,12 @@ module Update
         def call(record:, **params)
           record.update!(params)
           record
+        end
+      end
+
+      class Notify
+        def call(hero)
+          AppEvents.publish('hero_updated', hero: hero)
         end
       end
     end

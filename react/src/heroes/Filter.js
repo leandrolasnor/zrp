@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { IconButton, Accordion, Tag, Col, Row, InputPicker, Stack } from 'rsuite'
 import Funnel from '@rsuite/icons/Funnel'
 import { FaAngleDoubleDown } from 'react-icons/fa';
-import { get_statuses, get_ranks } from './actions'
+import { get_statuses } from './actions'
 
 const Filter = () => {
   const [activeKey, setActiveKey] = useState(0)
@@ -12,7 +12,6 @@ const Filter = () => {
   const { ranks, statuses, search: { filter } } = useSelector(state => state.heroes)
   const dispatch = useDispatch()
 
-  useEffect(() => { if (ranks?.length === 0) dispatch(get_ranks()) }, [ranks, dispatch])
   useEffect(() => { if (statuses?.length === 0) dispatch(get_statuses()) }, [statuses, dispatch])
 
 

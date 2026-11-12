@@ -22,7 +22,7 @@ RSpec.describe ResourceNotAllocated::Subscriber do
       expect(RES).to have_received(:pub).with(
         ResourceNotAllocated,
         "Threat##{threat.id}",
-        [battle.hero].to_json
+        [battle.hero]
       )
     end
   end

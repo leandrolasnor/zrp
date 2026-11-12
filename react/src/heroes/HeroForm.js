@@ -1,7 +1,7 @@
 import { useRef, useState, forwardRef, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Modal, Button, Schema, Form, InputPicker, Tag } from 'rsuite'
-import { create_hero, get_ranks, update_hero } from './actions.js'
+import { create_hero, update_hero } from './actions.js'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 
@@ -68,7 +68,6 @@ const HeroForm = props => {
     [ranks]
   )
 
-  useEffect(() => { if (ranks?.length === 0) dispatch(get_ranks()) }, [ranks, dispatch])
   useEffect(() => { setFormValue(INITIAL_VALUES) }, [data])
 
   return (

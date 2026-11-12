@@ -5,4 +5,5 @@ class Delete::Transaction
 
   try :find, with: "steps.find", catch: ActiveRecord::RecordNotFound
   try :destroy, with: "steps.destroy", catch: ActiveRecord::RecordNotDestroyed
+  tee :notify, with: "steps.notify"
 end

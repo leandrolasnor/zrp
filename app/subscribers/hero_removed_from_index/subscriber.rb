@@ -10,6 +10,6 @@ class HeroRemovedFromIndex::Subscriber
   def call
     Dashboard::Widgets::Job.enqueue(:heroes_working)
     Dashboard::Widgets::Job.enqueue(:heroes_distribution)
-    RES.pub HeroRemovedFromIndex, "#{event[:model].demodulize}##{event[:id]}", event[:document].to_json
+    RES.pub HeroRemovedFromIndex, "#{event[:model].demodulize}##{event[:id]}", event[:document]
   end
 end

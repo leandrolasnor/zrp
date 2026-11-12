@@ -7,6 +7,7 @@ module Delete
 
       register 'steps.find', -> { Steps::Find.new }
       register 'steps.destroy', -> { Steps::Destroy.new }
+      register 'steps.notify', -> { Steps::Notify.new }
     end
 
     module Steps
@@ -23,6 +24,12 @@ module Delete
           raise ActiveRecord::RecordNotDestroyed.new(I18n.t(:cannot_destroy_hero)) if hero.blank?
 
           hero.destroy!
+        end
+      end
+
+      class Notify
+        def call(hero)
+          AppEvents.publish('hero_destroyed', hero: hero)
         end
       end
     end

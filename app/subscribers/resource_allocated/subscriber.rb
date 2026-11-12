@@ -18,6 +18,11 @@ class ResourceAllocated::Subscriber
     Dashboard::Widgets::Job.enqueue(:battles_lineup)
     Dashboard::Widgets::Job.enqueue(:heroes_working)
     Dashboard::Widgets::Job.enqueue(:super_hero)
-    RES.pub ResourceAllocated, "#{threat.class.name.demodulize}##{threat.id}", threat.heroes.to_json
+    RES.pub ResourceAllocated, "#{threat.class.name.demodulize}##{threat.id}",
+            {
+              threat: threat.attributes,
+              heroes: threat.heroes.map(&:attributes),
+              battles: threat.battles.map(&:attributes)
+            }
   end
 end
