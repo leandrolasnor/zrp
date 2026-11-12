@@ -16,10 +16,8 @@ ENV RAILS_ENV=development \
     BUNDLE_DISABLE_LOCAL_BRANCH_CHECK=true \
     XDG_CONFIG_HOME=/workspaces/zrp \
     TZ=America/Sao_Paulo
-ENV PATH=/root/.opencode/bin:$PATH
 ENV PATH=/workspaces/zrp/bin:$PATH
 ENV PATH=$GEM_HOME/bin:$PATH
-RUN curl -fsSL https://opencode.ai/v2/install | SHELL=/bin/bash bash -s -- --no-modify-path
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
     build-essential libjemalloc2 git wget curl ca-certificates \
@@ -27,7 +25,7 @@ RUN apt-get update -qq && \
     shared-mime-info zsh libyaml-dev tmux lsb-release && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
-RUN npm install -g corepack
+RUN npm install -g corepack @opencode/cli
 RUN sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 RUN usermod --shell /bin/zsh root
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
