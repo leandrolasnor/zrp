@@ -30,9 +30,9 @@ Ordem sugerida para atacar primeiro (impacto x urgência):
 
 1. **Rotacionar e remover segredos do git** — `RAILS_MASTER_KEY`, `MEILI_MASTER_KEY`, token gRPC e senhas estão commitados.
 2. **Fechar o Resque Web** (`/jobs`) — sem autenticação, permite enfileirar jobs arbitrários (RCE).
-3. **Corrigir o cálculo de score da batalha** — `rank.to_i` sempre retorna `0`, a lógica de rank não funciona.
+3. ✅ **Corrigir o cálculo de score da batalha** — resolvido em `a25152c` (`Model::Hero.ranks[hero.rank]` / `Model::Threat.ranks[threat.rank]`); specs do calculator validam a matriz de ranks.
 4. **Corrigir o boot de produção** — `rswag` só existe em dev/test mas é montado em produção; e produção usa SQLite com schema PostgreSQL.
-5. **Parar o loop quente de realocação** — `resource_not_allocated` reenfileira o job imediatamente, sem intervalo nem limite.
+5. ✅ **Parar o loop quente de realocação** — considerado resolvido: cada tentativa renova a amostra de heróis vinda do banco (`allocatable` ordenado por `updated_at` + `touch` dos candidatos), que é a nova tentativa de match desejada.
 6. **Corrigir a recursão infinita do Socket.IO server** — sem caso base e com o client nunca respondendo ao ACK.
 
 ---
@@ -44,14 +44,9 @@ Ordem sugerida para atacar primeiro (impacto x urgência):
   O `.gitignore` **não** possui regra para `.env`.
   **Correção:** `git rm --cached` desses arquivos; adicionar `.env`, `.env.*` (com `!.env.example`) ao `.gitignore`; remover do histórico (`git filter-repo`); **rotacionar** master key, `MEILI_MASTER_KEY`, token gRPC, senhas de pgAdmin/RabbitMQ; criar `.env.example` com placeholders e injetar segredos via secrets do devcontainer/CI.
 
-- [ ] **[CRÍTICO][Backend] Score da batalha ignora o rank dos heróis e ameaças**
-  `app/use_cases/allocate_resource/domain_service/calculator/battle.rb:35-36`
-  ```ruby
-  option :nv, ..., default: -> { hero.rank.to_i }
-  option :nc, ..., default: -> { threat.rank.to_i }
-  ```
-  Os enums retornam a **label string** (`enum :rank, { c: 0, ... }`), então `"c".to_i == 0` e `"god".to_i == 0`. Logo `nv == nc == 0` sempre, e `n = 100 - ratio*(nv-nc).abs` vira sempre `100`. O rank é ignorado no cálculo.
-  **Correção:** usar o valor inteiro do enum: `AllocateResource::Model::Hero.ranks.fetch(hero.rank)` (idem `Threat`), ou `hero[:rank]`/`rank_before_type_cast`. Revisar os `Types::Strict::Integer.constrained(gteq: 0)` de `n`/`d`, que podem passar a violar o limite após a correção.
+- [x] **[CRÍTICO][Backend] Score da batalha ignora o rank dos heróis e ameaças** — ✅ corrigido em `a25152c`
+  `app/use_cases/allocate_resource/domain_service/calculator/battle.rb:36-37` agora usa `Model::Hero.ranks[hero.rank]` / `Model::Threat.ranks[threat.rank]`, resolvendo o problema do `rank.to_i` (que sempre retornava `0`). O `ratio` mantém `n` entre `1` e `100`, dentro do constraint `gteq: 0`.
+  **Verificação:** `bundle exec rspec spec/use_cases/allocate_resource/domain_service/calculator/battle_spec.rb` — 9 examples, 0 failures (inclui matriz completa de ranks/distâncias).
 
 - [ ] **[CRÍTICO][Infra] Boot de produção quebrado — `rswag` em produção**
   `config/routes.rb:4-5` monta `Rswag::Ui::Engine`/`Rswag::Api::Engine` e os initializers `rswag_api.rb`/`rswag_ui.rb` os referenciam, mas `rswag`/`rswag-specs` estão em `group :development, :test` (`Gemfile:115-116`). Em produção `Bundler.require` não carrega o gem → `NameError` ao carregar rotas/initializers.
@@ -65,9 +60,9 @@ Ordem sugerida para atacar primeiro (impacto x urgência):
   `config/routes.rb:6` — `mount Resque::Server, at: '/jobs'`. Sem basic-auth, qualquer um lista/reenfileira/descarta jobs e pode enfileirar classes+argumentos arbitrários (caminho conhecido para RCE).
   **Correção:** proteger com `Rack::Auth::Basic` (ou equivalente) e/ou montar apenas em development.
 
-- [ ] **[CRÍTICO][Backend] Loop quente de realocação quando não há herói compatível**
-  `app/use_cases/allocate_resource/container.rb:77` publica `resource_not_allocated`, e `app/subscribers/resource_not_allocated/subscriber.rb:13` reenfileira `AllocateResource::Job.perform_later(threat.id)` **imediatamente, sem delay e sem limite**. O job roda de novo, não acha match, republica e reenfileira — loop sem fim que satura workers/fila.
-  **Correção:** adicionar backoff + teto de tentativas (`set(wait: 1.minute)` com contador em Redis, ou `retry_on` com `attempts:`); ao esgotar, registrar/marcar a ameaça.
+- [x] **[CRÍTICO][Backend] Loop quente de realocação quando não há herói compatível** — ✅ resolvido por decisão do usuário
+  Cada reenfileiramento consulta novamente `Model::Hero.allocatable` (`app/models/concerns/scopes/hero/allocatable.rb:7-10`: `enabled.order(:updated_at).limit(5).lock('FOR UPDATE SKIP LOCKED')`). Como `Steps::Matches` (`app/use_cases/allocate_resource/container.rb:33-39`) faz `touch` nos candidatos mesmo quando não há alocação, a amostra gira e a próxima execução tenta outros heróis — comportamento considerado suficiente para formar o match.
+  Observação mantida para registro: o reenfileiramento em `app/subscribers/resource_not_allocated/subscriber.rb:13` permanece sem delay e sem teto; o caminho alternativo `insufficient_resources` já usa `set(wait: 1.minute)`.
 
 - [ ] **[CRÍTICO][Socket.IO] Recursão infinita de `emitOccurrence` sem caso base**
   `socket.io/server/index.js:33-35` — no erro/ACK-timeout chama a si mesma sem limite nem backoff, e o client (`socket.io/client/index.js:36-38`) **nunca chama o callback de ACK**, então todo emit expira e a recursão nunca para (mesmo após `disconnect`).
