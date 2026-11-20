@@ -3,9 +3,10 @@ import { createClient } from "redis"
 import { faultRateFromEnv, randomPayload } from "./occurrence.js"
 import { createEmitter } from "./emitter.js"
 import { connectWithRetry, createInsurgencyTime } from "./redis.js"
+import { createFileLogger } from "./file-logger.js"
 
 const INSURGENCY_DEFAULT = Number(process.env.INSURGENCY_TIME || 20000)
-const logger = console
+const logger = createFileLogger()
 
 let stopped = false
 let lastRedisErrorLog = 0
@@ -25,7 +26,8 @@ const insurgencyTime = createInsurgencyTime({ redis, fallback: INSURGENCY_DEFAUL
 const { stream } = createEmitter({
   insurgencyTime,
   createPayload: randomPayload,
-  fallbackTimeout: INSURGENCY_DEFAULT
+  fallbackTimeout: INSURGENCY_DEFAULT,
+  logger
 })
 
 const io = new Server({})

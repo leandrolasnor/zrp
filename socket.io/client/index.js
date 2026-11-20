@@ -4,9 +4,10 @@ import { createAmqpConnection } from "./amqp.js"
 import { createPublisher } from "./publisher.js"
 import { createOccurrenceHandler } from "./handler.js"
 import { createLogger } from "./logger.js"
+import { createFileLogger } from "./file-logger.js"
 import { createStartup } from "./startup.js"
 
-const logger = createLogger(console)
+const logger = createLogger(createFileLogger())
 let stopped = false
 
 const socketUrl = `${process.env.SOCKET_IO_SERVER}:${process.env.SOCKET_IO_SERVER_PORT}`
