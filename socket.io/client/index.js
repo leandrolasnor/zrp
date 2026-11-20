@@ -1,38 +1,62 @@
-import { io } from "socket.io-client";
-import amqp from "amqplib";
+import { io } from "socket.io-client"
+import amqp from "amqplib"
+import { createAmqpConnection } from "./amqp.js"
+import { createPublisher } from "./publisher.js"
+import { createOccurrenceHandler } from "./handler.js"
+import { createLogger } from "./logger.js"
+import { createFileLogger } from "./file-logger.js"
+import { createStartup } from "./startup.js"
 
-const queue = "un";
+const logger = createLogger(createFileLogger())
+let stopped = false
 
-const send_event = async (data) => {
-  let connection;
-  try {
-    connection = await amqp.connect(`${process.env.AMQP_SERVER}`);
-    const channel = await connection.createChannel();
+const socketUrl = `${process.env.SOCKET_IO_SERVER}:${process.env.SOCKET_IO_SERVER_PORT}`
+const amqpConnection = createAmqpConnection({
+  amqp,
+  url: process.env.AMQP_SERVER,
+  isStopped: () => stopped,
+  logger
+})
+const publish = createPublisher({ amqpConnection, logger })
+const handleOccurrence = createOccurrenceHandler({ publish, logger })
 
-    await channel.assertQueue(queue, {
-      durable: true,
-      arguments: {
-        "x-dead-letter-exchange": "un.dlx"
-      }
-    });
-    channel.sendToQueue(queue, Buffer.from(JSON.stringify(data)));
-    console.log(data);
-    await channel.close();
-  } catch (err) {
-    console.warn(err);
-  } finally {
-    if (connection) await connection.close();
-  }
+// O client fica de pé esperando o servidor; socket.io-client reconecta sozinho.
+const socket = io(socketUrl, {
+  reconnection: true,
+  reconnectionDelay: 1000,
+  reconnectionDelayMax: 5000
+})
+
+const startup = createStartup({ socket, amqpConnection, handleOccurrence, logger })
+
+const start = () => {
+  startup.start().catch(error => logger.warn(`startup failed: ${error.message}`))
 }
 
-// const socket = io('https://zrp-challenges-dev-production.up.railway.app');
-const socket = io(`${process.env.SOCKET_IO_SERVER}:${process.env.SOCKET_IO_SERVER_PORT}`);
 socket.on("connect", () => {
-  console.log('Server Connected');
-});
-socket.on("disconnect", () => {
-  console.log("Server Disconnected");
-});
-socket.on("occurrence", (data) => {
-  send_event(data)
-});
+  logger.log("socket.io.server connected")
+  start()
+})
+
+socket.on("disconnect", reason => {
+  startup.stop()
+  logger.warn(`socket.io.server disconnected: ${reason}`)
+})
+
+socket.on("connect_error", error => {
+  logger.warn(`socket.io.server connect failed: ${error.message}`)
+})
+
+start()
+
+const shutdown = async signal => {
+  logger.log(`${signal} received, shutting down`)
+  stopped = true
+  startup.stop()
+  socket.disconnect()
+  await amqpConnection.close()
+  process.exit(0)
+}
+
+process.on("SIGTERM", () => shutdown("SIGTERM"))
+process.on("SIGINT", () => shutdown("SIGINT"))

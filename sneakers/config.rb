@@ -4,6 +4,9 @@ require 'dotenv'
 Dotenv.load('./sneakers/.env')
 require './config/environment'
 
+log_path = Rails.root.join('log', 'sneakers.log')
+FileUtils.mkdir_p(log_path.dirname)
+
 opts = {
   amqp: ENV.fetch('AMQP_SERVER'),
   username: ENV.fetch('RABBITMQ_USER', 'guest'),
@@ -14,7 +17,8 @@ opts = {
   ack: true,
   workers: 1,
   prefetch: 10,
-  heartbeat: 5
+  heartbeat: 5,
+  log: log_path.to_s
 }
 
 Sneakers.configure(opts)

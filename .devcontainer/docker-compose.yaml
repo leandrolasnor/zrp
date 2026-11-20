@@ -64,14 +64,11 @@ services:
     image: devcontainer:ruby-3.4.2-slim
     container_name: zrp.socket-io-client
     command: corepack yarn workspace socket.io.client start
+    restart: unless-stopped
     environment:
       AMQP_SERVER: ${AMQP_SERVER}
       SOCKET_IO_SERVER: ${SOCKET_IO_SERVER}
       SOCKET_IO_SERVER_PORT: ${SOCKET_IO_SERVER_PORT}
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-    restart: unless-stopped
 
   socket.io.server:
     image: devcontainer:ruby-3.4.2-slim

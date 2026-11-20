@@ -14,6 +14,7 @@ RSpec.describe Processor do
 
     before do
       allow(processor).to receive(:ihero).and_return(client)
+      allow(Readiness).to receive(:ready?).and_return(true)
       allow(Rails.cache).to receive(:read).with('SNEAKERS_REQUEUE').and_return(false)
     end
 
@@ -105,15 +106,93 @@ RSpec.describe Processor do
       before do
         allow(exchange).to receive(:publish).and_raise(StandardError, 'broker down')
         allow(processor).to receive(:dead_exchange).and_return(exchange)
+        allow(processor).to receive(:reject!)
+        allow(Sneakers.logger).to receive(:error)
+        processor.work(message)
+      end
+
+      it 'logs the failure and rejects the message' do
+        expect(processor).to have_received(:reject!)
+        expect(Sneakers.logger).to have_received(:error)
+          .with('Failed to dead-letter message: broker down')
+      end
+    end
+
+    context 'when dead-lettering a parser error' do
+      let(:message) { 'invalid json' }
+      let(:channel) { double }
+      let(:queue) { double(channel:) }
+      let(:exchange) { double(publish: true) }
+
+      before do
+        allow(processor).to receive(:queue).and_return(queue)
+        allow(channel).to receive(:exchange)
+          .with('un.dlx', type: :direct, durable: true).and_return(exchange)
         allow(processor).to receive(:ack!)
         allow(Sneakers.logger).to receive(:error)
         processor.work(message)
       end
 
-      it 'logs the failure and acknowledges the message' do
+      it 'publishes through the queue channel to the parser error queue' do
+        expect(channel).to have_received(:exchange)
+          .with('un.dlx', type: :direct, durable: true)
+        expect(exchange).to have_received(:publish)
+          .with(message, routing_key: 'parser.error', persistent: true)
         expect(processor).to have_received(:ack!)
+      end
+    end
+
+    context 'when rabbitmq or grpc are not ready' do
+      before do
+        allow(client).to receive(:call)
+        allow(Readiness).to receive(:ready?).with(processor).and_return(false)
+        allow(processor).to receive(:reject!)
+        allow(Rails.cache).to receive(:increment)
+        allow(Sneakers.logger).to receive(:warn)
+        processor.work(message)
+      end
+
+      it 'requeues without counting an attempt or calling grpc' do
+        expect(processor).to have_received(:reject!)
+        expect(Rails.cache).not_to have_received(:increment)
+        expect(client).not_to have_received(:call)
+        expect(Sneakers.logger).to have_received(:warn)
+          .with('Waiting for rabbitmq and grpc before processing messages')
+      end
+    end
+
+    context 'when the rpc client raises an infrastructure error' do
+      let(:error) { Gruf::Client::Errors::Unavailable.new('grpc down') }
+
+      before do
+        allow(client).to receive(:call).and_raise(error)
+        allow(processor).to receive(:reject!)
+        allow(Rails.cache).to receive(:increment)
+        allow(Sneakers.logger).to receive(:error)
+        processor.work(message)
+      end
+
+      it 'requeues without counting an attempt or dead-lettering' do
+        expect(processor).to have_received(:reject!)
+        expect(Rails.cache).not_to have_received(:increment)
         expect(Sneakers.logger).to have_received(:error)
-          .with('Failed to dead-letter message: broker down')
+          .with('gRPC unavailable, requeueing: grpc down')
+      end
+    end
+
+    context 'when the rpc client raises a validation error' do
+      let(:error) { Gruf::Client::Errors::InvalidArgument.new('invalid fields') }
+
+      before do
+        allow(client).to receive(:call).and_raise(error)
+        allow(processor).to receive(:handle_retry)
+        allow(Sneakers.logger).to receive(:error)
+        processor.work(message)
+      end
+
+      it 'handles the retry so the message can be dead-lettered' do
+        expect(processor).to have_received(:handle_retry).with(message)
+        expect(Sneakers.logger).to have_received(:error)
       end
     end
 
