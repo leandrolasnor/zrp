@@ -97,9 +97,9 @@ Ordem sugerida para atacar primeiro (impacto x urgência):
   Usados por `Scopes::Battle::Fresh`, `Scopes::Threat::Fresh`, dashboard (`includes(:battles).where('battles.finished_at'...)`) e `threats_history` (`.order 'battles.finished_at desc'`).
   **Correção:** adicionar índices (`battles(hero_id)`, `battles(threat_id)`, `battles(finished_at)`, `threats(created_at)`, `threats(status)`, `heroes(status)`) — idealmente `concurrently` em produção.
 
-- [ ] **[ALTO][Sneakers] Dead-letter quebrado — mensagens são acked e perdidas**
-  `sneakers/processor.rb:46-48` — `dead_exchange` usa `channel.exchange(...)`, mas `Sneakers::Worker` **não define `channel`** (só `queue`, que expõe `channel`). Isso levanta `NoMethodError`, capturado pelo `rescue` de `dead!` (linhas 41-43) que chama `ack!` — ou seja, JSON inválido e mensagens com retry esgotado são descartadas silenciosamente.
-  **Correção:** usar `queue.channel.exchange(...)` (ou `queue.exchange`); no rescue, preferir `reject!`/nack sem requeue em vez de `ack!`. Adicionar spec que verifique a publicação no exchange.
+- [x] **[ALTO][Sneakers] Dead-letter quebrado — mensagens são acked e perdidas** — ✅ corrigido
+  `sneakers/processor.rb:46-48` agora usa `queue.channel.exchange('un.dlx', ...)`. O `rescue` de `dead!` passou a chamar `reject!` (nack sem requeue) em vez de `ack!`, para não descartar a mensagem quando a publicação no DLX falhar.
+  **Verificação:** `bundle exec rspec spec/sneakers/processor_spec.rb` — 8 examples, 0 failures. Novo spec cobre a publicação em `un.dlx` via `queue.channel` com routing key `parser.error`.
 
 - [ ] **[ALTO][gRPC] Token de auth com fallback hardcoded e nome de env divergente**
   `config/initializers/gruf.rb:17` — `ENV.fetch('GRPC_AUTH_TOKEN', 'austin')` (fallback fraco); `sneakers/processor.rb:75` lê `ENV.fetch('GRUF_AUTH_TOKEN')` (nome diferente). Configurar um lado quebra o outro.

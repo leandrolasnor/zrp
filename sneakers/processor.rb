@@ -2,6 +2,7 @@
 
 require 'digest'
 require_relative 'config'
+require_relative 'readiness'
 
 class Processor
   include Sneakers::Worker
@@ -16,17 +17,18 @@ class Processor
 
   def work(message)
     return reject! if requeue?
+    # Só opera quando RabbitMQ e gRPC estão prontos. A mensagem volta para
+    # un.retry (5s) sem incrementar o contador de tentativas de domínio.
+    return not_ready! unless Readiness.ready?(self)
 
-    occurrence = ::Rpc::Occurrence.new(JSON.parse(message))
-    if ihero.(:Alert, occurrence).message.is_a?(::Rpc::Threat)
-      clear_retry_count(message)
-      ack!
-    else
-      handle_retry(message)
-    end
+    process_alert(message)
   rescue JSON::ParserError => error
     Sneakers.logger.error "Invalid JSON: #{error.message}"
     dead!(message, routing_key: 'parser.error')
+  rescue *Readiness::GRPC_INFRASTRUCTURE_ERRORS => error
+    # gRPC fora não é erro da mensagem: não conta tentativa nem vai para dead.
+    Sneakers.logger.error "gRPC unavailable, requeueing: #{error.message}"
+    reject!
   rescue StandardError => error
     Sneakers.logger.error "#{error.message}\n#{error.backtrace&.first(5)&.join("\n")}"
     handle_retry(message)
@@ -34,17 +36,32 @@ class Processor
 
   private
 
+  def process_alert(message)
+    occurrence = ::Rpc::Occurrence.new(JSON.parse(message))
+    if ihero.(:Alert, occurrence).message.is_a?(::Rpc::Threat)
+      clear_retry_count(message)
+      ack!
+    else
+      handle_retry(message)
+    end
+  end
+
+  def not_ready!
+    Sneakers.logger.warn 'Waiting for rabbitmq and grpc before processing messages'
+    reject!
+  end
+
   def dead!(message, routing_key: 'dead')
     dead_exchange.publish(message, routing_key: routing_key, persistent: true)
     Sneakers.logger.info "Message dead-lettered to un.#{routing_key.tr('.', '_')}"
     ack!
   rescue StandardError => error
     Sneakers.logger.error "Failed to dead-letter message: #{error.message}"
-    ack!
+    reject!
   end
 
   def dead_exchange
-    @dead_exchange ||= channel.exchange('un.dlx', type: :direct, durable: true)
+    @dead_exchange ||= queue.channel.exchange('un.dlx', type: :direct, durable: true)
   end
 
   def handle_retry(message)

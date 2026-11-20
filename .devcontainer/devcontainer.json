@@ -2,7 +2,7 @@
 {
   "name": "ZRP project development",
   "remoteUser": "root",
-  "dockerComposeFile": "docker-compose.yml",
+  "dockerComposeFile": "docker-compose.yaml",
   "service": "api",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "runServices": [
