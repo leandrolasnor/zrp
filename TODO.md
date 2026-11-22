@@ -47,10 +47,6 @@ Ordem sugerida para atacar primeiro (impacto x urgência):
 
 ## Alto
 
-- [ ] **[ALTO][Backend] Contracts HTTP nunca são executados (validação morta)**
-  `app/services/http/application_service.rb:10` — `if defined?(self::Contract)`. Os contracts são **irmãos** do service (ex.: `Http::DestroyHero::Contract` vs `Http::DestroyHero::Service`), não aninhados sob ele, então a checagem é sempre `nil`. Resultado: a validação de `search` (regex/`query`/`page`), o `id: integer` do destroy e o `page` do threats-history não rodam — e `GET /v1/heroes/search` repassa `filter`/`sort` arbitrários ao Meilisearch.
-  **Correção:** resolver o nome pelo namespace (`"#{self.name.deconstantize}::Contract".safe_constantize`) ou definir `Service::Contract`. Adicionar specs que afirmem que o contract é aplicado.
-
 - [ ] **[ALTO][Cable/SSE] Action Cable sem autenticação e com stream único compartilhado**
   `app/channels/application_cable/connection.rb:8` fixa `self.token = 'token'`; `app/channels/notification_channel.rb:4-6` faz `reject if token.nil?` (inalcançável) e `stream_from(token)` — todos os clientes recebem as mesmas notificações.
   **Correção:** identificar o usuário (cookie assinado/JWT) e separar o stream (`"notifications:#{current_user.id}"`). Reescrever as specs de channel/connection (hoje testam `'token' == 'token'`).
