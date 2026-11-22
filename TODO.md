@@ -28,45 +28,20 @@ verdade: cada item abaixo foi re-verificado no código/estado atual do repositó
 
 Ordem sugerida para atacar primeiro (impacto x urgência):
 
-1. **Rotacionar e remover segredos do git** — `RAILS_MASTER_KEY`, `MEILI_MASTER_KEY`, token gRPC e senhas estão commitados.
-2. **Fechar o Resque Web** (`/jobs`) — sem autenticação, permite enfileirar jobs arbitrários (RCE).
-3. ✅ **Corrigir o cálculo de score da batalha** — resolvido em `a25152c` (`Model::Hero.ranks[hero.rank]` / `Model::Threat.ranks[threat.rank]`); specs do calculator validam a matriz de ranks.
-4. **Corrigir o boot de produção** — `rswag` só existe em dev/test mas é montado em produção; e produção usa SQLite com schema PostgreSQL.
-5. ✅ **Parar o loop quente de realocação** — considerado resolvido: cada tentativa renova a amostra de heróis vinda do banco (`allocatable` ordenado por `updated_at` + `touch` dos candidatos), que é a nova tentativa de match desejada.
-6. **Corrigir a recursão infinita do Socket.IO server** — sem caso base e com o client nunca respondendo ao ACK.
+1. ✅ **Corrigir o cálculo de score da batalha** — resolvido em `a25152c` (`Model::Hero.ranks[hero.rank]` / `Model::Threat.ranks[threat.rank]`); specs do calculator validam a matriz de ranks.
+2. ✅ **Parar o loop quente de realocação** — considerado resolvido: cada tentativa renova a amostra de heróis vinda do banco (`allocatable` ordenado por `updated_at` + `touch` dos candidatos), que é a nova tentativa de match desejada.
 
 ---
 
 ## Crítico
 
-- [ ] **[CRÍTICO][Infra] Segredos versionados no repositório**
-  `git ls-files` confirma que estão rastreados: `.devcontainer/.env` (`RAILS_MASTER_KEY`, `PGADMIN_DEFAULT_PASSWORD`, `MEILI_MASTER_KEY`, `DB_PASSWORD`), `sneakers/.env` (`GRUF_AUTH_TOKEN=austin`) e `react/.env.development`. Além disso `.devcontainer/rabbitmq/definitions.json` traz `guest/guest` como admin.
-  O `.gitignore` **não** possui regra para `.env`.
-  **Correção:** `git rm --cached` desses arquivos; adicionar `.env`, `.env.*` (com `!.env.example`) ao `.gitignore`; remover do histórico (`git filter-repo`); **rotacionar** master key, `MEILI_MASTER_KEY`, token gRPC, senhas de pgAdmin/RabbitMQ; criar `.env.example` com placeholders e injetar segredos via secrets do devcontainer/CI.
-
 - [x] **[CRÍTICO][Backend] Score da batalha ignora o rank dos heróis e ameaças** — ✅ corrigido em `a25152c`
   `app/use_cases/allocate_resource/domain_service/calculator/battle.rb:36-37` agora usa `Model::Hero.ranks[hero.rank]` / `Model::Threat.ranks[threat.rank]`, resolvendo o problema do `rank.to_i` (que sempre retornava `0`). O `ratio` mantém `n` entre `1` e `100`, dentro do constraint `gteq: 0`.
   **Verificação:** `bundle exec rspec spec/use_cases/allocate_resource/domain_service/calculator/battle_spec.rb` — 9 examples, 0 failures (inclui matriz completa de ranks/distâncias).
 
-- [ ] **[CRÍTICO][Infra] Boot de produção quebrado — `rswag` em produção**
-  `config/routes.rb:4-5` monta `Rswag::Ui::Engine`/`Rswag::Api::Engine` e os initializers `rswag_api.rb`/`rswag_ui.rb` os referenciam, mas `rswag`/`rswag-specs` estão em `group :development, :test` (`Gemfile:115-116`). Em produção `Bundler.require` não carrega o gem → `NameError` ao carregar rotas/initializers.
-  **Correção:** mover `rswag` para o grupo default **ou** proteger os mounts/initializers com `if Rails.env.development? || Rails.env.test?`.
-
-- [ ] **[CRÍTICO][Infra] Produção usa SQLite com schema PostgreSQL**
-  `config/database.yml:29-31` (`production: <<: *sqlite`) enquanto dev/test usam PostgreSQL. O `db/schema.rb` usa recursos exclusivos do Postgres (`enable_extension "pg_catalog.plpgsql"`, `jsonb`, `uuid`, `bigserial`). Além disso o código depende de lock de linha (`FOR UPDATE SKIP LOCKED`).
-  **Correção:** apontar `production` para o anchor `*postgresql` (variáveis `DB_*`). Se SQLite for realmente desejado, o schema/estratégia de lock precisa ser revisto.
-
-- [ ] **[CRÍTICO][Backend] Resque Web exposto sem autenticação em `/jobs`**
-  `config/routes.rb:6` — `mount Resque::Server, at: '/jobs'`. Sem basic-auth, qualquer um lista/reenfileira/descarta jobs e pode enfileirar classes+argumentos arbitrários (caminho conhecido para RCE).
-  **Correção:** proteger com `Rack::Auth::Basic` (ou equivalente) e/ou montar apenas em development.
-
 - [x] **[CRÍTICO][Backend] Loop quente de realocação quando não há herói compatível** — ✅ resolvido por decisão do usuário
   Cada reenfileiramento consulta novamente `Model::Hero.allocatable` (`app/models/concerns/scopes/hero/allocatable.rb:7-10`: `enabled.order(:updated_at).limit(5).lock('FOR UPDATE SKIP LOCKED')`). Como `Steps::Matches` (`app/use_cases/allocate_resource/container.rb:33-39`) faz `touch` nos candidatos mesmo quando não há alocação, a amostra gira e a próxima execução tenta outros heróis — comportamento considerado suficiente para formar o match.
   Observação mantida para registro: o reenfileiramento em `app/subscribers/resource_not_allocated/subscriber.rb:13` permanece sem delay e sem teto; o caminho alternativo `insufficient_resources` já usa `set(wait: 1.minute)`.
-
-- [ ] **[CRÍTICO][Socket.IO] Recursão infinita de `emitOccurrence` sem caso base**
-  `socket.io/server/index.js:33-35` — no erro/ACK-timeout chama a si mesma sem limite nem backoff, e o client (`socket.io/client/index.js:36-38`) **nunca chama o callback de ACK**, então todo emit expira e a recursão nunca para (mesmo após `disconnect`).
-  **Correção:** limite de tentativas (`MAX_RETRIES`) + backoff + checagem `if (!socket.connected) return`; limpar no `socket.on('disconnect')`; e/ou fazer o client responder ao ACK. Tratar rejeições (`await ... .catch(...)`).
 
 ---
 
@@ -347,7 +322,6 @@ Verificado no código atual (evita retrabalho):
 
 ### Itens que precisam de verificação em runtime (`(VN)`)
 
-- Comportamento de lock (`FOR UPDATE SKIP LOCKED`) sob SQLite (relacionado ao CRÍTICO de DB).
 - `config.cache_classes` no Rails 8 (confirmar se é no-op/deprecado) — o sintoma de reload já é claro.
 - Alcance do RabbitMQ `guest` entre containers (a política padrão restringe a localhost).
 - Descritor gRPC `:Handle` em `spec/services/rpc/alert_receives/un/service_spec.rb:14` (o proto define `rpc :Alert`).
