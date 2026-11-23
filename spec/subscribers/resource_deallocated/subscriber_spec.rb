@@ -20,8 +20,9 @@ RSpec.describe ResourceDeallocated::Subscriber do
       expect(Dashboard::Widgets::Job).to have_received(:enqueue).with(:threats_disabled)
       expect(RES).to have_received(:pub)
         .with(ResourceDeallocated, "Threat##{threat.id}", {
-          threat: threat, heroes: threat.heroes,
-          battles: threat.battles
+          threat: threat.attributes,
+          heroes: threat.heroes.map(&:attributes),
+          battles: threat.battles.map(&:attributes)
         })
     end
   end
