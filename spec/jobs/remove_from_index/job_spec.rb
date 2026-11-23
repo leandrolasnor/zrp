@@ -35,19 +35,13 @@ RSpec.describe 'RemoveFromIndex' do
       end
 
       context 'on Failure' do
-        let(:configured_job) { double }
-
         before do
-          allow(monad).to receive(:call).and_return(Dry::Monads::Try::Error.new(StandardError.new))
-          allow(RemoveFromIndex::Job).to receive(:set).and_return(configured_job)
-          allow(configured_job).to receive(:perform_later)
+          allow(monad).to receive(:call).and_return(Dry::Monads::Try::Error.new(StandardError.new('index unavailable')))
         end
 
-        it 'schedules a retry' do
-          call
-
-          expect(RemoveFromIndex::Job).to have_received(:set).with(wait: 5.seconds)
-          expect(configured_job).to have_received(:perform_later).with(model:, id:)
+        it 'raises a retryable error so the job is rescheduled' do
+          expect { call }.to raise_error(ApplicationJob::RetryableError, 'index unavailable')
+          expect(AppEvents).not_to receive(:publish)
         end
       end
     end

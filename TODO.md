@@ -55,11 +55,11 @@ Ordem sugerida para atacar primeiro (impacto x urgência):
   Não há filtro de auth em `ApiController`/`ApplicationController`. Qualquer cliente cria/edita/remove heróis (`heroes_controller.rb`) e escreve estado global via `threats_controller.rb:12-14` (`set_insurgency` faz `params[:insurgency].to_i * 1000` sem validar presença/faixa e com `expires_in: nil`).
   **Correção:** implementar autenticação (SSO/Keycloak já era previsto) + autorização; validar `insurgency` (presença e faixa) antes de gravar no Redis.
 
-- [ ] **[ALTO][Backend] `rescue_from StandardError` genérico esconde erros e retorna status errado**
+- [x] **[ALTO][Backend] `rescue_from StandardError` genérico esconde erros e retorna status errado** — ✅ corrigido
   `app/controllers/api_controller.rb:4`, `app/services/http/application_service.rb:16-19` (`Rails.logger.info(args)` loga params completos), e `show_hero/service.rb:10`, `search_heroes/service.rb:9`, `dashboard/service.rb:9` (`raise StandardError, res.exception`). Todo `RecordNotFound` vira 500, então `ApplicationController#not_found` fica inalcançável e `GET /v1/heroes/:id` inexistente retorna 500 em vez de 404.
   **Correção:** deixar erros de domínio propagarem para o handler 404; mapear falhas conhecidas para 4xx; só capturar inesperados no nível externo; não logar params crus.
 
-- [ ] **[ALTO][Backend] Jobs com retry sem limite (deallocate / remove_from_index)**
+- [x] **[ALTO][Backend] Jobs com retry sem limite (deallocate / remove_from_index)** — ✅ corrigido
   `app/jobs/deallocate_resource/job.rb:14-17` reenfileira a si mesmo sem teto e com retry imediato; `app/jobs/remove_from_index/job.rb:12` reenfileira a cada 5s indefinidamente. Um id permanentemente inválido entra em loop.
   **Correção:** `retry_on` com `attempts:`/`wait:` ou contador em Redis; ao esgotar, logar e publicar evento de falha (dead-letter).
 

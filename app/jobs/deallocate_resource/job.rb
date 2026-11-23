@@ -13,7 +13,7 @@ module DeallocateResource
 
         if res.failure?
           Rails.logger.error(res.exception)
-          Job.perform_later(threat_id)
+          raise ApplicationJob::RetryableError, res.exception.message
         end
       end
     end
@@ -21,6 +21,9 @@ module DeallocateResource
 
   class Job < ApplicationJob
     queue_as :default
+    retry_on ApplicationJob::RetryableError, attempts: ApplicationJob::RETRY_ATTEMPTS, wait: :polynomially_longer do |job, error|
+      Rails.logger.error("DeallocateResource::Job descartado após #{job.executions} tentativas (threat_id=#{job.arguments.first}): #{error.message}")
+    end
     def perform(threat_id) = Service.new(threat_id).call
   end
 end

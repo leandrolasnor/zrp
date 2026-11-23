@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class ApplicationJob < ActiveJob::Base
+  class RetryableError < StandardError; end
+
+  RETRY_ATTEMPTS = 30
+
   # Automatically retry jobs that encountered a deadlock
   # retry_on ActiveRecord::Deadlocked
 

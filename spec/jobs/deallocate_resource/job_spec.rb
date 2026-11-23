@@ -16,12 +16,8 @@ RSpec.describe 'DeallocateResource' do
       context 'on Success' do
         before { allow(monad).to receive(:call).and_return(Dry::Monads::Success(double)) }
 
-        it 'does not schedule another deallocation' do
-          allow(DeallocateResource::Job).to receive(:perform_later)
-
-          call
-
-          expect(DeallocateResource::Job).not_to have_received(:perform_later)
+        it 'does not raise' do
+          expect { call }.not_to raise_error
         end
       end
 
@@ -31,14 +27,11 @@ RSpec.describe 'DeallocateResource' do
         before do
           allow(monad).to receive(:call).and_return(Dry::Monads::Try::Error.new(error))
           allow(Rails.logger).to receive(:error)
-          allow(DeallocateResource::Job).to receive(:perform_later)
         end
 
-        it 'logs the error and schedules the job again' do
-          call
-
+        it 'logs the error and raises a retryable error' do
+          expect { call }.to raise_error(ApplicationJob::RetryableError, 'deallocation failed')
           expect(Rails.logger).to have_received(:error).with(error)
-          expect(DeallocateResource::Job).to have_received(:perform_later).with(threat_id)
         end
       end
     end
