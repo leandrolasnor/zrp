@@ -1,5 +1,5 @@
 import React from 'react'
-import { Panel, Button, Placeholder } from 'rsuite'
+import { Paper, Title, Text, Button, Code } from '@mantine/core'
 import PropTypes from 'prop-types'
 
 class ErrorBoundary extends React.Component {
@@ -26,26 +26,21 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <Panel
-          header="Something went wrong"
-          bordered
-          style={{ margin: 20, maxWidth: 600 }}
-        >
-          <p style={{ marginBottom: 10 }}>
+        <Paper withBorder p="md" style={{ margin: 20, maxWidth: 600 }}>
+          <Title order={4}>Something went wrong</Title>
+          <Text mb="sm">
             An unexpected error occurred. Please try refreshing the page.
-          </p>
+          </Text>
           {process.env.NODE_ENV === 'development' && this.state.error && (
-            <Placeholder.Paragraph rows={8}>
-              <pre style={{ fontSize: 12, overflow: 'auto' }}>
-                {this.state.error.toString()}
-                {this.state.errorInfo?.componentStack}
-              </pre>
-            </Placeholder.Paragraph>
+            <Code block style={{ fontSize: 12, overflow: 'auto', maxHeight: 300 }}>
+              {this.state.error.toString()}
+              {this.state.errorInfo?.componentStack}
+            </Code>
           )}
-          <Button appearance="primary" onClick={this.handleReset}>
+          <Button mt="sm" onClick={this.handleReset}>
             Try again
           </Button>
-        </Panel>
+        </Paper>
       )
     }
 

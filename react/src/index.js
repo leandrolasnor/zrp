@@ -11,7 +11,7 @@ import axios from 'axios'
 import reportWebVitals from './reportWebVitals'
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import 'rsuite/dist/rsuite.min.css'
+import '@mantine/core/styles.css'
 import './index.css'
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL

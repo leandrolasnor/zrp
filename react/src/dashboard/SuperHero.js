@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux'
-import { Tag, Badge } from 'rsuite'
-import { Icon } from '@rsuite/icons'
+import { Badge } from '@mantine/core'
 import { FaTrophy } from 'react-icons/fa6'
 import { memo } from 'react'
 
@@ -14,12 +13,11 @@ const SuperHero = () => {
   }
 
   if (super_hero) return (
-    <Tag>
-      <Badge color={colors[super_hero.rank]} content={<Icon as={FaTrophy} />}>
-        {super_hero.name}
-      </Badge>
-    </Tag>
+    <Badge color={colors[super_hero.rank]} variant="light" leftSection={<FaTrophy />}>
+      {super_hero.name}
+    </Badge>
   )
+  return null
 }
 
 export default memo(SuperHero)

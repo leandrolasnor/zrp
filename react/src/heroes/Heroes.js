@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Grid } from 'rsuite'
+import { Container } from '@mantine/core'
 import { useDispatch, useSelector } from 'react-redux'
 import Filter from './Filter.js'
 import Searcher from './Searcher.js'
@@ -16,12 +16,12 @@ const Heroes = () => {
   }, [ranks, dispatch])
 
   return (
-    <Grid fluid>
+    <Container fluid>
       <Filter />
       <Searcher />
       <Paginate />
       <List />
-    </Grid>
+    </Container>
   )
 }
 

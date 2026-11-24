@@ -1,10 +1,11 @@
-import { Tag, Badge } from 'rsuite'
+import { Badge } from '@mantine/core'
 import { useSelector } from 'react-redux'
 import { memo } from 'react'
 
 const AverageScore = () => {
   const average_score = useSelector(state => state.metrics.average_score)
 
-  if (average_score) return <Tag><Badge color="cyan" content={average_score}>average score</Badge></Tag>
+  if (average_score) return <Badge color="cyan" variant="light">average score: {average_score}</Badge>
+  return null
 }
 export default memo(AverageScore)

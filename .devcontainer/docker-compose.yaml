@@ -63,7 +63,7 @@ services:
   socket.io.client:
     image: devcontainer:ruby-3.4.2-slim
     container_name: zrp.socket-io-client
-    command: corepack yarn workspace socket.io.client start
+    command: corepack yarn start:socket-client
     restart: unless-stopped
     environment:
       AMQP_SERVER: ${AMQP_SERVER}
@@ -73,7 +73,7 @@ services:
   socket.io.server:
     image: devcontainer:ruby-3.4.2-slim
     container_name: zrp.socket-io-server
-    command: corepack yarn workspace socket.io.server start
+    command: corepack yarn start:socket-server
     restart: unless-stopped
     environment:
       INSURGENCY_TIME: ${INSURGENCY_TIME}

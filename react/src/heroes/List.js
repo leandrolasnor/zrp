@@ -1,15 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Table, Row, Col, Button, Badge, TagGroup, Tag, IconButton, Placeholder, Panel } from 'rsuite'
-import { Icon } from '@rsuite/icons'
+import { Table, Button, Badge, Group, Paper, Text, Loader, ActionIcon } from '@mantine/core'
 import { FaTrashCan, FaFilePen, FaTrophy, FaClipboardCheck } from 'react-icons/fa6'
 import HeroForm from './HeroForm'
 import { destroy_hero } from './actions'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
-
-const { Column, HeaderCell, Cell } = Table
-const rowKey = 'id'
 
 const List = () => {
   const dispatch = useDispatch()
@@ -31,8 +27,8 @@ const List = () => {
 
   const statusColors = {
     enabled: 'green',
-    working: 'red',
-    disable: 'violet'
+    working: 'yellow',
+    disable: 'red'
   }
   const rankColors = {
     s: 'cyan',
@@ -41,104 +37,66 @@ const List = () => {
     c: 'red'
   }
 
-  const NameCell = ({ rowData, dataKey, ...props }) => {
-    return (
-      <Cell {...props}>
-        <Row>
-          <Col>
-            {_.get(super_hero, 'name', '') === rowData.name ? <Badge color='orange' content={<Icon as={FaTrophy} />}>{rowData[dataKey]}</Badge> : rowData[dataKey]}
-          </Col>
-        </Row>
-      </Cell>
-    );
+  const renderSortIndicator = (col) => {
+    if (sortColumn !== col) return null
+    return sortType === 'asc' ? ' ▲' : ' ▼'
   }
 
-  NameCell.propTypes = {
-    rowData: PropTypes.object,
-    dataKey: PropTypes.string,
-  }
+  const thStyle = { cursor: 'pointer' }
 
   return (
-    <Row>
-      <Col xs={24} className="mt-3">
-        <div style={{ position: 'relative' }}>
-          {loading ? (
-            <Placeholder.Graph active height={200} />
-          ) : hits.length === 0 ? (
-            <Panel bordered style={{ textAlign: 'center', padding: 40 }}>
-              <p style={{ opacity: 0.6 }}>No heroes found</p>
-            </Panel>
-          ) : (
-            <Table
-              onSortColumn={handleSortColumn}
-              sortColumn={sortColumn}
-              sortType={sortType || 'desc'}
-              shouldUpdateScroll={false}
-              autoHeight={true}
-              data={hits}
-              rowKey={rowKey}
-              bordered={true}
-              cellBordered={true}
-              headerHeight={30}
-            >
-              <Column fixed="right" align='center'>
-                <HeaderCell>...</HeaderCell>
-
-                <Cell style={{ padding: '6px' }}>
-                  {
-                    row => {
-                      return (
-                        <>
-                          <Button appearance="link" onClick={() => setDataHeroForm(row)}><Icon as={FaFilePen} /></Button>
-                          <Button appearance="link" onClick={() => dispatch(destroy_hero(row))}><Icon as={FaTrashCan} /></Button>
-                        </>
-                      )
-                    }
-                  }
-                </Cell>
-              </Column>
-              <Column align='center' sortable>
-                <HeaderCell>RANK</HeaderCell>
-                <Cell dataKey='rank'>
-                  {row => <Tag color={rankColors[row.rank]}>{row.rank}</Tag>}
-                </Cell>
-              </Column>
-              <Column align='center' sortable>
-                <HeaderCell>STATUS</HeaderCell>
-                <Cell dataKey='status'>
-                  {row => <Col><Badge color={statusColors[row.status]} content={row.status} /></Col>}
-                </Cell>
-              </Column>
-              <Column width={250} align='center' sortable>
-                <HeaderCell>NAME</HeaderCell>
-                <NameCell dataKey='name' />
-              </Column>
-              <Column flexGrow={1}>
-                <HeaderCell>LOCATION</HeaderCell>
-                <Cell>
-                  {row => {
-                    return (
-                      <TagGroup>
-                        <Tag>{row.lat}</Tag>
-                        <Tag>{row.lng}</Tag>
-                        <IconButton
-                          onClick={() => { navigator.clipboard.writeText(`${row.lat} ${row.lng}`) }}
-                          appearance='subtle'
-                          circle size="xs"
-                          icon={<Icon as={FaClipboardCheck} />}
-                        />
-                      </TagGroup>
-                    )
-                  }
-                  }
-                </Cell>
-              </Column>
-            </Table>
-          )}
-        </div>
-      </Col>
+    <div style={{ marginTop: 12 }}>
+      <div style={{ position: 'relative' }}>
+        {loading ? (
+          <div style={{ padding: 40, textAlign: 'center' }}><Loader /></div>
+        ) : hits.length === 0 ? (
+          <Paper withBorder p="xl" style={{ textAlign: 'center' }}>
+            <Text c="dimmed">No heroes found</Text>
+          </Paper>
+        ) : (
+          <Table striped highlightOnHover withTableBorder withColumnBorders>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>...</Table.Th>
+                <Table.Th style={thStyle} onClick={() => handleSortColumn('rank', sortColumn === 'rank' && sortType === 'asc' ? 'desc' : 'asc')}>RANK{renderSortIndicator('rank')}</Table.Th>
+                <Table.Th style={thStyle} onClick={() => handleSortColumn('status', sortColumn === 'status' && sortType === 'asc' ? 'desc' : 'asc')}>STATUS{renderSortIndicator('status')}</Table.Th>
+                <Table.Th style={thStyle} onClick={() => handleSortColumn('name', sortColumn === 'name' && sortType === 'asc' ? 'desc' : 'asc')}>NAME{renderSortIndicator('name')}</Table.Th>
+                <Table.Th>LOCATION</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+              {hits.map((row) => (
+                <Table.Tr key={row.id}>
+                  <Table.Td>
+                    <Group gap="xs" wrap="nowrap">
+                      <ActionIcon variant="subtle" onClick={() => setDataHeroForm(row)}><FaFilePen /></ActionIcon>
+                      <ActionIcon variant="subtle" color="red" onClick={() => dispatch(destroy_hero(row))}><FaTrashCan /></ActionIcon>
+                    </Group>
+                  </Table.Td>
+                  <Table.Td><Badge color={rankColors[row.rank]} variant="light">{row.rank}</Badge></Table.Td>
+                  <Table.Td><Badge color={statusColors[row.status]} variant="light">{row.status}</Badge></Table.Td>
+                  <Table.Td>
+                    {_.get(super_hero, 'name', '') === row.name ? (
+                      <Badge color="orange" variant="light" leftSection={<FaTrophy />}>{row.name}</Badge>
+                    ) : row.name}
+                  </Table.Td>
+                  <Table.Td>
+                    <Group gap="xs">
+                      <Badge variant="outline">{row.lat}</Badge>
+                      <Badge variant="outline">{row.lng}</Badge>
+                      <ActionIcon variant="subtle" size="sm" onClick={() => { navigator.clipboard.writeText(`${row.lat} ${row.lng}`) }}>
+                        <FaClipboardCheck />
+                      </ActionIcon>
+                    </Group>
+                  </Table.Td>
+                </Table.Tr>
+              ))}
+            </Table.Tbody>
+          </Table>
+        )}
+      </div>
       <HeroForm size='xs' open={openUpdateHeroForm} textButton='Update' title='Update Hero' data={dataHeroForm} handleClose={() => setDataHeroForm({})} />
-    </Row>
+    </div>
   )
 }
 

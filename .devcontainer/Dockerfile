@@ -15,7 +15,8 @@ ENV RAILS_ENV=development \
     BUNDLE_DISABLE_LOCAL_REVISION_CHECK=true \
     BUNDLE_DISABLE_LOCAL_BRANCH_CHECK=true \
     XDG_CONFIG_HOME=/workspaces/zrp \
-    TZ=America/Sao_Paulo
+    TZ=America/Sao_Paulo \
+    OVERMIND_KILL_TIMEOUT=30
 ENV PATH=/workspaces/zrp/bin:$PATH
 ENV PATH=$GEM_HOME/bin:$PATH
 RUN apt-get update -qq && \
