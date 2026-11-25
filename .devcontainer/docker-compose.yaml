@@ -32,8 +32,6 @@ services:
       context: ..
       dockerfile: .devcontainer/Dockerfile
       target: devcontainer
-      cache_from:
-      - devcontainer:ruby-3.4.2-slim
       args:
         RUBY_VERSION: ${RUBY_VERSION}
     container_name: zrp.api

@@ -38,8 +38,6 @@ RUN sed -i -e '$aPOWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true' ~/.zshrc
 RUN sed -i -e '$a[[ ! -f .devcontainer/.p10k.zsh ]] || source .devcontainer/.p10k.zsh' ~/.zshrc
 COPY package.json yarn.lock ./
 COPY react/package.json ./react/
-COPY socket.io/client/package.json ./socket.io/client/
-COPY socket.io/server/package.json ./socket.io/server/
 RUN corepack prepare yarn@stable --activate
 RUN corepack yarn install --no-immutable
 COPY Gemfile Gemfile.lock ./

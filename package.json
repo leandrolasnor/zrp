@@ -2,6 +2,7 @@
   "name": "zrp-monorepo",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
@@ -68,8 +69,8 @@
     "build:react": "cd react && react-scripts build",
     "test:react": "cd react && react-scripts test",
     "start:socket-server": "node socket.io/server/index.js",
-    "test:socket-server": "node --test socket.io/server",
+    "test:socket-server": "node --test socket.io/server/test/*.test.js",
     "start:socket-client": "node socket.io/client/index.js",
-    "test:socket-client": "node --test socket.io/client"
+    "test:socket-client": "node --test socket.io/client/test/*.test.js"
   }
 }
