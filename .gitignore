@@ -53,3 +53,4 @@ node_modules
 **/repomix.config.*.json
 
 /react/build
+/Code
