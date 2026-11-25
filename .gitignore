@@ -52,4 +52,4 @@ node_modules
 **/repomix.config.json
 **/repomix.config.*.json
 
-react/build
+/react/build
