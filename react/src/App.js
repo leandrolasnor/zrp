@@ -10,7 +10,7 @@ global.EventSource = EventSourcePolyfill
 const App = () => {
   return (
     <MantineProvider defaultColorScheme="dark">
-      <HashRouter>
+      <HashRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <ErrorBoundary>
           <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <header>

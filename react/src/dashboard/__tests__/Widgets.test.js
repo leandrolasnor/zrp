@@ -1,10 +1,7 @@
-jest.mock('@rsuite/charts', () => ({
-    PieChart: ({ data }) => <div data-testid="pie-chart">{data.map(d => <span key={d[0]}>{d[0]}</span>)}</div>
-}))
-
 import { render, screen } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
+import { MantineProvider } from '@mantine/core'
 import AverageScore from '../AverageScore'
 import AverageTimeToMatch from '../AverageTimeToMatch'
 import SuperHero from '../SuperHero'
@@ -20,7 +17,13 @@ const renderWithMetrics = (Component, metricsState) => {
         reducer: { metrics: reducer },
         preloadedState: { metrics: metricsState }
     })
-    return render(<Provider store={store}>{Component}</Provider>)
+    return render(
+        <Provider store={store}>
+            <MantineProvider withGlobalClasses={false} withCssVariables={false}>
+                {Component}
+            </MantineProvider>
+        </Provider>
+    )
 }
 
 describe('AverageScore', () => {
@@ -35,8 +38,7 @@ describe('AverageScore', () => {
         renderWithMetrics(<AverageScore />, {
             average_score: 85
         })
-        expect(screen.getByText('average score')).toBeInTheDocument()
-        expect(screen.getByText('85')).toBeInTheDocument()
+        expect(screen.getByText('average score: 85')).toBeInTheDocument()
     })
 })
 
@@ -108,10 +110,10 @@ describe('HeroesDistribution', () => {
         renderWithMetrics(<HeroesDistribution />, {
             heroes_distribution: { s: 3, a: 7, b: 5, c: 2 }
         })
-        expect(screen.getByText('S')).toBeInTheDocument()
-        expect(screen.getByText('A')).toBeInTheDocument()
-        expect(screen.getByText('B')).toBeInTheDocument()
-        expect(screen.getByText('C')).toBeInTheDocument()
+        expect(screen.getByText('S: 3')).toBeInTheDocument()
+        expect(screen.getByText('A: 7')).toBeInTheDocument()
+        expect(screen.getByText('B: 5')).toBeInTheDocument()
+        expect(screen.getByText('C: 2')).toBeInTheDocument()
     })
 })
 
@@ -127,37 +129,44 @@ describe('ThreatsDistribution', () => {
         renderWithMetrics(<ThreatsDistribution />, {
             threats_distribution: { god: 1, dragon: 4, tiger: 10, wolf: 20 }
         })
-        expect(screen.getByText('God')).toBeInTheDocument()
-        expect(screen.getByText('Dragon')).toBeInTheDocument()
-        expect(screen.getByText('Tiger')).toBeInTheDocument()
-        expect(screen.getByText('Wolf')).toBeInTheDocument()
+        expect(screen.getByText('God: 1')).toBeInTheDocument()
+        expect(screen.getByText('Dragon: 4')).toBeInTheDocument()
+        expect(screen.getByText('Tiger: 10')).toBeInTheDocument()
+        expect(screen.getByText('Wolf: 20')).toBeInTheDocument()
     })
 })
 
 describe('HeroesWorking', () => {
-    it('renders progress circles', () => {
+    it('renders progress rings', () => {
         const { container } = renderWithMetrics(<HeroesWorking />, {
             heroes_working: { global: 50, s: 20, a: 30, b: 10, c: 5, count: 4 }
         })
-        expect(container.querySelector('.rs-progress-circle')).toBeInTheDocument()
+        expect(container.querySelectorAll('.mantine-RingProgress-root')).toHaveLength(5)
+        expect(screen.getByText('50%')).toBeInTheDocument()
     })
 })
 
 describe('ThreatsDisabled', () => {
-    it('renders progress circles', () => {
+    it('renders progress rings', () => {
         const { container } = renderWithMetrics(<ThreatsDisabled />, {
             threats_disabled: { global: 30, god: 5, dragon: 10, tiger: 8, wolf: 7, count: 4 }
         })
-        expect(container.querySelector('.rs-progress-circle')).toBeInTheDocument()
+        expect(container.querySelectorAll('.mantine-RingProgress-root')).toHaveLength(5)
+        expect(screen.getByText('30%')).toBeInTheDocument()
     })
 })
 
 describe('BattlesCharts', () => {
-    it('renders pie chart', () => {
-        renderWithMetrics(<BattlesCharts />, {
+    it('renders donut chart with the battles lineup', () => {
+        const { container } = renderWithMetrics(<BattlesCharts />, {
             battles_lineup: [['One Hero', 10], ['Two Heroes', 5]]
         })
+        expect(container.querySelector('.mantine-RingProgress-root')).toBeInTheDocument()
         expect(screen.getByText('One Hero')).toBeInTheDocument()
         expect(screen.getByText('Two Heroes')).toBeInTheDocument()
+        expect(screen.getByText('67%')).toBeInTheDocument()
+        expect(screen.getByText('33%')).toBeInTheDocument()
+        expect(screen.getByText('100%')).toBeInTheDocument()
+        expect(screen.getByText('15')).toBeInTheDocument()
     })
 })

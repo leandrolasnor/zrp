@@ -1,6 +1,7 @@
-import { render, screen, fireEvent, act } from '@testing-library/react'
+import { render, screen, within, fireEvent, act } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
+import { MantineProvider } from '@mantine/core'
 import HistoricalThreats from '../HistoricalThreats'
 import reducer from '../reducer'
 
@@ -18,7 +19,11 @@ const renderHistoricalThreats = (metricsState) => {
         reducer: { metrics: reducer },
         preloadedState: { metrics: metricsState }
     })
-    return render(<Provider store={store}><HistoricalThreats /></Provider>)
+    return render(
+        <Provider store={store}>
+            <MantineProvider><HistoricalThreats /></MantineProvider>
+        </Provider>
+    )
 }
 
 const baseMetrics = {
@@ -115,8 +120,7 @@ describe('HistoricalThreats', () => {
         it('renders refresh button', async () => {
             renderHistoricalThreats({ ...baseMetrics, historical_threats: [twoHeroThreat] })
             await act(async () => { resolveLoading() })
-            const refreshButton = document.querySelector('.rs-btn-icon')
-            expect(refreshButton).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /refresh historical threats/i })).toBeInTheDocument()
         })
 
         it('renders initial date column', async () => {
@@ -131,20 +135,22 @@ describe('HistoricalThreats', () => {
         it('renders expand buttons for each row', async () => {
             renderHistoricalThreats({ ...baseMetrics, historical_threats: [twoHeroThreat] })
             await act(async () => { resolveLoading() })
-            const expandButtons = document.querySelectorAll('.rs-btn-icon-circle')
-            expect(expandButtons.length).toBeGreaterThanOrEqual(1)
+            expect(screen.getByRole('button', { name: /expand godzilla/i })).toBeInTheDocument()
         })
 
-        it('expands row on click and shows battle details', async () => {
+        it('expands and collapses row on click, showing battle details', async () => {
             renderHistoricalThreats({ ...baseMetrics, historical_threats: [singleHeroThreat] })
             await act(async () => { resolveLoading() })
-            const expandBtn = document.querySelector('.rs-btn-icon-circle')
-            if (expandBtn) {
-                fireEvent.click(expandBtn)
-            }
-            // After clicking expand, check that battle details appear
-            const expandIcons = document.querySelectorAll('.rs-btn-icon-circle')
-            expect(expandIcons.length).toBeGreaterThanOrEqual(1)
+
+            fireEvent.click(screen.getByRole('button', { name: /expand mothra/i }))
+
+            const details = screen.getByTestId('battle-details-2')
+            expect(within(details).getByText(/Score:/)).toBeInTheDocument()
+            expect(within(details).getByText('Wonder Woman')).toBeInTheDocument()
+            expect(within(details).getByText(/3\.00min/)).toBeInTheDocument()
+
+            fireEvent.click(screen.getByRole('button', { name: /collapse mothra/i }))
+            expect(screen.queryByTestId('battle-details-2')).not.toBeInTheDocument()
         })
     })
 
@@ -152,9 +158,10 @@ describe('HistoricalThreats', () => {
         it('renders threat with single hero', async () => {
             renderHistoricalThreats({ ...baseMetrics, historical_threats: [singleHeroThreat] })
             await act(async () => { resolveLoading() })
-            // Verify the threat name appears (rsuite Table renders threat name cells)
             expect(screen.getByText('Mothra')).toBeInTheDocument()
             expect(screen.getByText('dragon')).toBeInTheDocument()
+            expect(screen.getByText('30')).toBeInTheDocument()
+            expect(screen.getByText('40')).toBeInTheDocument()
         })
     })
 })

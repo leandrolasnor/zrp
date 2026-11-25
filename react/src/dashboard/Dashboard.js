@@ -1,4 +1,4 @@
-import { Row, Col, Grid, TagGroup } from 'rsuite'
+import { Container, Group, SimpleGrid, Stack } from '@mantine/core'
 import HeroesWorking from './HeroesWorking.js'
 import ThreatsDisabled from './ThreatsDisabled.js'
 import BattlesCharts from './BattlesCharts.js'
@@ -20,31 +20,21 @@ const Dashboard = () => {
   }, [dispatch])
 
   return (
-    <Grid fluid>
-      <Row className='mt-3'>
-        <Col>
-          <TagGroup>
-            <AverageScore />
-            <AverageTimeToMatch />
-            <SuperHero />
-          </TagGroup>
-        </Col>
-      </Row>
-      <Row className='mt-3'>
-        <Col sm={8}>
+    <Container fluid mt="md">
+      <Stack gap="md">
+        <Group gap="xs" align="center">
+          <AverageScore />
+          <AverageTimeToMatch />
+          <SuperHero />
+        </Group>
+        <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="md">
           <HeroesWorking />
-        </Col>
-        <Col sm={8}>
           <ThreatsDisabled />
-        </Col>
-        <Col sm={8}>
           <BattlesCharts />
-        </Col>
-      </Row>
-      <Row className='mt-1'>
+        </SimpleGrid>
         <HistoricalThreats />
-      </Row>
-    </Grid>
+      </Stack>
+    </Container>
   )
 }
 
