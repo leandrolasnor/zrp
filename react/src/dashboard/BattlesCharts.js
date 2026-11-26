@@ -1,4 +1,4 @@
-import { Box, Group, Paper, RingProgress, Stack, Text } from '@mantine/core'
+import { Badge, Box, Group, Paper, RingProgress, Text } from '@mantine/core'
 import { useSelector } from 'react-redux'
 import { memo } from 'react'
 
@@ -20,27 +20,25 @@ const BattlesCharts = () => {
 
   return (
     <Paper withBorder p="md">
-      <Stack align="center" gap="sm">
+      <Group align="center" gap="lg">
         <RingProgress
-          size={160}
+          size={120}
           thickness={12}
+          roundCaps
           sections={sections}
         />
-        <Group gap="md" justify="center">
+      </Group>
+      <Box mt="md">
+        <Text c="dimmed" fw={600} mb="xs">{total} Battles</Text>
+        <Group gap="xs">
           {lineup.map(([name, value], index) => (
-            <Group key={name} gap="xs" wrap="nowrap">
-              <Box
-                w={10}
-                h={10}
-                bg={colors[index % colors.length]}
-                style={{ borderRadius: '50%' }}
-              />
-              <Text size="sm">{name}</Text>
-              <Text size="sm" c="dimmed">{`${Math.round(percentage(value))} %`}</Text>
-            </Group>
+            <Badge key={name} color={colors[index % colors.length]} variant="light">
+              <Text component="span" inherit>{name}</Text>{' '}
+              <Text component="span" inherit>{`${Math.round(percentage(value))}%`}</Text>
+            </Badge>
           ))}
         </Group>
-      </Stack>
+      </Box>
     </Paper>
   )
 }
