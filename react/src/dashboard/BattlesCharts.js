@@ -24,7 +24,6 @@ const BattlesCharts = () => {
         <RingProgress
           size={120}
           thickness={12}
-          roundCaps
           sections={sections}
         />
       </Group>
