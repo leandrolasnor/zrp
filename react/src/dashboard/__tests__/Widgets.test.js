@@ -166,7 +166,6 @@ describe('BattlesCharts', () => {
         expect(screen.getByText('Two Heroes')).toBeInTheDocument()
         expect(screen.getByText('67%')).toBeInTheDocument()
         expect(screen.getByText('33%')).toBeInTheDocument()
-        expect(screen.getByText('100%')).toBeInTheDocument()
-        expect(screen.getByText('15')).toBeInTheDocument()
+        expect(screen.getByText('15 Battles')).toBeInTheDocument()
     })
 })

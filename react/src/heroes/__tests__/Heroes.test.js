@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
+import { MantineProvider } from '@mantine/core'
 import Heroes from '../Heroes'
 import reducer from '../reducer'
 
@@ -11,7 +12,13 @@ jest.mock('../Paginate', () => () => <div data-testid="paginate">Paginate</div>)
 
 const renderHeroes = () => {
     const store = configureStore({ reducer: { heroes: reducer } })
-    return render(<Provider store={store}><Heroes /></Provider>)
+    return render(
+        <Provider store={store}>
+            <MantineProvider>
+                <Heroes />
+            </MantineProvider>
+        </Provider>
+    )
 }
 
 describe('Heroes', () => {

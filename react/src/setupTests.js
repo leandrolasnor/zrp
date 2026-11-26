@@ -27,3 +27,10 @@ class MockEventSource {
 }
 
 global.EventSource = MockEventSource
+
+// Mantine's Select/Popover components rely on ResizeObserver, which jsdom does not provide.
+global.ResizeObserver = class ResizeObserver {
+  observe() { }
+  unobserve() { }
+  disconnect() { }
+}
