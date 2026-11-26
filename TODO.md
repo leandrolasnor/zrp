@@ -2,7 +2,7 @@
 
 ## Pendências
 
-- [ ] **[React] ThreatsDistribution: ranks sem ameaça não exibem o zero**
+- [x] **[React] ThreatsDistribution: ranks sem ameaça não exibem o zero** — ✅ corrigido
   Quando não há threat de determinado rank, o badge mostra só o nome seguido de `:` (ex.: `Tiger:`). Exibir `Tiger: 0`.
   Causa provável: `app/use_cases/dashboard/widgets/threats_distribution/monad.rb:20` envia `dist[it]` = `nil` para ranks ausentes; `react/src/dashboard/ThreatsDistribution.js:21` renderiza o valor direto. Garantir o `0` (no payload e/ou no componente, ex.: `?? 0`).
 

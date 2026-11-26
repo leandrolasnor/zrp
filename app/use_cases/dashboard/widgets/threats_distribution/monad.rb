@@ -17,7 +17,7 @@ class Dashboard::Widgets::ThreatsDistribution::Monad
       )
 
       dist = search.dig('facetDistribution', 'rank') || {}
-      count = ranks.map { [it, dist[it]] }
+      count = ranks.map { [it, dist.fetch(it, 0)] }
 
       count.to_h.symbolize_keys
     end

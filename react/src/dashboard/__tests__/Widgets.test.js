@@ -134,6 +134,16 @@ describe('ThreatsDistribution', () => {
         expect(screen.getByText('Tiger: 10')).toBeInTheDocument()
         expect(screen.getByText('Wolf: 20')).toBeInTheDocument()
     })
+
+    it('shows zero for ranks missing from the payload', () => {
+        renderWithMetrics(<ThreatsDistribution />, {
+            threats_distribution: { god: 1 }
+        })
+        expect(screen.getByText('God: 1')).toBeInTheDocument()
+        expect(screen.getByText('Dragon: 0')).toBeInTheDocument()
+        expect(screen.getByText('Tiger: 0')).toBeInTheDocument()
+        expect(screen.getByText('Wolf: 0')).toBeInTheDocument()
+    })
 })
 
 describe('HeroesWorking', () => {

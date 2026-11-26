@@ -18,7 +18,7 @@ const ThreatsDistribution = () => {
         Object.entries(colors).map(([rank, color]) => {
           return (
             <Badge key={rank} color={color} variant="light">
-              {_.capitalize(rank)}: {threats_distribution[rank.toLowerCase()]}
+              {_.capitalize(rank)}: {threats_distribution[rank.toLowerCase()] ?? 0}
             </Badge>
           )
         })
