@@ -7,7 +7,7 @@ jest.mock('../InsurgencySlider', () => () => <div data-testid="insurgency-slider
 
 const renderNavBar = () => render(
     <MantineProvider>
-        <MemoryRouter>
+        <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <NavBar />
         </MemoryRouter>
     </MantineProvider>
