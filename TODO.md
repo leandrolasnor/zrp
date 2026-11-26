@@ -6,7 +6,7 @@
   Quando não há threat de determinado rank, o badge mostra só o nome seguido de `:` (ex.: `Tiger:`). Exibir `Tiger: 0`.
   Causa provável: `app/use_cases/dashboard/widgets/threats_distribution/monad.rb:20` envia `dist[it]` = `nil` para ranks ausentes; `react/src/dashboard/ThreatsDistribution.js:21` renderiza o valor direto. Garantir o `0` (no payload e/ou no componente, ex.: `?? 0`).
 
-- [ ] **[React/Backend] BattlesCharts: label mostra sempre "100 Battles"**
+- [x] **[React/Backend] BattlesCharts: label mostra sempre "100 Battles"**
   Exibir a quantidade real de batalhas em uma janela de tempo (padrão: últimos 20 min) no lugar do `100`, ex.: `37 Battles`.
   O `total` em `react/src/dashboard/BattlesCharts.js:12,31` hoje soma as porcentagens de `app/use_cases/dashboard/widgets/battles_lineup/monad.rb:22-23` (sempre 100). O search já filtra `created_at > 20.minutes.ago` e traz `totalHits` (`:11-19`) — incluir esse count no payload do widget e usá-lo no label (com guarda para `totalHits.zero?` nas porcentagens). Ajustar `react/src/dashboard/__tests__/Widgets.test.js:169`.
 

@@ -167,15 +167,28 @@ describe('ThreatsDisabled', () => {
 })
 
 describe('BattlesCharts', () => {
-    it('renders donut chart with the battles lineup', () => {
+    it('renders donut chart with the battles lineup and real battle count', () => {
         const { container } = renderWithMetrics(<BattlesCharts />, {
-            battles_lineup: [['One Hero', 10], ['Two Heroes', 5]]
+            battles_lineup: {
+                lineup: [['One Hero', 67], ['Two Heroes', 33]],
+                count: 37
+            }
         })
         expect(container.querySelector('.mantine-RingProgress-root')).toBeInTheDocument()
         expect(screen.getByText('One Hero')).toBeInTheDocument()
         expect(screen.getByText('Two Heroes')).toBeInTheDocument()
         expect(screen.getByText('67%')).toBeInTheDocument()
         expect(screen.getByText('33%')).toBeInTheDocument()
-        expect(screen.getByText('15 Battles')).toBeInTheDocument()
+        expect(screen.getByText('37 Battles')).toBeInTheDocument()
+    })
+
+    it('renders zero battles when no battles were found', () => {
+        renderWithMetrics(<BattlesCharts />, {
+            battles_lineup: {
+                lineup: [['One Hero', 0], ['Two Heroes', 0]],
+                count: 0
+            }
+        })
+        expect(screen.getByText('0 Battles')).toBeInTheDocument()
     })
 })

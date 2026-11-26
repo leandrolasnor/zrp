@@ -7,7 +7,9 @@ const colors = ['#34c3ff', '#1464ac']
 const BattlesCharts = () => {
   const battles_lineup = useSelector(state => state.metrics.battles_lineup)
 
-  const lineup = (Array.isArray(battles_lineup) ? battles_lineup : [])
+  const source = Array.isArray(battles_lineup) ? battles_lineup : battles_lineup?.lineup || []
+  const count = Array.isArray(battles_lineup) ? 0 : Number(battles_lineup?.count) || 0
+  const lineup = source
     .map(([name, value]) => [name, Number(value) || 0])
   const total = lineup.reduce((sum, [, value]) => sum + value, 0)
 
@@ -28,7 +30,7 @@ const BattlesCharts = () => {
         />
       </Group>
       <Box mt="md">
-        <Text c="dimmed" fw={600} mb="xs">{total} Battles</Text>
+        <Text c="dimmed" fw={600} mb="xs">{count} Battles</Text>
         <Group gap="xs">
           {lineup.map(([name, value], index) => (
             <Badge key={name} color={colors[index % colors.length]} variant="light">

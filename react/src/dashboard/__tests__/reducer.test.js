@@ -9,10 +9,13 @@ const INITIAL_STATE = {
     threats_disabled: { global: 0, god: 0, dragon: 0, tiger: 0, wolf: 0, count: 0 },
     heroes_distribution: null,
     threats_distribution: null,
-    battles_lineup: [
-        ['One Hero', 0],
-        ['Two Heroes', 0]
-    ]
+    battles_lineup: {
+        lineup: [
+            ['One Hero', 0],
+            ['Two Heroes', 0]
+        ],
+        count: 0
+    }
 }
 
 describe('dashboard reducer', () => {
@@ -46,7 +49,7 @@ describe('dashboard reducer', () => {
 
     describe('WIDGET_BATTLES_LINEUP_FETCHED', () => {
         it('sets battles_lineup', () => {
-            const lineup = [['One Hero', 10], ['Two Heroes', 5]]
+            const lineup = { lineup: [['One Hero', 10], ['Two Heroes', 5]], count: 37 }
             const state = reducer(undefined, { type: 'WIDGET_BATTLES_LINEUP_FETCHED', payload: lineup })
             expect(state.battles_lineup).toEqual(lineup)
         })
