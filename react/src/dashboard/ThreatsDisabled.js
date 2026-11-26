@@ -14,21 +14,22 @@ const ThreatsDisabled = () => {
         <RingProgress
           size={120}
           thickness={12}
+          roundCaps
           sections={[{ value: g, color: 'yellow' }]}
           label={<Text ta="center" fw={700}>{g}%</Text>}
         />
         <Group gap="md">
           <Tooltip label={<i>God</i>}>
-            <RingProgress size={60} thickness={8} sections={[{ value: _.get(threats_disabled, 'god', 0), color: 'blue' }]} />
+            <RingProgress size={60} thickness={8} roundCaps sections={[{ value: _.get(threats_disabled, 'god', 0), color: 'blue' }]} />
           </Tooltip>
           <Tooltip label={<i>Dragon</i>}>
-            <RingProgress size={60} thickness={8} sections={[{ value: _.get(threats_disabled, 'dragon', 0), color: 'green' }]} />
+            <RingProgress size={60} thickness={8} roundCaps sections={[{ value: _.get(threats_disabled, 'dragon', 0), color: 'green' }]} />
           </Tooltip>
           <Tooltip label={<i>Tiger</i>}>
-            <RingProgress size={60} thickness={8} sections={[{ value: _.get(threats_disabled, 'tiger', 0), color: 'violet' }]} />
+            <RingProgress size={60} thickness={8} roundCaps sections={[{ value: _.get(threats_disabled, 'tiger', 0), color: 'violet' }]} />
           </Tooltip>
           <Tooltip label={<i>Wolf</i>}>
-            <RingProgress size={60} thickness={8} sections={[{ value: _.get(threats_disabled, 'wolf', 0), color: 'red' }]} />
+            <RingProgress size={60} thickness={8} roundCaps sections={[{ value: _.get(threats_disabled, 'wolf', 0), color: 'red' }]} />
           </Tooltip>
         </Group>
       </Group>

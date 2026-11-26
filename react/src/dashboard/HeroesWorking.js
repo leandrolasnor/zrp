@@ -15,21 +15,22 @@ const HeroesWorking = () => {
         <RingProgress
           size={120}
           thickness={12}
+          roundCaps
           sections={[{ value: g, color: 'yellow' }]}
           label={<Text ta="center" fw={700}>{g}%</Text>}
         />
         <Group gap="md">
           <Tooltip label={<i>S</i>}>
-            <RingProgress size={60} thickness={8} sections={[{ value: _.get(heroes_working, 's', 0), color: 'blue' }]} />
+            <RingProgress size={60} thickness={8} roundCaps sections={[{ value: _.get(heroes_working, 's', 0), color: 'blue' }]} />
           </Tooltip>
           <Tooltip label={<i>A</i>}>
-            <RingProgress size={60} thickness={8} sections={[{ value: _.get(heroes_working, 'a', 0), color: 'green' }]} />
+            <RingProgress size={60} thickness={8} roundCaps sections={[{ value: _.get(heroes_working, 'a', 0), color: 'green' }]} />
           </Tooltip>
           <Tooltip label={<i>B</i>}>
-            <RingProgress size={60} thickness={8} sections={[{ value: _.get(heroes_working, 'b', 0), color: 'violet' }]} />
+            <RingProgress size={60} thickness={8} roundCaps sections={[{ value: _.get(heroes_working, 'b', 0), color: 'violet' }]} />
           </Tooltip>
           <Tooltip label={<i>C</i>}>
-            <RingProgress size={60} thickness={8} sections={[{ value: _.get(heroes_working, 'c', 0), color: 'red' }]} />
+            <RingProgress size={60} thickness={8} roundCaps sections={[{ value: _.get(heroes_working, 'c', 0), color: 'red' }]} />
           </Tooltip>
         </Group>
       </Group>
