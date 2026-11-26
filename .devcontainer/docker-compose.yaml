@@ -3,7 +3,8 @@ services:
   rabbitmq:
     image: rabbitmq:3.13-management
     container_name: zrp.rabbitmq
-    command: sh -c "rabbitmq-plugins enable rabbitmq_prometheus && rabbitmq-server"
+    command: rabbitmq-server
+    init: true
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
@@ -24,6 +25,8 @@ services:
     container_name: zrp.redis
     environment:
       ALLOW_EMPTY_PASSWORD: ${ALLOW_EMPTY_PASSWORD}
+    volumes:
+    - redis_data:/data
     restart: unless-stopped
 
   api:
@@ -36,6 +39,7 @@ services:
         RUBY_VERSION: ${RUBY_VERSION}
     container_name: zrp.api
     command: sleep infinity
+    init: true
     environment:
       DB_HOST: ${DB_HOST}
       DB_NAME: ${DB_NAME}
@@ -61,7 +65,8 @@ services:
   socket.io.client:
     image: devcontainer:ruby-3.4.2-slim
     container_name: zrp.socket-io-client
-    command: corepack yarn start:socket-client
+    command: node socket.io/client/index.js
+    init: true
     restart: unless-stopped
     environment:
       AMQP_SERVER: ${AMQP_SERVER}
@@ -71,7 +76,8 @@ services:
   socket.io.server:
     image: devcontainer:ruby-3.4.2-slim
     container_name: zrp.socket-io-server
-    command: corepack yarn start:socket-server
+    command: node socket.io/server/index.js
+    init: true
     restart: unless-stopped
     environment:
       INSURGENCY_TIME: ${INSURGENCY_TIME}
@@ -91,16 +97,20 @@ services:
       POSTGRES_DB: ${DB_NAME}
     volumes:
     - ./../db/initdb:/docker-entrypoint-initdb.d
+    - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
 
   pgadmin:
     image: dpage/pgadmin4
     container_name: zrp.pgadmin
+    init: true
+    stop_grace_period: 2s
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
       PGADMIN_SETUP_MASTER_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
       PGADMIN_CONFIG_SERVER_MODE: ${PGADMIN_CONFIG_SERVER_MODE}
+      GUNICORN_CMD_ARGS: "--graceful-timeout 2"
     ports:
     - 8080:80
     restart: unless-stopped
@@ -115,3 +125,7 @@ services:
     ports:
     - 7700:7700
     restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:

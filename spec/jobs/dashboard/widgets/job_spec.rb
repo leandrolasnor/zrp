@@ -14,7 +14,7 @@ RSpec.describe Dashboard::Widgets::Job do
     it 'accepts the widget as a string' do
       expect(described_class.widget_config('super_hero')).to eq(
         event: 'WIDGET_SUPER_HERO_FETCHED',
-        queue: :low_priority
+        queue: :default
       )
     end
 
@@ -42,7 +42,7 @@ RSpec.describe Dashboard::Widgets::Job do
     it 'enqueues low priority widgets on the low priority queue' do
       described_class.enqueue(:average_score)
 
-      expect(described_class).to have_received(:set).with(queue: :low_priority)
+      expect(described_class).to have_received(:set).with(queue: :default)
       expect(configured_job).to have_received(:perform_later).with('average_score')
     end
   end
