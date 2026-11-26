@@ -4,6 +4,7 @@ import { Table, Button, Badge, Group, Paper, Text, Loader, ActionIcon } from '@m
 import { FaTrashCan, FaFilePen, FaTrophy, FaClipboardCheck } from 'react-icons/fa6'
 import HeroForm from './HeroForm'
 import { destroy_hero } from './actions'
+import { rankColor } from './rankColors.js'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 
@@ -30,13 +31,6 @@ const List = () => {
     working: 'yellow',
     disable: 'red'
   }
-  const rankColors = {
-    s: 'cyan',
-    a: 'green',
-    b: 'violet',
-    c: 'red'
-  }
-
   const renderSortIndicator = (col) => {
     if (sortColumn !== col) return null
     return sortType === 'asc' ? ' ▲' : ' ▼'
@@ -73,7 +67,7 @@ const List = () => {
                       <ActionIcon variant="subtle" color="red" onClick={() => dispatch(destroy_hero(row))}><FaTrashCan /></ActionIcon>
                     </Group>
                   </Table.Td>
-                  <Table.Td><Badge color={rankColors[row.rank]} variant="light">{row.rank}</Badge></Table.Td>
+                  <Table.Td><Badge color={rankColor(row.rank)} variant="light">{row.rank}</Badge></Table.Td>
                   <Table.Td><Badge color={statusColors[row.status]} variant="light">{row.status}</Badge></Table.Td>
                   <Table.Td>
                     {_.get(super_hero, 'name', '') === row.name ? (

@@ -33,7 +33,7 @@ const ThreatsDisabled = () => {
         </Group>
       </Group>
       <Box mt="md">
-        <Text fw={600} mb="xs">{_.get(threats_disabled, 'count', 0)} Disabled</Text>
+        <Text c="dimmed" fw={600} mb="xs">{_.get(threats_disabled, 'count', 0)} Disabled</Text>
         <ThreatsDistribution />
       </Box>
     </Paper>

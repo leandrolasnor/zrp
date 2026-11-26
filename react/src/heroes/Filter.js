@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Accordion, Badge, Select, Group, Button } from '@mantine/core'
 import { FaFilter } from 'react-icons/fa6'
 import { get_statuses } from './actions'
+import { rankColor, rankTextColor } from './rankColors.js'
 
 const Filter = () => {
   const { ranks, statuses, search: { filter } } = useSelector(state => state.heroes)
@@ -31,7 +32,6 @@ const Filter = () => {
     }
   }, [filter])
 
-  const rankColors = { s: 'cyan', a: 'green', b: 'violet', c: 'red' }
   const statusColors = { enabled: 'green', working: 'yellow', disable: 'red' }
   const ranksData = useMemo(() =>
     ranks.map((r) => ({ label: r.toUpperCase(), value: r })).reverse(),
@@ -74,9 +74,9 @@ const Filter = () => {
                 clearable
                 searchable={false}
                 style={{ minWidth: 150 }}
-                styles={{ input: { color: rankFilter ? `var(--mantine-color-${rankColors[rankFilter] || 'gray'}-6)` : undefined, fontWeight: 700 } }}
+                styles={{ input: { color: rankTextColor(rankFilter), fontWeight: 700 } }}
                 renderOption={({ option }) => (
-                  <Badge color={rankColors[option.value] || 'gray'} variant="light">{option.value.toUpperCase()}</Badge>
+                  <Badge color={rankColor(option.value)} variant="light">{option.value.toUpperCase()}</Badge>
                 )}
               />
               <Select

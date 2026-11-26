@@ -34,7 +34,7 @@ const HeroesWorking = () => {
         </Group>
       </Group>
       <Box mt="md">
-        <Text fw={600} mb="xs">{_.get(heroes_working, 'count', 0)} Working</Text>
+        <Text c="dimmed" fw={600} mb="xs">{_.get(heroes_working, 'count', 0)} Working</Text>
         <HeroesDistribution />
       </Box>
     </Paper>

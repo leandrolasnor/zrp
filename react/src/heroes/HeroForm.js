@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal, Button, TextInput, Select, Group } from '@mantine/core'
+import { Modal, Button, TextInput, Select, Group, Badge } from '@mantine/core'
 import { create_hero, update_hero } from './actions.js'
+import { rankColor, rankTextColor } from './rankColors.js'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 
@@ -65,6 +66,10 @@ const HeroForm = props => {
         error={errors.rank}
         mb="sm"
         clearable
+        styles={{ input: { color: rankTextColor(formValue.rank), fontWeight: 700 } }}
+        renderOption={({ option }) => (
+          <Badge color={rankColor(option.value)} variant="light">{option.value.toUpperCase()}</Badge>
+        )}
       />
       <TextInput
         label="Latitude"
