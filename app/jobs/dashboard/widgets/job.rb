@@ -15,7 +15,7 @@ module Dashboard::Widgets
 
     queue_as :default
 
-    unique :until_and_while_executing, lock_ttl: 5.seconds
+    unique :until_expired, lock_ttl: 30.seconds
 
     def perform(widget)
       redis = Redis.new(url: ENV.fetch('REDIS_URL', 'redis://localhost:6379/0'))
