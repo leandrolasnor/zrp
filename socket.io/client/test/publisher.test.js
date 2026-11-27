@@ -42,11 +42,21 @@ const fakeAmqpConnection = ({ fail = false, confirmed = true, failConfirm = fals
   }
 }
 
-const silentLogger = () => ({ log() {}, warn() {} })
+const makeLogger = () => {
+  const logs = []
+  return {
+    logs,
+    logger: {
+      log: message => logs.push(message),
+      warn() {}
+    }
+  }
+}
 
 test("publishes the server message verbatim and waits for broker confirmation", async () => {
   const { amqpConnection, calls } = fakeAmqpConnection()
-  const publish = createPublisher({ amqpConnection, logger: silentLogger() })
+  const { logs, logger } = makeLogger()
+  const publish = createPublisher({ amqpConnection, logger })
   const message = '{"monsterName":"Joker","dangerLevel":"God"}'
 
   await publish(message)
@@ -60,11 +70,12 @@ test("publishes the server message verbatim and waits for broker confirmation", 
   assert.deepEqual(calls.sendToQueue[0][2], { persistent: true })
   assert.equal(calls.waitForConfirms, 1)
   assert.equal(calls.close, 1)
+  assert.deepEqual(logs, [message])
 })
 
 test("publishes malformed content verbatim", async () => {
   const { amqpConnection, calls } = fakeAmqpConnection()
-  const publish = createPublisher({ amqpConnection, logger: silentLogger() })
+  const publish = createPublisher({ amqpConnection, logger: makeLogger().logger })
   const message = '{"monsterName":"Joker"'
 
   await publish(message)
@@ -75,14 +86,18 @@ test("publishes malformed content verbatim", async () => {
 
 test("rejects when sendToQueue reports backpressure", async () => {
   const { amqpConnection } = fakeAmqpConnection({ confirmed: false })
-  const publish = createPublisher({ amqpConnection, logger: silentLogger() })
+  const { logs, logger } = makeLogger()
+  const publish = createPublisher({ amqpConnection, logger })
 
   await assert.rejects(() => publish('{"monsterName":"Joker"}'), /backpressure/)
+  assert.deepEqual(logs, [])
 })
 
 test("rejects when the broker does not confirm", async () => {
   const { amqpConnection } = fakeAmqpConnection({ failConfirm: true })
-  const publish = createPublisher({ amqpConnection, logger: silentLogger() })
+  const { logs, logger } = makeLogger()
+  const publish = createPublisher({ amqpConnection, logger })
 
   await assert.rejects(() => publish('{"monsterName":"Joker"}'), /confirm failed/)
+  assert.deepEqual(logs, [])
 })

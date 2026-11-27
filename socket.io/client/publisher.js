@@ -21,6 +21,7 @@ export const createPublisher = ({ amqpConnection, queue = QUEUE, logger = consol
 
     await channel.waitForConfirms()
 
+    // Só entra no log o que o broker confirmou; falhas não são registradas aqui.
     logger.log?.(message)
     return true
   })

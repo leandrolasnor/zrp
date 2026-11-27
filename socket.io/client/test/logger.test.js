@@ -2,6 +2,17 @@ import test from "node:test"
 import assert from "node:assert/strict"
 import { createLogger } from "../logger.js"
 
+test("does not throttle payload logs", () => {
+  const messages = []
+  const logger = createLogger({ log: message => messages.push(message) })
+
+  logger.log("first")
+  logger.log("second")
+  logger.log("third")
+
+  assert.deepEqual(messages, ["first", "second", "third"])
+})
+
 test("throttles repeated warnings by level and lets other levels through", () => {
   let now = 0
   const originalNow = Date.now
