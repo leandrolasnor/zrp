@@ -1,8 +1,9 @@
 export const QUEUE = "un"
 
 // O cliente é apenas um forwarder: não inspeciona nem valida o que vem do server.
-// `sendToQueue` com `confirm: true` só resolve depois que o broker confirma a
-// publicação; é essa confirmação que habilita o ACK ao socket.io/server.
+// O canal é um ConfirmChannel (ver amqp.js): `waitForConfirms` só resolve
+// depois que o broker confirma a publicação, e é isso que habilita o ACK
+// ao socket.io/server.
 export const createPublisher = ({ amqpConnection, queue = QUEUE, logger = console }) => async message => {
   return amqpConnection.withChannel(async channel => {
     await channel.assertQueue(queue, {

@@ -1,10 +1,2 @@
 #!/usr/bin/env zsh
-set -e
-
-# O overmind roda em background: sua saída é relida por `overmind echo` no
-# comando principal do container e aparece apenas em `make logs`.
-if ! overmind status >/dev/null 2>&1; then
-  overmind start -D >/dev/null
-fi
-
-exec zsh -l
+overmind start

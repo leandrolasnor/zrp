@@ -12,7 +12,7 @@ test("retries until rabbitmq connects and reuses the connection", async () => {
   }
   const connection = {
     on () {},
-    async createChannel () { return channel },
+    async createConfirmChannel () { return channel },
     async close () {}
   }
   const amqpConnection = createAmqpConnection({
@@ -38,12 +38,16 @@ test("retries until rabbitmq connects and reuses the connection", async () => {
   assert.equal(second, connection)
 })
 
-test("withChannel creates and closes a channel on the live connection", async () => {
+test("withChannel creates and closes a confirm channel on the live connection", async () => {
   const closed = []
+  let channelsCreated = 0
   const channel = { async close () { closed.push(true) } }
   const connection = {
     on () {},
-    async createChannel () { return channel },
+    async createConfirmChannel () {
+      channelsCreated += 1
+      return channel
+    },
     async close () {}
   }
   const amqpConnection = createAmqpConnection({
@@ -55,6 +59,7 @@ test("withChannel creates and closes a channel on the live connection", async ()
   const result = await amqpConnection.withChannel(async () => "ok")
 
   assert.equal(result, "ok")
+  assert.equal(channelsCreated, 1)
   assert.deepEqual(closed, [true])
 })
 
@@ -62,7 +67,7 @@ test("drops the connection when the channel fails so the next publish reconnects
   const connections = []
   const makeConnection = () => ({
     on () {},
-    async createChannel () {
+    async createConfirmChannel () {
       throw new Error("channel closed")
     },
     async close () {}
