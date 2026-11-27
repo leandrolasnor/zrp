@@ -31,7 +31,7 @@ test-socket-server: up ## Roda os testes do socket.io server
 test-react: up ## Roda os testes do React (sem watch)
 	$(COMPOSE) exec -T -e CI=true api corepack yarn test:react --watchAll=false
 
-logs-ui: up ## Abre a UI de logs (Dozzle) em http://localhost:8888
+logs: up ## Abre a UI de logs (Dozzle) em http://localhost:8888
 	@echo "Dozzle: http://localhost:8888"
 	@command -v xdg-open >/dev/null 2>&1 && xdg-open http://localhost:8888 >/dev/null 2>&1 || true
 
