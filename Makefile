@@ -3,7 +3,7 @@ DEVCONTAINER_CLI ?= devcontainer
 
 .DEFAULT_GOAL := help
 
-.PHONY: help cli up exec test test-api test-socket-client test-socket-server test-react logs-ui _stop-app down reset rebuild
+.PHONY: help cli up exec test test-api test-socket-client test-socket-server test-react logs down reset rebuild
 
 help: ## Lista os alvos disponíveis
 	@awk 'BEGIN {FS = ":.*## "} /^[a-zA-Z_-]+:.*## / {printf "  %-18s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -11,11 +11,12 @@ help: ## Lista os alvos disponíveis
 cli: ## Instala o CLI do devcontainer, se necessário
 	@command -v $(DEVCONTAINER_CLI) >/dev/null 2>&1 || npm install -g @devcontainers/cli
 
-up: cli ## Sobe o devcontainer
+up: cli ## Sobe o devcontainer e todos os serviços
 	$(DEVCONTAINER_CLI) up --workspace-folder $(CURDIR)
+	$(COMPOSE) up -d
 
-exec: up ## Execução completa da solução
-	$(COMPOSE) exec api ihero
+exec: up ## Abre um shell no container da api
+	$(COMPOSE) exec api zsh
 
 test: test-api test-socket-client test-socket-server test-react ## Roda todos os testes
 
@@ -35,13 +36,10 @@ logs: up ## Abre a UI de logs (Dozzle) em http://localhost:8888
 	@echo "Dozzle: http://localhost:8888"
 	@command -v xdg-open >/dev/null 2>&1 && xdg-open http://localhost:8888 >/dev/null 2>&1 || true
 
-_stop-app:
-	@$(COMPOSE) exec -T api bin/overmind stop >/dev/null 2>&1 || true
-
-down: _stop-app ## Para os serviços (mantém volumes)
+down: ## Para os serviços (mantém volumes)
 	$(COMPOSE) down -t 30
 
-reset: _stop-app ## Para os serviços e apaga os volumes
+reset: ## Para os serviços e apaga os volumes
 	$(COMPOSE) down -v -t 30
 
 rebuild: reset ## Executa reset seguido de up
