@@ -4,10 +4,6 @@ require 'dotenv'
 Dotenv.load('./sneakers/.env')
 require './config/environment'
 
-# Sem a opção `log` o Sneakers escreve no STDOUT do container (`make logs`).
-# log_path = Rails.root.join('log', 'sneakers.log')
-# FileUtils.mkdir_p(log_path.dirname)
-
 opts = {
   amqp: ENV.fetch('AMQP_SERVER'),
   username: ENV.fetch('RABBITMQ_USER', 'guest'),
@@ -19,7 +15,6 @@ opts = {
   workers: 1,
   prefetch: 10,
   heartbeat: 5
-  # log: log_path.to_s
 }
 
 Sneakers.configure(opts)

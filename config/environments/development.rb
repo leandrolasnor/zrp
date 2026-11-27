@@ -6,15 +6,9 @@ Rails.application.configure do
   config.after_initialize do
     Bullet.enable        = true
     Bullet.alert         = true
-    # O logger do Bullet grava em log/bullet.log; `rails_logger` já envia para o stdout.
-    # Bullet.bullet_logger = true
     Bullet.console       = true
     Bullet.rails_logger  = true
     Bullet.add_footer    = true
-    # Log do Action Cable segue o Rails logger (stdout do container).
-    # cable_logger = ActiveSupport::Logger.new(Rails.root.join('log', 'cable.log'), 5, 2 * 1024 * 1024)
-    # cable_logger.formatter = Rails.logger.formatter
-    # ActionCable.server.config.logger = cable_logger
     ActionCable.server.config.logger = Rails.logger
     Rails.application.reload_routes!
   end
