@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux'
-import { Tag, Col, Badge } from 'rsuite'
+import { Badge, Group } from '@mantine/core'
 import { memo } from 'react'
-import _ from 'lodash'
 
 const HeroesDistribution = () => {
   const heroes_distribution = useSelector(state => state.metrics.heroes_distribution)
@@ -13,20 +12,19 @@ const HeroesDistribution = () => {
   }
 
   if (heroes_distribution) return (
-    <Col>
+    <Group gap="xs">
       {
         Object.entries(colors).map(([rank, color]) => {
           return (
-            <Col key={rank}>
-              <Badge color={color} content={heroes_distribution[rank.toLowerCase()]}>
-                <Tag>{rank.toUpperCase()}</Tag>
-              </Badge>
-            </Col>
+            <Badge key={rank} color={color} variant="light">
+              {rank.toUpperCase()}: {heroes_distribution[rank.toLowerCase()]}
+            </Badge>
           )
         })
       }
-    </Col>
+    </Group>
   )
+  return null
 }
 
 export default memo(HeroesDistribution)

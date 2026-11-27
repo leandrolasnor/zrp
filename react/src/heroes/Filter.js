@@ -1,70 +1,103 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { IconButton, Accordion, Tag, Col, Row, InputPicker, Stack } from 'rsuite'
-import Funnel from '@rsuite/icons/Funnel'
-import { FaAngleDoubleDown } from 'react-icons/fa';
+import { Accordion, Badge, Select, Group, Button } from '@mantine/core'
+import { FaFilter } from 'react-icons/fa6'
 import { get_statuses } from './actions'
+import { rankColor, rankTextColor } from './rankColors.js'
 
 const Filter = () => {
-  const [activeKey, setActiveKey] = useState(0)
-  const [rankFilter, setRankFilter] = useState(false)
-  const [statusFilter, setStatusFilter] = useState(false)
   const { ranks, statuses, search: { filter } } = useSelector(state => state.heroes)
   const dispatch = useDispatch()
+  const parseFilter = (filterArr) => {
+    let rank = null, status = null
+    ;(filterArr || []).forEach(f => {
+      const rMatch = String(f).match(/rank\s*=\s*'([^']+)'/)
+      const sMatch = String(f).match(/status\s*=\s*'([^']+)'/)
+      if (rMatch) rank = rMatch[1]
+      if (sMatch) status = sMatch[1]
+    })
+    return { rank, status }
+  }
+  const [opened, setOpened] = useState(() => (filter && filter.length > 0))
+  const [rankFilter, setRankFilter] = useState(() => parseFilter(filter).rank)
+  const [statusFilter, setStatusFilter] = useState(() => parseFilter(filter).status)
 
   useEffect(() => { if (statuses?.length === 0) dispatch(get_statuses()) }, [statuses, dispatch])
 
+  useEffect(() => {
+    if (!filter || filter.length === 0) {
+      setOpened(false)
+      setRankFilter(null)
+      setStatusFilter(null)
+    }
+  }, [filter])
 
-  const colors = {
-    s: 'blue',
-    a: 'green',
-    b: 'violet',
-    c: 'red'
-  }
-
+  const statusColors = { enabled: 'green', working: 'yellow', disable: 'red' }
   const ranksData = useMemo(() =>
-    ranks.map((r) => ({ label: <Tag size='sm' color={colors[r]}>{r}</Tag>, value: r })).reverse(),
+    ranks.map((r) => ({ label: r.toUpperCase(), value: r })).reverse(),
     [ranks]
   )
   const statusesData = useMemo(() =>
-    statuses.map((s) => ({ label: <Tag size='sm'>{s}</Tag>, value: s })).reverse(),
+    statuses.map((s) => ({ label: s, value: s })).reverse(),
     [statuses]
   )
 
   const applyFilter = () => {
-    let filter = []
-    if (rankFilter) filter.push(`rank = '${rankFilter}'`)
-    if (statusFilter) filter.push(`status = '${statusFilter}'`)
-    dispatch({ type: 'SET_FILTER', payload: filter })
+    let f = []
+    if (rankFilter) f.push(`rank = '${rankFilter}'`)
+    if (statusFilter) f.push(`status = '${statusFilter}'`)
+    dispatch({ type: 'SET_FILTER', payload: f })
+    dispatch({ type: 'FOCUS_SEARCH_INPUT' })
   }
 
-  const handleAccordionSelect = (key, event) => {
-    setActiveKey(key)
-    if (event.currentTarget.ariaExpanded === 'true') {
-      setStatusFilter(false)
-      setRankFilter(false)
+  const handleAccordionChange = (val) => {
+    if (!val && opened) {
+      setStatusFilter(null)
+      setRankFilter(null)
       if (filter.length) dispatch({ type: 'CLEAR_FILTER' })
     }
+    setOpened(!!val)
   }
 
   return (
-    <Row className='mt-3'>
-      <Accordion activeKey={activeKey} onSelect={handleAccordionSelect}>
-        <Accordion.Panel eventKey={1} header="Filter" caretAs={FaAngleDoubleDown} >
-          <Row className='mt-2'>
-            <Col md={4}>
-              <InputPicker placeholder="Rank" key='rank' value={rankFilter} autoFocus data={ranksData} onChange={setRankFilter} />
-            </Col >
-            <Col md={4}>
-              <InputPicker placeholder="Status" key='status' value={statusFilter} data={statusesData} onChange={setStatusFilter} />
-            </Col>
-            <Col md={16}>
-              <Stack justifyContent="flex-end"><IconButton onClick={applyFilter} icon={<Funnel />}>Apply</IconButton></Stack>
-            </Col>
-          </Row>
-        </Accordion.Panel>
+    <div style={{ marginTop: 12 }}>
+      <Accordion value={opened ? 'filter' : null} onChange={handleAccordionChange}>
+        <Accordion.Item value="filter">
+          <Accordion.Control>Filter</Accordion.Control>
+          <Accordion.Panel>
+            <Group mt="sm" align="flex-end">
+              <Select
+                placeholder="Rank"
+                data={ranksData}
+                value={rankFilter}
+                onChange={setRankFilter}
+                clearable
+                searchable={false}
+                style={{ minWidth: 150 }}
+                styles={{ input: { color: rankTextColor(rankFilter), fontWeight: 700 } }}
+                renderOption={({ option }) => (
+                  <Badge color={rankColor(option.value)} variant="light">{option.value.toUpperCase()}</Badge>
+                )}
+              />
+              <Select
+                placeholder="Status"
+                data={statusesData}
+                value={statusFilter}
+                onChange={setStatusFilter}
+                clearable
+                searchable={false}
+                style={{ minWidth: 150 }}
+                styles={{ input: { color: statusFilter ? `var(--mantine-color-${statusColors[statusFilter] || 'gray'}-6)` : undefined, fontWeight: 700 } }}
+                renderOption={({ option }) => (
+                  <Badge color={statusColors[option.value] || 'gray'} variant="light">{option.value}</Badge>
+                )}
+              />
+              <Button onClick={applyFilter} leftSection={<FaFilter />}>Apply</Button>
+            </Group>
+          </Accordion.Panel>
+        </Accordion.Item>
       </Accordion>
-    </Row>
+    </div>
   )
 }
 

@@ -1,14 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Input, InputGroup, IconButton, Row, Col } from 'rsuite'
+import { TextInput, Button, Group, ActionIcon } from '@mantine/core'
+import { FaMagnifyingGlass, FaPlus } from 'react-icons/fa6'
 import HeroForm from './HeroForm.js'
-import SearchIcon from '@rsuite/icons/Search'
-import PlusIcon from '@rsuite/icons/Plus'
-import PropTypes from 'prop-types'
 
 const Searcher = () => {
-  const { search: { query } } = useSelector(state => state.heroes)
+  const { search: { query, focusTick } } = useSelector(state => state.heroes)
   const dispatch = useDispatch()
+  const inputRef = useRef(null)
   const [searchTerm, setSearchTerm] = useState(query)
   const [openCreateHeroForm, setOpenCreateHeroForm] = useState(false)
 
@@ -16,8 +15,15 @@ const Searcher = () => {
     setSearchTerm(query)
   }, [query])
 
+  useEffect(() => {
+    if (focusTick > 0 && inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [focusTick])
+
   const submitSearch = () => {
     dispatch({ type: 'QUERY_CHANGED', payload: searchTerm })
+    dispatch({ type: 'FOCUS_SEARCH_INPUT' })
   }
 
   const keyDownSearchHandler = (event) => {
@@ -25,6 +31,7 @@ const Searcher = () => {
       event.preventDefault()
       setSearchTerm('')
       dispatch({ type: 'QUERY_CHANGED', payload: '' })
+      dispatch({ type: 'CLEAR_FILTER' })
     } else if (event.key === 'Enter') {
       event.preventDefault()
       submitSearch()
@@ -32,29 +39,24 @@ const Searcher = () => {
   }
 
   return (
-    <Row className='mt-3'>
-      <Col md={22}>
-        <InputGroup inside>
-          <Input
-            placeholder="Search"
-            autoFocus
-            value={searchTerm}
-            onChange={setSearchTerm}
-            onKeyDown={keyDownSearchHandler}
-          />
-          <InputGroup.Button onClick={submitSearch}>
-            <SearchIcon />
-          </InputGroup.Button>
-        </InputGroup>
-      </Col>
-      <Col md={2}>
-        <IconButton onClick={() => setOpenCreateHeroForm(true)} icon={<PlusIcon />}>Hero</IconButton>
-      </Col>
+    <Group mt="md" wrap="nowrap">
+      <TextInput
+        ref={inputRef}
+        style={{ flex: 1 }}
+        placeholder="Search"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.currentTarget.value)}
+        onKeyDown={keyDownSearchHandler}
+        rightSection={
+          <ActionIcon variant="subtle" onClick={submitSearch} aria-label="Search">
+            <FaMagnifyingGlass />
+          </ActionIcon>
+        }
+      />
+      <Button onClick={() => setOpenCreateHeroForm(true)} leftSection={<FaPlus />}>Hero</Button>
       <HeroForm size='xs' open={openCreateHeroForm} textButton='Save' title='New Hero' handleClose={() => setOpenCreateHeroForm(false)} />
-    </Row>
+    </Group>
   )
 }
-
-Searcher.propTypes = {}
 
 export default Searcher

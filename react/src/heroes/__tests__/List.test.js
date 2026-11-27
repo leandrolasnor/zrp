@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
+import { MantineProvider } from '@mantine/core'
 import List from '../List'
 import reducer from '../reducer'
 
@@ -16,7 +17,13 @@ const renderList = (heroesState, metricsState = {}) => {
         reducer: { heroes: reducer, metrics: () => metricsState },
         preloadedState: { heroes: heroesState }
     })
-    return render(<Provider store={store}><List /></Provider>)
+    return render(
+        <Provider store={store}>
+            <MantineProvider>
+                <List />
+            </MantineProvider>
+        </Provider>
+    )
 }
 
 const baseState = {
@@ -38,7 +45,7 @@ describe('List', () => {
     describe('loading state', () => {
         it('shows placeholder when loading is true', () => {
             const { container } = renderList({ ...baseState, loading: true })
-            expect(container.querySelector('.rs-placeholder')).toBeInTheDocument()
+            expect(container.querySelector('.mantine-Loader-root')).toBeInTheDocument()
         })
     })
 
@@ -141,7 +148,8 @@ describe('List', () => {
                 }
             }
             renderList(state, { super_hero: null })
-            const sortableHeaders = document.querySelectorAll('.rs-table-cell-header-sortable')
+            const sortableHeaders = Array.from(document.querySelectorAll('th'))
+                .filter(header => header.style.cursor === 'pointer')
             expect(sortableHeaders.length).toBeGreaterThanOrEqual(1)
         })
     })

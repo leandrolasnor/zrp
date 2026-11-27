@@ -21,6 +21,8 @@ export const createEmitter = ({
     if (!socket.connected || attempt > maxAttempts) return undefined
 
     const payload = createPayload()
+    // Espelha o log do client: registra exatamente o payload enviado ao socket.
+    logger.log?.(payload)
     const timeout = await readTimeout()
 
     // O ACK é manual por natureza: o client só invoca o callback depois que o

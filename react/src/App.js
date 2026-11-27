@@ -1,4 +1,5 @@
-import { Container, Content, Header, CustomProvider } from 'rsuite'
+import { MantineProvider } from '@mantine/core'
+import { HashRouter } from 'react-router-dom'
 import NavBar from './navbar/NavBar.js'
 import Routes from './Routes'
 import { EventSourcePolyfill } from 'event-source-polyfill'
@@ -8,18 +9,20 @@ global.EventSource = EventSourcePolyfill
 
 const App = () => {
   return (
-    <CustomProvider theme="dark">
-      <ErrorBoundary>
-        <Container>
-          <Header>
-            <NavBar />
-          </Header>
-          <Content>
-            <Routes />
-          </Content>
-        </Container>
-      </ErrorBoundary>
-    </CustomProvider>
+    <MantineProvider defaultColorScheme="dark">
+      <HashRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <ErrorBoundary>
+          <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+            <header>
+              <NavBar />
+            </header>
+            <main style={{ flex: 1 }}>
+              <Routes />
+            </main>
+          </div>
+        </ErrorBoundary>
+      </HashRouter>
+    </MantineProvider>
   );
 }
 

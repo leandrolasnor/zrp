@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { Tag, Col, Badge } from 'rsuite'
+import { Badge, Group } from '@mantine/core'
 import { memo } from 'react'
 import _ from 'lodash'
 
@@ -13,20 +13,19 @@ const ThreatsDistribution = () => {
   }
 
   if (threats_distribution) return (
-    <Col>
+    <Group gap="xs">
       {
         Object.entries(colors).map(([rank, color]) => {
           return (
-            <Col key={rank}>
-              <Badge color={color} content={threats_distribution[rank.toLowerCase()]}>
-                <Tag>{_.capitalize(rank)}</Tag>
-              </Badge>
-            </Col>
+            <Badge key={rank} color={color} variant="light">
+              {_.capitalize(rank)}: {threats_distribution[rank.toLowerCase()] ?? 0}
+            </Badge>
           )
         })
       }
-    </Col>
+    </Group>
   )
+  return null
 }
 
 export default memo(ThreatsDistribution)

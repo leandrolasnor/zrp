@@ -3,7 +3,7 @@
 ###### RUNNING THE APPLICATION USING TERMINAL :zap:
 ```
 git clone https://github.com/leandrolasnor/zrp.git && \
-make exec -C zrp
+make up -C zrp
 ```
 ###### TOOLS
 `Docker` `Git` `Visual Studio Code`
@@ -11,10 +11,10 @@ make exec -C zrp
 
 `Socket.io` `Sneakers` `Redis` `gRPC` `dry-rb`
 
-`Rails Event Store` `Rails MCP Server`
+`Rails Event Store` `Rails MCP Server` `Mantine UI`
 
 ###### SERVICE WEB INTERFACE
-[`React`](http://localhost:5600) [`Rails`](http://localhost:3000/rails/info/routes) [`Swagger`](http://localhost:3000/api_docs) [`Resque`](http://localhost:3000/jobs)
+[`React`](http://localhost:5600) [`Rails`](http://localhost:3000/rails/info/routes) [`Swagger`](http://localhost:3000/api_docs) [`Resque`](http://localhost:3000/jobs) [`Doozle`](http://localhost:8888)
 
 [`PostgreSQL`](http://localhost:8080) [`MeiliSearch`](http://localhost:7700) [`Rabbitmq`](http://localhost:15672)
 

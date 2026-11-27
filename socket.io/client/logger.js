@@ -10,7 +10,8 @@ export const createLogger = (logger = console, intervalMs = 60000) => {
   }
 
   return {
-    log: message => throttled("log", message),
+    // Payloads não são throttled: o log precisa refletir tudo o que o client recebe.
+    log: message => logger.log?.(message),
     warn: message => throttled("warn", message),
     error: message => throttled("error", message)
   }

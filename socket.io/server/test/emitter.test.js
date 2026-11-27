@@ -35,7 +35,11 @@ const makeEmitter = overrides => createEmitter({
 
 test("emits the payload using the timeout from redis", async () => {
   const socket = fakeSocket()
-  const emitter = makeEmitter({ insurgencyTime: async () => 1234 })
+  const logs = []
+  const emitter = makeEmitter({
+    insurgencyTime: async () => 1234,
+    logger: { warn() {}, log: message => logs.push(message) }
+  })
 
   await emitter.emitOccurrence(socket)
   await flush()
@@ -45,6 +49,7 @@ test("emits the payload using the timeout from redis", async () => {
   assert.equal(socket.emits[0].event, "occurrence")
   assert.equal(socket.emits[0].payload, '{"monsterName":"Joker"}')
   assert.equal(socket.acks.length, 1)
+  assert.deepEqual(logs, ['{"monsterName":"Joker"}'])
 })
 
 test("a successful ack stops the retries", async () => {

@@ -9,7 +9,8 @@ const INITIAL_STATE = {
     page: 1,
     hitsPerPage: 30,
     filter: [],
-    sort: ['name:asc']
+    sort: ['name:asc'],
+    focusTick: 0
   }
 }
 
@@ -90,6 +91,14 @@ var reducer = (state = INITIAL_STATE, action) => {
         search: {
           ...state.search,
           query: action.payload
+        }
+      }
+    case 'FOCUS_SEARCH_INPUT':
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          focusTick: (state.search.focusTick || 0) + 1
         }
       }
     default:

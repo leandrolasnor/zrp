@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
+import { MantineProvider } from '@mantine/core'
 import Filter from '../Filter'
 import reducer from '../reducer'
 
@@ -15,7 +16,13 @@ const renderFilter = (state) => {
     reducer: { heroes: reducer },
     preloadedState: { heroes: state }
   })
-  return render(<Provider store={store}><Filter /></Provider>)
+  return render(
+    <Provider store={store}>
+      <MantineProvider>
+        <Filter />
+      </MantineProvider>
+    </Provider>
+  )
 }
 
 const baseState = {

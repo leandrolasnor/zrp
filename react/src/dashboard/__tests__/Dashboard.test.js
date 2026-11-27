@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
+import { MantineProvider } from '@mantine/core'
 import Dashboard from '../Dashboard'
 import reducer from '../reducer'
 
@@ -14,12 +15,13 @@ jest.mock('../SuperHero', () => () => <div data-testid="super-hero">SuperHero</d
 
 const renderDashboard = () => {
     const store = configureStore({ reducer: { metrics: reducer } })
-    return render(<Provider store={store}><Dashboard /></Provider>)
+    return render(<Provider store={store}><MantineProvider><Dashboard /></MantineProvider></Provider>)
 }
 
 describe('Dashboard', () => {
     it('renders all dashboard widgets', () => {
-        renderDashboard()
+        const { container } = renderDashboard()
+        expect(container.querySelector('.mantine-SimpleGrid-root')).toBeInTheDocument()
         expect(screen.getByTestId('heroes-working')).toBeInTheDocument()
         expect(screen.getByTestId('threats-disabled')).toBeInTheDocument()
         expect(screen.getByTestId('battles-charts')).toBeInTheDocument()

@@ -1,4 +1,4 @@
-import { Row, Col, Panel, Tooltip, Whisper, Progress } from 'rsuite'
+import { Paper, Group, RingProgress, Text, Tooltip, Box, Stack } from '@mantine/core'
 import { useSelector } from 'react-redux'
 import HeroesDistribution from './HeroesDistribution'
 import { memo } from 'react'
@@ -7,39 +7,42 @@ import _ from 'lodash'
 const HeroesWorking = () => {
   const heroes_working = useSelector(state => state.metrics.heroes_working)
 
+  const g = _.get(heroes_working, 'global', 0)
+
   return (
-    <Panel bodyFill>
-      <Row>
-        <Col className='ms-4' sm={8}>
-          <Progress.Circle percent={_.get(heroes_working, 'global', 0)} strokeColor="#ffdb58" />
-        </Col>
-        <Col className='mt-5' sm={3}>
-          <Whisper placement="bottom" controlId="control-id-hover" trigger="hover" speaker={<Tooltip><i>S</i></Tooltip>}>
-            <Progress.Circle percent={_.get(heroes_working, 's', 0)} status="active" strokeColor="#2986cc" />
-          </Whisper>
-        </Col>
-        <Col className='mt-5' sm={3}>
-          <Whisper placement="bottom" controlId="control-id-hover" trigger="hover" speaker={<Tooltip><i>A</i></Tooltip>}>
-            <Progress.Circle percent={_.get(heroes_working, 'a', 0)} status="active" strokeColor="#0AB653" />
-          </Whisper>
-        </Col>
-        <Col className='mt-5' sm={3}>
-          <Whisper placement="bottom" controlId="control-id-hover" trigger="hover" speaker={<Tooltip><i>B</i></Tooltip>}>
-            <Progress.Circle percent={_.get(heroes_working, 'b', 0)} status="active" strokeColor="#a442f5" />
-          </Whisper>
-        </Col>
-        <Col className='mt-5' sm={3}>
-          <Whisper placement="bottom" controlId="control-id-hover" trigger="hover" speaker={<Tooltip><i>C</i></Tooltip>}>
-            <Progress.Circle percent={_.get(heroes_working, 'c', 0)} status="active" strokeColor="#ff0000" />
-          </Whisper>
-        </Col>
-      </Row>
-      <Panel header={`${_.get(heroes_working, 'count', 0)} Working`}>
+    <Paper withBorder p="md">
+      <Group align="center" gap="lg">
+        <Stack gap="xs">
+          <Text c="dimmed" fw={600}>Heroes</Text>
+          <RingProgress
+            size={120}
+            thickness={12}
+            roundCaps
+            sections={[{ value: g, color: 'yellow' }]}
+            label={<Text ta="center" fw={700}>{g}%</Text>}
+          />
+        </Stack>
+        <Group gap="md">
+          <Tooltip label={<i>S</i>}>
+            <RingProgress size={60} thickness={8} roundCaps sections={[{ value: _.get(heroes_working, 's', 0), color: 'blue' }]} />
+          </Tooltip>
+          <Tooltip label={<i>A</i>}>
+            <RingProgress size={60} thickness={8} roundCaps sections={[{ value: _.get(heroes_working, 'a', 0), color: 'green' }]} />
+          </Tooltip>
+          <Tooltip label={<i>B</i>}>
+            <RingProgress size={60} thickness={8} roundCaps sections={[{ value: _.get(heroes_working, 'b', 0), color: 'violet' }]} />
+          </Tooltip>
+          <Tooltip label={<i>C</i>}>
+            <RingProgress size={60} thickness={8} roundCaps sections={[{ value: _.get(heroes_working, 'c', 0), color: 'red' }]} />
+          </Tooltip>
+        </Group>
+      </Group>
+      <Box mt="md">
+        <Text c="dimmed" fw={600} mb="xs">{_.get(heroes_working, 'count', 0)} Working</Text>
         <HeroesDistribution />
-      </Panel>
-    </Panel>
+      </Box>
+    </Paper>
   )
 }
-
 
 export default memo(HeroesWorking)

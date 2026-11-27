@@ -1,9 +1,36 @@
-# docker-compose.yml
+x-app: &app
+  image: devcontainer:ruby-3.4.2-slim
+  build:
+    context: ..
+    dockerfile: .devcontainer/Dockerfile
+    target: devcontainer
+    args:
+      RUBY_VERSION: ${RUBY_VERSION}
+  init: true
+  environment: &app-env
+    DB_HOST: ${DB_HOST}
+    DB_NAME: ${DB_NAME}
+    DB_USERNAME: ${DB_USERNAME}
+    DB_PASSWORD: ${DB_PASSWORD}
+    DB_TEST: ${DB_TEST}
+    MEILI_MASTER_KEY: ${MEILI_MASTER_KEY}
+    MEILI_URL: ${MEILI_URL}
+    AMQP_SERVER: ${AMQP_SERVER}
+    REDIS_HOST: ${REDIS_HOST}
+    REDIS_PORT: ${REDIS_PORT}
+    REDIS_URL: redis://${REDIS_HOST}:${REDIS_PORT}/0
+    RAILS_MAX_THREADS: ${RAILS_MAX_THREADS}
+    GRUF_CONTROLLERS_PATH: ${GRUF_CONTROLLERS_PATH}
+    RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+    RESQUE_DEBUG: ${RESQUE_DEBUG}
+    SCORE_THRESHOLD: ${SCORE_THRESHOLD}
+
 services:
   rabbitmq:
     image: rabbitmq:3.13-management
     container_name: zrp.rabbitmq
-    command: sh -c "rabbitmq-plugins enable rabbitmq_prometheus && rabbitmq-server"
+    command: rabbitmq-server
+    init: true
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
@@ -24,46 +51,98 @@ services:
     container_name: zrp.redis
     environment:
       ALLOW_EMPTY_PASSWORD: ${ALLOW_EMPTY_PASSWORD}
+    volumes:
+    - redis_data:/data
     restart: unless-stopped
 
+  # Procfile: rails
   api:
-    image: devcontainer:ruby-3.4.2-slim
-    build:
-      context: ..
-      dockerfile: .devcontainer/Dockerfile
-      target: devcontainer
-      cache_from:
-      - devcontainer:ruby-3.4.2-slim
-      args:
-        RUBY_VERSION: ${RUBY_VERSION}
+    <<: *app
     container_name: zrp.api
-    command: sleep infinity
-    environment:
-      DB_HOST: ${DB_HOST}
-      DB_NAME: ${DB_NAME}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_TEST: ${DB_TEST}
-      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY}
-      MEILI_URL: ${MEILI_URL}
-      AMQP_SERVER: ${AMQP_SERVER}
-      REDIS_HOST: ${REDIS_HOST}
-      REDIS_PORT: ${REDIS_PORT}
-      REDIS_URL: redis://${REDIS_HOST}:${REDIS_PORT}/0
-      RAILS_MAX_THREADS: ${RAILS_MAX_THREADS}
-      GRUF_CONTROLLERS_PATH: ${GRUF_CONTROLLERS_PATH}
-      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
-      RESQUE_DEBUG: ${RESQUE_DEBUG}
-      SCORE_THRESHOLD: ${SCORE_THRESHOLD}
+    command: rails s -p 3000 -b 0.0.0.0 -P tmp/pids/rails.pid
+    depends_on:
+    - db
+    - redis
+    - rabbitmq
+    - meilisearch
     ports:
     - 3000:3000
     - 28080:28080
+
+  resque:
+    <<: *app
+    container_name: zrp.resque
+    command: rake resque:workers
+    environment:
+      <<: *app-env
+      COUNT: "2"
+      QUEUE: critical,default,low_priority
+    depends_on:
+    - db
+    - redis
+    - rabbitmq
+    restart: unless-stopped
+
+  # Procfile: scheduler
+  scheduler:
+    <<: *app
+    container_name: zrp.scheduler
+    command: rake resque:scheduler
+    depends_on:
+    - db
+    - redis
+    restart: unless-stopped
+
+  # Procfile: gruf
+  gruf:
+    <<: *app
+    container_name: zrp.gruf
+    command: gruf
+    environment:
+      <<: *app-env
+      GRPC_AUTH_TOKEN: ${GRPC_AUTH_TOKEN:-austin}
+    depends_on:
+    - db
+    - redis
+    ports:
+    - 50051:50051
+    restart: unless-stopped
+
+  # Procfile: sneakers
+  sneakers:
+    <<: *app
+    container_name: zrp.sneakers
+    command: sneakers work Processor --require ./sneakers/processor.rb
+    environment:
+      <<: *app-env
+      GRUF_SERVER: gruf:50051
+      GRPC_AUTH_TOKEN: ${GRPC_AUTH_TOKEN:-austin}
+    depends_on:
+    - db
+    - redis
+    - rabbitmq
+    - gruf
+    restart: unless-stopped
+
+  # Procfile: react
+  react:
+    <<: *app
+    container_name: zrp.react
+    command: corepack yarn start:react
+    environment:
+      <<: *app-env
+      HOST: 0.0.0.0
+    depends_on:
+    - api
+    ports:
     - 5600:5600
+    restart: unless-stopped
 
   socket.io.client:
     image: devcontainer:ruby-3.4.2-slim
     container_name: zrp.socket-io-client
-    command: corepack yarn workspace socket.io.client start
+    command: node socket.io/client/index.js
+    init: true
     restart: unless-stopped
     environment:
       AMQP_SERVER: ${AMQP_SERVER}
@@ -73,7 +152,8 @@ services:
   socket.io.server:
     image: devcontainer:ruby-3.4.2-slim
     container_name: zrp.socket-io-server
-    command: corepack yarn workspace socket.io.server start
+    command: node socket.io/server/index.js
+    init: true
     restart: unless-stopped
     environment:
       INSURGENCY_TIME: ${INSURGENCY_TIME}
@@ -93,16 +173,20 @@ services:
       POSTGRES_DB: ${DB_NAME}
     volumes:
     - ./../db/initdb:/docker-entrypoint-initdb.d
+    - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
 
   pgadmin:
     image: dpage/pgadmin4
     container_name: zrp.pgadmin
+    init: true
+    stop_grace_period: 2s
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
       PGADMIN_SETUP_MASTER_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
       PGADMIN_CONFIG_SERVER_MODE: ${PGADMIN_CONFIG_SERVER_MODE}
+      GUNICORN_CMD_ARGS: "--graceful-timeout 2"
     ports:
     - 8080:80
     restart: unless-stopped
@@ -117,3 +201,18 @@ services:
     ports:
     - 7700:7700
     restart: unless-stopped
+
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: zrp.dozzle
+    environment:
+      DOZZLE_FILTER: label=com.docker.compose.project=zrp_devcontainer
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+    - 8888:8080
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:

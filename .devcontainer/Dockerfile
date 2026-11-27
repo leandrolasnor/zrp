@@ -15,17 +15,21 @@ ENV RAILS_ENV=development \
     BUNDLE_DISABLE_LOCAL_REVISION_CHECK=true \
     BUNDLE_DISABLE_LOCAL_BRANCH_CHECK=true \
     XDG_CONFIG_HOME=/workspaces/zrp \
-    TZ=America/Sao_Paulo
+    TZ=America/Sao_Paulo \
+    OVERMIND_KILL_TIMEOUT=30
 ENV PATH=/workspaces/zrp/bin:$PATH
 ENV PATH=$GEM_HOME/bin:$PATH
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y \
-    build-essential libjemalloc2 git wget curl ca-certificates \
-    cmake pkg-config libpq-dev openssh-client nodejs npm \
+    apt-get install --no-install-recommends -y curl ca-certificates && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x -o /tmp/nodesource_setup.sh && \
+    bash /tmp/nodesource_setup.sh && rm -rf /tmp/nodesource_setup.sh
+RUN apt-get install --no-install-recommends -y \
+    build-essential libjemalloc2 git wget \
+    cmake pkg-config libpq-dev openssh-client nodejs \
     shared-mime-info zsh libyaml-dev tmux lsb-release && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
-RUN npm install -g corepack @opencode/cli
+RUN npm install -g @opencode/cli && corepack enable
 RUN sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 RUN usermod --shell /bin/zsh root
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
@@ -37,8 +41,6 @@ RUN sed -i -e '$aPOWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true' ~/.zshrc
 RUN sed -i -e '$a[[ ! -f .devcontainer/.p10k.zsh ]] || source .devcontainer/.p10k.zsh' ~/.zshrc
 COPY package.json yarn.lock ./
 COPY react/package.json ./react/
-COPY socket.io/client/package.json ./socket.io/client/
-COPY socket.io/server/package.json ./socket.io/server/
 RUN corepack prepare yarn@stable --activate
 RUN corepack yarn install --no-immutable
 COPY Gemfile Gemfile.lock ./

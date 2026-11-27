@@ -1,6 +1,7 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
+import { MantineProvider } from '@mantine/core'
 import Searcher from '../Searcher'
 import reducer from '../reducer'
 
@@ -15,7 +16,16 @@ const renderSearcher = (state) => {
     reducer: { heroes: reducer },
     preloadedState: { heroes: state }
   })
-  return { store, ...render(<Provider store={store}><Searcher /></Provider>) }
+  return {
+    store,
+    ...render(
+      <Provider store={store}>
+        <MantineProvider>
+          <Searcher />
+        </MantineProvider>
+      </Provider>
+    )
+  }
 }
 
 const baseState = {
@@ -48,8 +58,7 @@ describe('Searcher', () => {
 
   it('renders search icon button', () => {
     renderSearcher(baseState)
-    const searchButton = document.querySelector('.rs-input-group-btn')
-    expect(searchButton).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument()
   })
 
   it('renders plus icon on hero button', () => {
@@ -69,45 +78,32 @@ describe('Searcher', () => {
   })
 
   it('dispatches QUERY_CHANGED on Escape key (clears input)', () => {
-    renderSearcher(baseState)
+    const { store } = renderSearcher(baseState)
     const input = screen.getByPlaceholderText('Search')
     fireEvent.change(input, { target: { value: 'some query' } })
     fireEvent.keyDown(input, { key: 'Escape' })
-    // No error means dispatch was called
+    expect(store.getState().heroes.search.query).toBe('')
   })
 
   it('dispatches QUERY_CHANGED when search icon button is clicked', () => {
-    renderSearcher(baseState)
+    const { store } = renderSearcher(baseState)
     const input = screen.getByPlaceholderText('Search')
     fireEvent.change(input, { target: { value: 'search query' } })
-    // Find and click the search icon button inside the input group
-    const searchButton = document.querySelector('.rs-input-group-btn')
-    if (searchButton) {
-      fireEvent.click(searchButton)
-    }
-    // No error means dispatch was called
+    fireEvent.click(screen.getByRole('button', { name: 'Search' }))
+    expect(store.getState().heroes.search.query).toBe('search query')
   })
 
-  it('opens HeroForm when Hero button is clicked', () => {
+  it('opens HeroForm when Hero button is clicked', async () => {
     renderSearcher(baseState)
-    const heroButton = screen.getByText('Hero').closest('button')
-    if (heroButton) {
-      fireEvent.click(heroButton)
-    }
-    // No error means dispatch was called
+    fireEvent.click(screen.getByText('Hero').closest('button'))
+    expect(await screen.findByText('Cancel')).toBeInTheDocument()
   })
 
-  it('closes HeroForm when Cancel is clicked', () => {
+  it('closes HeroForm when Cancel is clicked', async () => {
     renderSearcher(baseState)
-    const heroButton = screen.getByText('Hero').closest('button')
-    if (heroButton) {
-      fireEvent.click(heroButton)
-    }
-    const cancelButton = screen.getByText('Cancel')
-    if (cancelButton) {
-      fireEvent.click(cancelButton)
-    }
-    // No error means handleClose was called
+    fireEvent.click(screen.getByText('Hero').closest('button'))
+    fireEvent.click(await screen.findByText('Cancel'))
+    await waitFor(() => expect(screen.queryByText('Cancel')).not.toBeInTheDocument())
   })
 
   it('renders with empty ranks gracefully', () => {

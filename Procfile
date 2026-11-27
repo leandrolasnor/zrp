@@ -4,4 +4,4 @@ scheduler: rake resque:scheduler
 # cable: puma -p 28080 cable/config.ru
 gruf: gruf
 sneakers: sneakers work Processor --require ./sneakers/processor.rb
-react: corepack yarn workspace react start
+react: corepack yarn start:react

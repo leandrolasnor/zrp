@@ -58,7 +58,9 @@ export const createAmqpConnection = ({
 
     let channel
     try {
-      channel = await activeConnection.createChannel()
+      // Confirms de publicação só existem em ConfirmChannel: é o que permite
+      // ao publisher esperar o broker antes de devolver o ack ao socket.io.
+      channel = await activeConnection.createConfirmChannel()
       return await callback(channel)
     } catch (error) {
       logger.warn?.(`amqp channel failed: ${error.message}`)

@@ -1,38 +1,15 @@
-import { useRef, useState, forwardRef, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal, Button, Schema, Form, InputPicker, Tag } from 'rsuite'
+import { Modal, Button, TextInput, Select, Group, Badge } from '@mantine/core'
 import { create_hero, update_hero } from './actions.js'
+import { rankColor, rankTextColor } from './rankColors.js'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
-
-const TextField = forwardRef((props, ref) => {
-  const { name, label, accepter, ...rest } = props;
-  return (
-    <Form.Group ref={ref}>
-      <Form.ControlLabel>{label} </Form.ControlLabel>
-      <Form.Control name={name} accepter={accepter} {...rest} />
-    </Form.Group>
-  )
-})
-
-TextField.propTypes = {
-  name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  accepter: PropTypes.elementType,
-}
-
-const model = Schema.Model({
-  name: Schema.Types.StringType().isRequired('This field is required.'),
-  rank: Schema.Types.StringType().isRequired('This field is required.'),
-  lat: Schema.Types.StringType().isRequired('This field is required.'),
-  lng: Schema.Types.StringType().isRequired('This field is required.')
-})
 
 const HeroForm = props => {
   const { size, open, handleClose, textButton, title, data } = props
   const dispatch = useDispatch()
   const { ranks } = useSelector(state => state.heroes)
-  const formRef = useRef()
   const INITIAL_VALUES = () => {
     const values = {
       name: _.get(data, 'name', ''),
@@ -44,56 +21,75 @@ const HeroForm = props => {
     return values
   }
   const [formValue, setFormValue] = useState(INITIAL_VALUES)
+  const [errors, setErrors] = useState({})
+
   const close = () => {
-    setFormValue({})
+    setFormValue({ name: '', rank: '', lat: '', lng: '' })
+    setErrors({})
     handleClose()
   }
   const handleSubmit = () => {
-    if (formRef.current.check()) {
-      const action = _.get(data, 'id', false) ? update_hero(formValue) : create_hero(formValue)
-      dispatch(action).then(close).catch(() => { })
-    }
-  }
-  const colors = {
-    s: 'blue',
-    a: 'green',
-    b: 'violet',
-    c: 'red'
+    const newErrors = {}
+    if (!formValue.name) newErrors.name = 'This field is required.'
+    if (!formValue.rank) newErrors.rank = 'This field is required.'
+    if (!formValue.lat) newErrors.lat = 'This field is required.'
+    if (!formValue.lng) newErrors.lng = 'This field is required.'
+    setErrors(newErrors)
+    if (Object.keys(newErrors).length > 0) return
+    const action = _.get(data, 'id', false) ? update_hero(formValue) : create_hero(formValue)
+    dispatch(action).then(close).catch(() => { })
   }
   const selectData = useMemo(() =>
     ranks.map((rank) => ({
-      label: <Tag size='sm' color={colors[rank]}>{rank}</Tag>,
+      label: rank.toUpperCase(),
       value: rank
     })).reverse(),
     [ranks]
   )
 
-  useEffect(() => { setFormValue(INITIAL_VALUES) }, [data])
+  useEffect(() => { setFormValue(INITIAL_VALUES); setErrors({}) }, [data])
 
   return (
-    <Form
-      layout="horizontal"
-      ref={formRef}
-      onChange={setFormValue}
-      formValue={formValue}
-      model={model}
-    >
-      <Modal autoFocus size={size} open={open} onClose={close}>
-        <Modal.Header>
-          <Modal.Title>{title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <TextField autoFocus name='name' label="Name" />
-          <TextField name='rank' label="Rank" accepter={InputPicker} data={selectData} />
-          <TextField name='lat' label="Latitude" />
-          <TextField name='lng' label="Longitude" />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={close} appearance="subtle">Cancel</Button>
-          <Button onClick={handleSubmit} appearance='primary'>{textButton || 'Ok'}</Button>
-        </Modal.Footer>
-      </Modal>
-    </Form>
+    <Modal opened={open} onClose={close} title={title} size={size || 'md'}>
+      <TextInput
+        label="Name"
+        value={formValue.name || ''}
+        onChange={(e) => setFormValue({ ...formValue, name: e.currentTarget.value })}
+        error={errors.name}
+        mb="sm"
+      />
+      <Select
+        label="Rank"
+        data={selectData}
+        value={formValue.rank || null}
+        onChange={(val) => setFormValue({ ...formValue, rank: val || '' })}
+        error={errors.rank}
+        mb="sm"
+        clearable
+        styles={{ input: { color: rankTextColor(formValue.rank), fontWeight: 700 } }}
+        renderOption={({ option }) => (
+          <Badge color={rankColor(option.value)} variant="light">{option.value.toUpperCase()}</Badge>
+        )}
+      />
+      <TextInput
+        label="Latitude"
+        value={formValue.lat || ''}
+        onChange={(e) => setFormValue({ ...formValue, lat: e.currentTarget.value })}
+        error={errors.lat}
+        mb="sm"
+      />
+      <TextInput
+        label="Longitude"
+        value={formValue.lng || ''}
+        onChange={(e) => setFormValue({ ...formValue, lng: e.currentTarget.value })}
+        error={errors.lng}
+        mb="sm"
+      />
+      <Group justify="flex-end" mt="md">
+        <Button variant="subtle" onClick={close}>Cancel</Button>
+        <Button onClick={handleSubmit}>{textButton || 'Ok'}</Button>
+      </Group>
+    </Modal>
   )
 }
 

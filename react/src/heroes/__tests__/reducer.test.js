@@ -11,7 +11,8 @@ const INITIAL_STATE = {
     page: 1,
     hitsPerPage: 30,
     filter: [],
-    sort: ['name:asc']
+    sort: ['name:asc'],
+    focusTick: 0
   }
 }
 

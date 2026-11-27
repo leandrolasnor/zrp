@@ -20,7 +20,7 @@ module DeallocateResource
   end
 
   class Job < ApplicationJob
-    queue_as :default
+    queue_as :critical
     retry_on ApplicationJob::RetryableError, attempts: ApplicationJob::RETRY_ATTEMPTS, wait: :polynomially_longer do |job, error|
       Rails.logger.error("DeallocateResource::Job descartado após #{job.executions} tentativas (threat_id=#{job.arguments.first}): #{error.message}")
     end

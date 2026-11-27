@@ -51,3 +51,6 @@ node_modules
 **/repomix-output.*
 **/repomix.config.json
 **/repomix.config.*.json
+
+/react/build
+/Code

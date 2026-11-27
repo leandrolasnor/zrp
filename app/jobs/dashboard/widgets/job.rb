@@ -3,9 +3,9 @@
 module Dashboard::Widgets
   class Job < ApplicationJob
     WIDGETS = {
-      super_hero: { event: 'WIDGET_SUPER_HERO_FETCHED', queue: :low_priority },
-      average_score: { event: 'WIDGET_AVERAGE_SCORE_FETCHED', queue: :low_priority },
-      average_time_to_match: { event: 'WIDGET_AVERAGE_TIME_TO_MATCH_FETCHED',  queue: :low_priority },
+      super_hero: { event: 'WIDGET_SUPER_HERO_FETCHED', queue: :default },
+      average_score: { event: 'WIDGET_AVERAGE_SCORE_FETCHED', queue: :default },
+      average_time_to_match: { event: 'WIDGET_AVERAGE_TIME_TO_MATCH_FETCHED',  queue: :default },
       battles_lineup: { event: 'WIDGET_BATTLES_LINEUP_FETCHED',         queue: :critical },
       heroes_working: { event: 'WIDGET_HEROES_WORKING_FETCHED',         queue: :critical },
       heroes_distribution: { event: 'WIDGET_HEROES_DISTRIBUTION_FETCHED', queue: :critical },
@@ -13,9 +13,9 @@ module Dashboard::Widgets
       threats_distribution: { event: 'WIDGET_THREATS_DISTRIBUTION_FETCHED', queue: :critical }
     }.freeze
 
-    queue_as :low_priority
+    queue_as :default
 
-    unique :until_and_while_executing, lock_ttl: 5.seconds
+    unique :until_expired, lock_ttl: 30.seconds
 
     def perform(widget)
       redis = Redis.new(url: ENV.fetch('REDIS_URL', 'redis://localhost:6379/0'))
