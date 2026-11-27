@@ -152,6 +152,7 @@ describe('HeroesWorking', () => {
             heroes_working: { global: 50, s: 20, a: 30, b: 10, c: 5, count: 4 }
         })
         expect(container.querySelectorAll('.mantine-RingProgress-root')).toHaveLength(5)
+        expect(screen.getByText('Heroes')).toBeInTheDocument()
         expect(screen.getByText('50%')).toBeInTheDocument()
     })
 })
@@ -162,12 +163,13 @@ describe('ThreatsDisabled', () => {
             threats_disabled: { global: 30, god: 5, dragon: 10, tiger: 8, wolf: 7, count: 4 }
         })
         expect(container.querySelectorAll('.mantine-RingProgress-root')).toHaveLength(5)
+        expect(screen.getByText('Threats')).toBeInTheDocument()
         expect(screen.getByText('30%')).toBeInTheDocument()
     })
 })
 
 describe('BattlesCharts', () => {
-    it('renders donut chart with the battles lineup and real battle count', () => {
+    it('renders donut chart with the battles lineup and real resolved count', () => {
         const { container } = renderWithMetrics(<BattlesCharts />, {
             battles_lineup: {
                 lineup: [['One Hero', 67], ['Two Heroes', 33]],
@@ -179,7 +181,8 @@ describe('BattlesCharts', () => {
         expect(screen.getByText('Two Heroes')).toBeInTheDocument()
         expect(screen.getByText('67%')).toBeInTheDocument()
         expect(screen.getByText('33%')).toBeInTheDocument()
-        expect(screen.getByText('37 Battles')).toBeInTheDocument()
+        expect(screen.getByText('Battles')).toBeInTheDocument()
+        expect(screen.getByText('37 Resolved')).toBeInTheDocument()
     })
 
     it('renders zero battles when no battles were found', () => {
@@ -189,6 +192,6 @@ describe('BattlesCharts', () => {
                 count: 0
             }
         })
-        expect(screen.getByText('0 Battles')).toBeInTheDocument()
+        expect(screen.getByText('0 Resolved')).toBeInTheDocument()
     })
 })

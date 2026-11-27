@@ -16,11 +16,13 @@ RSpec.describe Dashboard::Widgets::BattlesLineup::Monad do
 
     before { allow(model).to receive(:ms_raw_search).and_return(search) }
 
-    it 'returns the lineup percentages and the real battle count' do
+    it 'counts both battles of threats with two heroes without changing the lineup percentages' do
       result = monad.call
 
       expect(result).to be_success
-      expect(result.value!).to eq(lineup: [['One Hero', 40], ['Two Heroes', 60]], count: 5)
+      # Percentuais por threat (2/5 e 3/5); count soma a battle extra de cada
+      # threat com dois heróis: 5 threats + 3 battles extras = 8 battles.
+      expect(result.value!).to eq(lineup: [['One Hero', 40], ['Two Heroes', 60]], count: 8)
     end
 
     context 'when no battles were found' do

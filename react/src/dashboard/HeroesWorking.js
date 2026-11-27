@@ -12,13 +12,16 @@ const HeroesWorking = () => {
   return (
     <Paper withBorder p="md">
       <Group align="center" gap="lg">
-        <RingProgress
-          size={120}
-          thickness={12}
-          roundCaps
-          sections={[{ value: g, color: 'yellow' }]}
-          label={<Text ta="center" fw={700}>{g}%</Text>}
-        />
+        <Stack gap="xs">
+          <Text c="dimmed" fw={600}>Heroes</Text>
+          <RingProgress
+            size={120}
+            thickness={12}
+            roundCaps
+            sections={[{ value: g, color: 'yellow' }]}
+            label={<Text ta="center" fw={700}>{g}%</Text>}
+          />
+        </Stack>
         <Group gap="md">
           <Tooltip label={<i>S</i>}>
             <RingProgress size={60} thickness={8} roundCaps sections={[{ value: _.get(heroes_working, 's', 0), color: 'blue' }]} />

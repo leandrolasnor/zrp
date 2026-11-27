@@ -28,12 +28,19 @@ class Dashboard::Widgets::BattlesLineup::Monad
     total = result['totalHits'].to_i
     distribution = result.dig('facetDistribution', 'lineup') || {}
 
+    one_hero = distribution.fetch('1', 0).to_i
+    two_heroes = distribution.fetch('2', 0).to_i
+
+    # O índice tem uma threat por hit, mas uma threat com dois heróis gera
+    # duas battles. Cada threat com lineup = 2 contribui com uma battle extra.
+    count = total + two_heroes
+
     {
       lineup: [
-        ['One Hero', percentage(distribution['1'], total)],
-        ['Two Heroes', percentage(distribution['2'], total)]
+        ['One Hero', percentage(one_hero, total)],
+        ['Two Heroes', percentage(two_heroes, total)]
       ],
-      count: total
+      count:
     }
   end
 

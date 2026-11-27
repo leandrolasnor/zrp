@@ -1,4 +1,4 @@
-import { Badge, Box, Group, Paper, RingProgress, Text } from '@mantine/core'
+import { Badge, Box, Group, Paper, RingProgress, Stack, Text } from '@mantine/core'
 import { useSelector } from 'react-redux'
 import { memo } from 'react'
 
@@ -23,14 +23,17 @@ const BattlesCharts = () => {
   return (
     <Paper withBorder p="md">
       <Group align="center" gap="lg">
-        <RingProgress
-          size={120}
-          thickness={12}
-          sections={sections}
-        />
+        <Stack gap="xs">
+          <Text c="dimmed" fw={600}>Battles</Text>
+          <RingProgress
+            size={120}
+            thickness={12}
+            sections={sections}
+          />
+        </Stack>
       </Group>
       <Box mt="md">
-        <Text c="dimmed" fw={600} mb="xs">{count} Battles</Text>
+        <Text c="dimmed" fw={600} mb="xs">{count} Resolved</Text>
         <Group gap="xs">
           {lineup.map(([name, value], index) => (
             <Badge key={name} color={colors[index % colors.length]} variant="light">

@@ -1,4 +1,4 @@
-import { Paper, Group, RingProgress, Text, Tooltip, Box } from '@mantine/core'
+import { Paper, Group, RingProgress, Text, Tooltip, Box, Stack } from '@mantine/core'
 import { useSelector } from 'react-redux'
 import ThreatsDistribution from './ThreatsDistribution'
 import { memo } from 'react'
@@ -11,13 +11,16 @@ const ThreatsDisabled = () => {
   return (
     <Paper withBorder p="md">
       <Group align="center" gap="lg">
-        <RingProgress
-          size={120}
-          thickness={12}
-          roundCaps
-          sections={[{ value: g, color: 'yellow' }]}
-          label={<Text ta="center" fw={700}>{g}%</Text>}
-        />
+        <Stack gap="xs">
+          <Text c="dimmed" fw={600}>Threats</Text>
+          <RingProgress
+            size={120}
+            thickness={12}
+            roundCaps
+            sections={[{ value: g, color: 'yellow' }]}
+            label={<Text ta="center" fw={700}>{g}%</Text>}
+          />
+        </Stack>
         <Group gap="md">
           <Tooltip label={<i>God</i>}>
             <RingProgress size={60} thickness={8} roundCaps sections={[{ value: _.get(threats_disabled, 'god', 0), color: 'blue' }]} />
