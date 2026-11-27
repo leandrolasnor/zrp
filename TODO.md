@@ -16,6 +16,6 @@
   - `react/src/dashboard/ThreatsDisabled.js` → `Threats`
   - `react/src/dashboard/BattlesCharts.js` → `Battles` (a legenda com a contagem usa `Resolved`)
 
-- [ ] **[Dev] `make logs`: consolidar os logs de todos os serviços**
-  Hoje `make logs` apresenta apenas os logs do Meilisearch. Objetivo: ao rodar `make logs`, ver os logs de todos os serviços do compose (`api`, `db`, `redis`, `rabbitmq`, `meilisearch`, `pgadmin`, socket.io client/server). Para chegar nesse nível, se necessário, configurar os serviços para escrever seus logs em stdout/stderr (ou no formato capturado pelo `docker compose logs`), em vez de deixá-los apenas em arquivos dentro do container.
+- [x] **[Dev] `make logs`: consolidar os logs de todos os serviços** — ✅ corrigido
+  Loggers em arquivo (Rails/Bullet/Puma/Resque/Sneakers/socket.io) foram redirecionados para stdout/stderr. O overmind agora roda em background (`bin/ihero`) e o comando principal do container api relê sua saída com `overmind echo`, indo tudo para `docker compose logs`. `make logs` passa a mostrar api, db, redis, rabbitmq, meilisearch, pgadmin e socket.io client/server; `make exec` apenas abre o shell sem exibir logs.
 

@@ -4,10 +4,12 @@ import { createAmqpConnection } from "./amqp.js"
 import { createPublisher } from "./publisher.js"
 import { createOccurrenceHandler } from "./handler.js"
 import { createLogger } from "./logger.js"
-import { createFileLogger } from "./file-logger.js"
+// Os logs vão para o stdout do container e são coletados pelo `make logs`.
+// import { createFileLogger } from "./file-logger.js"
 import { createStartup } from "./startup.js"
 
-const logger = createLogger(createFileLogger())
+// const logger = createLogger(createFileLogger())
+const logger = createLogger()
 let stopped = false
 
 const socketUrl = `${process.env.SOCKET_IO_SERVER}:${process.env.SOCKET_IO_SERVER_PORT}`

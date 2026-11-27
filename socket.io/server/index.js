@@ -3,10 +3,12 @@ import { createClient } from "redis"
 import { faultRateFromEnv, randomPayload } from "./occurrence.js"
 import { createEmitter } from "./emitter.js"
 import { connectWithRetry, createInsurgencyTime } from "./redis.js"
-import { createFileLogger } from "./file-logger.js"
+// Os logs vão para o stdout do container e são coletados pelo `make logs`.
+// import { createFileLogger } from "./file-logger.js"
 
 const INSURGENCY_DEFAULT = Number(process.env.INSURGENCY_TIME || 20000)
-const logger = createFileLogger()
+// const logger = createFileLogger()
+const logger = console
 
 let stopped = false
 let lastRedisErrorLog = 0

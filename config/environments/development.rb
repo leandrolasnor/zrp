@@ -6,13 +6,16 @@ Rails.application.configure do
   config.after_initialize do
     Bullet.enable        = true
     Bullet.alert         = true
-    Bullet.bullet_logger = true
+    # O logger do Bullet grava em log/bullet.log; `rails_logger` já envia para o stdout.
+    # Bullet.bullet_logger = true
     Bullet.console       = true
     Bullet.rails_logger  = true
     Bullet.add_footer    = true
-    cable_logger = ActiveSupport::Logger.new(Rails.root.join('log', 'cable.log'), 5, 2 * 1024 * 1024)
-    cable_logger.formatter = Rails.logger.formatter
-    ActionCable.server.config.logger = cable_logger
+    # Log do Action Cable segue o Rails logger (stdout do container).
+    # cable_logger = ActiveSupport::Logger.new(Rails.root.join('log', 'cable.log'), 5, 2 * 1024 * 1024)
+    # cable_logger.formatter = Rails.logger.formatter
+    # ActionCable.server.config.logger = cable_logger
+    ActionCable.server.config.logger = Rails.logger
     Rails.application.reload_routes!
   end
 
@@ -69,8 +72,9 @@ Rails.application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
-  # Logs are collected by Fluentd via Docker log driver
-  config.logger = ActiveSupport::Logger.new(Rails.root.join('log', "#{Rails.env}.log"), 5, 2 * 1024 * 1024)
+  # Logs vão para o stdout do container e são coletados pelo `make logs`.
+  # config.logger = ActiveSupport::Logger.new(Rails.root.join('log', "#{Rails.env}.log"), 5, 2 * 1024 * 1024)
+  config.logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
 
   # Change to "debug" to log everything (including potentially personally-identifiable information!)
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")

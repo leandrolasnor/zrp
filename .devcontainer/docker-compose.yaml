@@ -38,7 +38,8 @@ services:
       args:
         RUBY_VERSION: ${RUBY_VERSION}
     container_name: zrp.api
-    command: sleep infinity
+    # Relê a saída do overmind para o stdout do container: `make logs` coleta tudo daqui.
+    command: sh -c 'rm -f .overmind.sock; until [ -S .overmind.sock ]; do sleep 1; done; exec overmind echo'
     init: true
     environment:
       DB_HOST: ${DB_HOST}

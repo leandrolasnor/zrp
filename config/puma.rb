@@ -29,12 +29,13 @@
 threads_count = ENV.fetch("RAILS_MAX_THREADS", 3)
 threads threads_count, threads_count
 
-require 'logger'
-stdout_log = Logger.new('log/puma.stdout.log', 5, 2 * 1024 * 1024)
-stderr_log = Logger.new('log/puma.stderr.log', 5, 2 * 1024 * 1024)
-stdout_redirect stdout_log.instance_variable_get(:@logdev).filename,
-                stderr_log.instance_variable_get(:@logdev).filename,
-                true
+# Logs do Puma seguem para o stdout/stderr do container (coletados via `make logs`).
+# require 'logger'
+# stdout_log = Logger.new('log/puma.stdout.log', 5, 2 * 1024 * 1024)
+# stderr_log = Logger.new('log/puma.stderr.log', 5, 2 * 1024 * 1024)
+# stdout_redirect stdout_log.instance_variable_get(:@logdev).filename,
+#                 stderr_log.instance_variable_get(:@logdev).filename,
+#                 true
 
 # stdout_redirect 'log/puma.stdout.log', 'log/puma.stderr.log', true
 
