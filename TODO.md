@@ -16,6 +16,6 @@
   - `react/src/dashboard/ThreatsDisabled.js` → `Threats`
   - `react/src/dashboard/BattlesCharts.js` → `Battles` (a legenda com a contagem usa `Resolved`)
 
-- [x] **[Dev] `make logs`: consolidar os logs dos serviços do docker compose** — ✅ corrigido
-  Loggers em arquivo (Rails/Bullet/Puma/Resque/Sneakers/socket.io) foram redirecionados para stdout/stderr; as configurações antigas de log em arquivo permanecem comentadas. `make logs` mostra api, db, redis, rabbitmq, meilisearch, pgadmin e socket.io client/server. Os processos do overmind (Rails, Resque, scheduler, gruf, sneakers, react) têm seus logs exibidos no terminal ao rodar `make exec` (`bin/ihero` → `overmind start` em foreground), sem passar pelo `docker compose logs`.
+- [x] **[Dev] Logs centralizados via Dozzle** — ✅ corrigido
+  Loggers em arquivo (Rails/Bullet/Puma/Resque/Sneakers/socket.io) foram redirecionados para stdout/stderr; as configurações antigas de log em arquivo permanecem comentadas. `make logs-ui` abre o Dozzle (filtro/busca/cores) em `http://localhost:8888` com os logs de api, db, redis, rabbitmq, meilisearch, pgadmin e socket.io client/server. Os processos do overmind (Rails, Resque, scheduler, gruf, sneakers, react) têm seus logs exibidos no terminal ao rodar `make exec` (`bin/ihero` → `overmind start` em foreground), sem passar pelo `docker compose logs`.
 

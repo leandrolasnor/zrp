@@ -8,9 +8,9 @@
   "runServices": [
     "db", "meilisearch",
     "pgadmin", "redis", "rabbitmq",
-    "socket.io.server", "socket.io.client"
+    "socket.io.server", "socket.io.client", "dozzle"
   ],
-  "forwardPorts": [3000, 28080],
+  "forwardPorts": [3000, 28080, 8888],
   "postCreateCommand": ".devcontainer/boot",
   "postStartCommand": ".devcontainer/start",
   "customizations": {

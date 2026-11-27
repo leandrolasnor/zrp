@@ -126,6 +126,18 @@ services:
     - 7700:7700
     restart: unless-stopped
 
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: zrp.dozzle
+    # UI web para acompanhar os logs dos containers em tempo real (sem arquivos de log).
+    environment:
+      DOZZLE_FILTER: label=com.docker.compose.project=zrp_devcontainer
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+    - 8888:8080
+    restart: unless-stopped
+
 volumes:
   postgres_data:
   redis_data:

@@ -3,7 +3,7 @@ DEVCONTAINER_CLI ?= devcontainer
 
 .DEFAULT_GOAL := help
 
-.PHONY: help cli up exec test test-api test-socket-client test-socket-server test-react logs _stop-app down reset rebuild
+.PHONY: help cli up exec test test-api test-socket-client test-socket-server test-react logs-ui _stop-app down reset rebuild
 
 help: ## Lista os alvos disponíveis
 	@awk 'BEGIN {FS = ":.*## "} /^[a-zA-Z_-]+:.*## / {printf "  %-18s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -31,8 +31,9 @@ test-socket-server: up ## Roda os testes do socket.io server
 test-react: up ## Roda os testes do React (sem watch)
 	$(COMPOSE) exec -T -e CI=true api corepack yarn test:react --watchAll=false
 
-logs: up ## Acompanha os logs dos serviços
-	$(COMPOSE) logs -f
+logs-ui: up ## Abre a UI de logs (Dozzle) em http://localhost:8888
+	@echo "Dozzle: http://localhost:8888"
+	@command -v xdg-open >/dev/null 2>&1 && xdg-open http://localhost:8888 >/dev/null 2>&1 || true
 
 _stop-app:
 	@$(COMPOSE) exec -T api bin/overmind stop >/dev/null 2>&1 || true
