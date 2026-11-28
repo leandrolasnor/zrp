@@ -6,7 +6,8 @@ class ThreatsController < BaseController
 
   def historical
     status, content, serializer = Http::ThreatsHistory::Service.(params)
-    render json: content, status: status, each_serializer: serializer
+    timeline = status == :ok ? ThreatTimeline.call(content.map(&:id)) : {}
+    render json: content, status: status, each_serializer: serializer, timeline: timeline
   end
 
   def set_insurgency

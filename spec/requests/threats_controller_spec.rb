@@ -12,6 +12,10 @@ RSpec.describe 'Threats API' do
 
       before do
         create(:battle, :threats_history, threat: threat, hero: hero, score: 90, finished_at: 1.minute.from_now)
+        Rails.configuration.event_store.publish(
+          UN::AlertReceived.new(data: { 'monsterName' => 'Dragon', 'dangerLevel' => 'Dragon' }),
+          stream_name: "Threat##{threat.id}"
+        )
         get '/v1/threats/historical', params: { page: 1, per_page: 25 }
       end
 
@@ -21,6 +25,12 @@ RSpec.describe 'Threats API' do
         expect(parsed_body.first).to include(id: threat.id, name: 'Dragon', rank: 'dragon')
         expect(parsed_body.first[:battle]).to include(score: 90)
         expect(parsed_body.first[:battle][:heroes]).to include(include(name: 'Superman', rank: 's'))
+      end
+
+      it 'returns the RES events of the threat' do
+        expect(parsed_body.first[:events]).to include(
+          a_hash_including(type: 'AlertReceived', title: 'Threat detected')
+        )
       end
     end
 

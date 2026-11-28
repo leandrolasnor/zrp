@@ -2,7 +2,7 @@ import { Container, Group, SimpleGrid, Stack } from '@mantine/core'
 import HeroesWorking from './HeroesWorking.js'
 import ThreatsDisabled from './ThreatsDisabled.js'
 import BattlesCharts from './BattlesCharts.js'
-import HistoricalThreats from './HistoricalThreats.js'
+import Earth from '../earth/Earth.js'
 import AverageTimeToMatch from './AverageTimeToMatch.js'
 import AverageScore from './AverageScore.js'
 import SuperHero from './SuperHero.js'
@@ -32,7 +32,7 @@ const Dashboard = () => {
           <ThreatsDisabled />
           <BattlesCharts />
         </SimpleGrid>
-        <HistoricalThreats />
+        <Earth />
       </Stack>
     </Container>
   )

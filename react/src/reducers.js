@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux'
 import metrics from './dashboard/reducer'
 import heroes from './heroes/reducer'
+import earth from './earth/reducer'
 import {reducer as toastr} from 'react-redux-toastr'
 
 const rootReducer = combineReducers({
   metrics,
   heroes,
+  earth,
   toastr
 })
 

@@ -5,6 +5,7 @@ describe('rootReducer', () => {
         const state = rootReducer(undefined, {})
         expect(state).toHaveProperty('metrics')
         expect(state).toHaveProperty('heroes')
+        expect(state).toHaveProperty('earth')
         expect(state).toHaveProperty('toastr')
     })
 

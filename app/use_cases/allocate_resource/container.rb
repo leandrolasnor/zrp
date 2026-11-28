@@ -113,8 +113,8 @@ module AllocateResource
       def can_allocate_both?
         tranks[@threat.rank] > hranks[@first.hero.rank] &&
           tranks[@threat.rank] > hranks[@second.hero.rank] &&
-          @first.score! >= ENV.fetch('SCORE_THRESHOLD', 75).to_i &&
-          @second.score! >= ENV.fetch('SCORE_THRESHOLD', 75).to_i
+          @first.score! >= ENV.fetch('SCORE_THRESHOLD', 70).to_i &&
+          @second.score! >= ENV.fetch('SCORE_THRESHOLD', 70).to_i
       end
     end
   end

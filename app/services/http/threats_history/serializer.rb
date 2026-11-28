@@ -2,9 +2,10 @@
 
 module Http::ThreatsHistory
   class Serializer < ActiveModel::Serializer
-    attributes :id, :name, :rank, :lat, :lng, :battle
+    attributes :id, :name, :rank, :lat, :lng, :battle, :events
 
     def battle = BattleSerializer.new(object)
+    def events = instance_options[:timeline]&.fetch(object.id, []) || []
   end
 
   class BattleSerializer < ActiveModel::Serializer
