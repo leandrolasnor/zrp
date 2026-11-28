@@ -53,7 +53,7 @@ const ThreatTimeline = ({ events }) => {
             event.details.length === 0
               ? <Text size="xs">-</Text>
               : event.details.map((item, index) => (
-                <Text key={index} size="xs" data-testid={`timeline-detail-${index}`}>
+                <Text key={index} component="div" size="xs" data-testid={`timeline-detail-${index}`}>
                   {item?.rank && (
                     <Badge color={heroRankColors[item.rank]} variant="light" size="xs" mr="xs">
                       {item.rank}

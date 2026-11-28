@@ -105,18 +105,25 @@ describe('Earth', () => {
         expect(rank.compareDocumentPosition(name) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
         expect(within(details).queryByText('god')).not.toBeInTheDocument()
         expect(details).toHaveTextContent('10, 20')
-        expect(details).toHaveTextContent('Score:')
         expect(screen.getByTestId('threat-score')).toHaveTextContent('95')
+        expect(details).not.toHaveTextContent('Score:')
         expect(screen.getByText('Duration:').compareDocumentPosition(screen.getByText('0h 5.00min 0.00sec')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-        expect(screen.getByText('Duration:').compareDocumentPosition(screen.getByText(/Score:/)) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+        expect(screen.getByTestId('threat-score').compareDocumentPosition(screen.getByText('Duration:')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
         expect(screen.getByText('Started:').compareDocumentPosition(screen.getByText('2024-01-15T10:00:00Z')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
         expect(screen.getByText('Finished:').compareDocumentPosition(screen.getByText('2024-01-15T10:05:00Z')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+
+        const scoreGrid = screen.getByTestId('threat-score').parentElement.parentElement
+        const finishedGrid = screen.getByText('Finished:').parentElement.parentElement
+        expect(scoreGrid).toHaveClass('mantine-SimpleGrid-root')
+        expect(finishedGrid).toHaveClass('mantine-SimpleGrid-root')
+        expect(scoreGrid.children).toHaveLength(2)
+        expect(finishedGrid.children).toHaveLength(2)
         expect(details).toHaveTextContent('Superman')
         expect(details).toHaveTextContent('Threat detected')
 
         const heroes = screen.getByTestId('threat-heroes')
         expect(heroes).toHaveTextContent('Superman')
-        expect(heroes.compareDocumentPosition(screen.getByText(/Score:/)) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+        expect(heroes.compareDocumentPosition(screen.getByTestId('threat-score')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
 
         const divider = screen.getByTestId('threat-details-divider')
         expect(divider.compareDocumentPosition(screen.getByTestId('threat-timeline')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()

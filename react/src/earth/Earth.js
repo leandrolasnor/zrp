@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { ActionIcon, Badge, Box, Divider, Group, Loader, Modal, Paper, Text, Tooltip } from '@mantine/core'
+import { ActionIcon, Badge, Box, Divider, Group, Loader, Modal, Paper, SimpleGrid, Text, Tooltip } from '@mantine/core'
 import { FaArrowRotateRight, FaBoxOpen } from 'react-icons/fa6'
 import PropTypes from 'prop-types'
 import { close_threat, fetch_earth_threats, hover_threat, rotate_earth, select_threat } from './actions'
@@ -178,18 +178,17 @@ const Earth = () => {
               <BattleHeroes heroes={battle.heroes} />
             </Box>
 
-            <Group gap="lg" wrap="wrap" mb="sm">
+            <SimpleGrid cols={2} spacing="lg" mb="sm">
+              <Box>
+                <Badge color="gray" variant="light" data-testid="threat-score">{battle.score ?? '?'}</Badge>
+              </Box>
               <Box>
                 <Text size="sm" fw={600}>Duration:</Text>
                 <Text size="xs" c="dimmed">{formatDuration(battle.duration)}</Text>
               </Box>
-              <Text size="sm">
-                <Text component="span" fw={600}>Score:</Text>{' '}
-                <Badge color="gray" variant="light" data-testid="threat-score">{battle.score ?? '-'}</Badge>
-              </Text>
-            </Group>
+            </SimpleGrid>
 
-            <Group gap="lg" wrap="wrap" mb="sm">
+            <SimpleGrid cols={2} spacing="lg" mb="sm">
               <Box>
                 <Text size="sm" fw={600}>Started:</Text>
                 <Text size="xs" c="dimmed">{battle.created_at ?? '-'}</Text>
@@ -198,7 +197,7 @@ const Earth = () => {
                 <Text size="sm" fw={600}>Finished:</Text>
                 <Text size="xs" c="dimmed">{battle.finished_at ?? '-'}</Text>
               </Box>
-            </Group>
+            </SimpleGrid>
 
             <Divider data-testid="threat-details-divider" my="sm" />
 

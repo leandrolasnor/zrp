@@ -65,6 +65,24 @@ describe('ThreatTimeline', () => {
         expect(screen.queryByText(/0: name:/)).not.toBeInTheDocument()
     })
 
+    it('does not emit a DOM nesting warning for hero rank badges', () => {
+        const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+        try {
+            renderTimeline({
+                events: [{
+                    id: 'event-4',
+                    type: 'ResourceNotAllocated',
+                    title: 'No hero available',
+                    details: [{ name: 'Flash', rank: 'a' }]
+                }]
+            })
+
+            expect(errorSpy.mock.calls.flat().join(' ')).not.toMatch(/validateDOMNesting/)
+        } finally {
+            errorSpy.mockRestore()
+        }
+    })
+
     it('renders an empty message when there are no events', () => {
         renderTimeline({ events: [] })
         expect(screen.getByText('No events recorded for this threat.')).toBeInTheDocument()
